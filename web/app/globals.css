@@ -3,160 +3,258 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design Tokens — Yala Insight (วัดคูหาภิมุข)
- * แรงบันดาลใจจากถ้ำหินปูน ธรรมชาติยะลา และแสงทองของวัดหน้าถ้ำ
- * - Surface: หินปูนอุ่น (Warm Stone)
- * - Primary: Teal เข้ม (Deep Cave Teal)
- * - Accent: ทอง/อำพัน 1 สี (Temple Amber)
+ * Design tokens — "ถ้ำยามค่ำ · ทองคำเปลว" (docs/DESIGN.md)
+ * กรอบสีกรมท่า (ถ้ำ) + กระดาษขาว + ทองคำ 1 จุดเน้น
+ * หมายเหตุ: --ink-3 เข้มกว่าตารางใน DESIGN.md เล็กน้อย เพื่อให้ข้อความ meta ผ่าน contrast 4.5:1
  */
 :root {
-  --canvas: #f5f2eb;
+  --canvas: #f5f4f0;
   --surface: #ffffff;
-  --surface-subtle: #faf8f3;
-  --surface-muted: #ede9df;
-  --ink: #1b2423;
-  --ink-secondary: #42504e;
-  --ink-muted: #5d6a67;
-  --border-line: #dfd9cd;
-  --border-strong: #c9c0b0;
-
-  --brand: #0f5e59;
-  --brand-hover: #0b4a46;
-  --brand-soft: #e4f2f0;
-  --brand-ink: #0a4541;
-
-  --accent: #b45309;
-  --accent-bright: #d97706;
-  --accent-soft: #fef3c7;
-  --accent-border: #f3d27a;
-  --accent-ink: #78350f;
-
-  --danger: #b91c1c;
-  --danger-soft: #fee2e2;
-
-  /* สีหมวดกราฟคงที่ทุกหน้า */
-  --chart-1: #0f6b64;
-  --chart-2: #d97706;
-  --chart-3: #475569;
-  --chart-4: #2e7d5b;
-  --chart-5: #b85d43;
-  --chart-muted: #8c857b;
+  --surface-2: #faf9f6;
+  --line: #e6e3dc;
+  --ink: #141b2d;
+  --ink-2: #4a5265;
+  --ink-3: #667085;
+  --frame: #121a2b;
+  --frame-ink: #c5cddc;
+  --brand: #2f55c9;
+  --brand-soft: #eaf0fd;
+  --brand-fg: #ffffff;
+  --gold: #b7862c;
+  --gold-soft: #fbf4e4;
+  --gold-ink: #7a5a14;
+  --data-muted: #cdd3df;
+  --warn: #a15c07;
+  --warn-soft: #fff5df;
+  --danger: #b42318;
+  --danger-soft: #fef3f2;
+  --ok: #157f3d;
+  --ok-soft: #ecfdf3;
+  /* diverging 1 -> 5 (ความพึงพอใจ / ความตั้งใจกลับมา) */
+  --div-1: #c2410c;
+  --div-2: #e8a33d;
+  --div-3: #cdd3df;
+  --div-4: #7c9bea;
+  --div-5: #2f55c9;
 }
 
 .dark {
-  --canvas: #111615;
-  --surface: #18201f;
-  --surface-subtle: #1e2726;
-  --surface-muted: #263130;
-  --ink: #f1eee7;
-  --ink-secondary: #cbd4d1;
-  --ink-muted: #98a6a2;
-  --border-line: #2d3937;
-  --border-strong: #3e4d4b;
-
-  --brand: #14b8a6;
-  --brand-hover: #2dd4bf;
-  --brand-soft: #133835;
-  --brand-ink: #7eeae0;
-
-  --accent: #f59e0b;
-  --accent-bright: #fbbf24;
-  --accent-soft: #3a290f;
-  --accent-border: #784f12;
-  --accent-ink: #fcd34d;
-
-  --danger: #f87171;
-  --danger-soft: #3f1d1d;
-
-  --chart-1: #2dd4bf;
-  --chart-2: #fbbf24;
-  --chart-3: #94a3b8;
-  --chart-4: #4ade80;
-  --chart-5: #fb923c;
-  --chart-muted: #64748b;
+  --canvas: #0e1422;
+  --surface: #151d2e;
+  --surface-2: #1b2438;
+  --line: #263049;
+  --ink: #e8ecf4;
+  --ink-2: #a9b3c7;
+  --ink-3: #8791a6;
+  --frame: #0a0f1a;
+  --frame-ink: #c5cddc;
+  --brand: #6e8ff0;
+  --brand-soft: #1c2a4e;
+  --brand-fg: #0e1422;
+  --gold: #d9ae55;
+  --gold-soft: #2e2716;
+  --gold-ink: #d9ae55;
+  --data-muted: #34405a;
+  --warn: #f0b95a;
+  --warn-soft: #33280f;
+  --danger: #f97066;
+  --danger-soft: #3a1a18;
+  --ok: #4ade80;
+  --ok-soft: #12301f;
+  --div-3: #4a5670;
 }
 
 @theme inline {
-  --font-sans: var(--font-noto-sans-thai), "Noto Sans Thai", system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-plex), "IBM Plex Sans Thai", system-ui, -apple-system, sans-serif;
 
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
-  --color-surface-subtle: var(--surface-subtle);
-  --color-surface-muted: var(--surface-muted);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
   --color-ink: var(--ink);
-  --color-ink-secondary: var(--ink-secondary);
-  --color-ink-muted: var(--ink-muted);
-  --color-line: var(--border-line);
-  --color-line-strong: var(--border-strong);
-
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-frame: var(--frame);
+  --color-frame-ink: var(--frame-ink);
   --color-brand: var(--brand);
-  --color-brand-hover: var(--brand-hover);
   --color-brand-soft: var(--brand-soft);
-  --color-brand-ink: var(--brand-ink);
-
-  --color-accent: var(--accent);
-  --color-accent-bright: var(--accent-bright);
-  --color-accent-soft: var(--accent-soft);
-  --color-accent-border: var(--accent-border);
-  --color-accent-ink: var(--accent-ink);
-
+  --color-brand-fg: var(--brand-fg);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-ink: var(--gold-ink);
+  --color-data-muted: var(--data-muted);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
-
-  --radius-card: 1rem;
-  --radius-control: 0.75rem;
-  --shadow-card: 0 1px 2px rgba(27, 36, 35, 0.05), 0 6px 20px rgba(27, 36, 35, 0.04);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
 }
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--canvas);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 0.9375rem; /* 15px base body */
-  line-height: 1.65;
+  font-size: 14px;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
 
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+/* Type scale: page title 24/32 · section 15/22 · body 14/22 · meta 12/18 · KPI 30/36 */
+@utility type-title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+@utility type-section {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+}
+@utility type-meta {
+  font-size: 12px;
+  line-height: 18px;
+}
+@utility type-kpi {
+  /* มือถือ 2 คอลัมน์แคบ: ลดขนาดไม่ให้ตัวเลข+หน่วยตัดบรรทัด */
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 600;
+  @media (min-width: 640px) {
+    font-size: 30px;
+    line-height: 36px;
+  }
 }
 
-/* Focus ring เพื่อการเข้าถึง (a11y) */
+/* Buttons 36px / radius 8 ; field ใช้ร่วมกับ input/select */
+@layer components {
+  .btn {
+    display: inline-flex;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease-out,
+      border-color 150ms ease-out,
+      opacity 150ms ease-out;
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .btn-primary {
+    background: var(--brand);
+    color: var(--brand-fg);
+  }
+  .btn-primary:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+  .btn-secondary {
+    background: var(--surface);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--surface-2);
+  }
+  .field {
+    height: 36px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    padding: 0 12px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .field:focus {
+    border-color: var(--brand);
+  }
+  .print-only {
+    display: none;
+  }
+}
+
+/* Focus ring: 2px brand, offset 2 */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2.5px solid var(--brand);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
-/* Print CSS สำหรับหน้า /reports และทุกหน้า */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: A4, ขาวดำ, ซ่อนกรอบ/ตัวกรอง/แบนเนอร์ (.no-print), แสดงหัวรายงาน (.print-only) */
 @media print {
   @page {
     size: A4 portrait;
     margin: 14mm 12mm;
   }
 
+  :root,
+  .dark {
+    --canvas: #fff;
+    --surface: #fff;
+    --surface-2: #f4f4f4;
+    --line: #c9c9c9;
+    --ink: #000;
+    --ink-2: #222;
+    --ink-3: #444;
+    --brand: #1d3a9e;
+    --brand-soft: #eee;
+    --brand-fg: #fff;
+    --gold: #8a6420;
+    --gold-soft: #f4f4f4;
+    --gold-ink: #000;
+    --data-muted: #bdbdbd;
+    --warn: #5c3a05;
+    --warn-soft: #f4f4f4;
+    --danger: #8f1a10;
+    --ok: #0f5c2b;
+    --div-3: #cdd3df;
+  }
+
+  html,
   body {
-    background: #ffffff !important;
-    color: #111827 !important;
-    font-size: 11pt !important;
-    line-height: 1.45 !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   .no-print {
     display: none !important;
   }
-
   .print-only {
     display: block !important;
   }
-
   .print-card {
-    box-shadow: none !important;
-    border-color: #d1d5db !important;
     break-inside: avoid;
     page-break-inside: avoid;
   }

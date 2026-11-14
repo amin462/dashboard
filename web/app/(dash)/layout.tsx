@@ -1,47 +1,47 @@
 import { Suspense, type ReactNode } from "react";
-import { DashShell } from "@/components/DashShell";
-import { DataSourceBadge, MockBanner } from "@/components/MockBanner";
-import { formatThaiDateTime } from "@/components/nav-config";
+import { bangkokDate, formatThaiDateTimeShort } from "@/components/format";
+import { FilterBar } from "@/components/filters/FilterBar";
+import { DataBanner } from "@/components/shell/Banner";
+import { DashShell } from "@/components/shell/DashShell";
+import { SourcePill } from "@/components/shell/SourcePill";
 import { getSurveyBundle } from "./_data";
 
-async function HeaderMeta() {
+async function TopMeta() {
   const { source, lastSubmittedAt } = await getSurveyBundle();
   return (
     <>
-      <DataSourceBadge source={source} />
-      <span className="hidden text-line-strong sm:inline">·</span>
-      <span className="truncate tabular-nums">
-        <span className="hidden sm:inline">อัปเดตล่าสุด: </span>
-        {formatThaiDateTime(lastSubmittedAt)}
-      </span>
+      <SourcePill source={source} />
+      <span className="hidden type-meta text-ink-3 md:inline">อัปเดต {formatThaiDateTimeShort(lastSubmittedAt)}</span>
     </>
   );
 }
 
-async function MockBannerSlot() {
-  const { source, error, seedCount } = await getSurveyBundle();
-  return <MockBanner source={source} error={error} seedCount={seedCount} />;
+async function FilterBarSlot() {
+  const { lastSubmittedAt } = await getSurveyBundle();
+  return <FilterBar anchor={bangkokDate(lastSubmittedAt)} />;
 }
 
-export default function DashLayout({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+async function BannerSlot() {
+  const { source, error, seedCount } = await getSurveyBundle();
+  return <DataBanner source={source} error={error} seedCount={seedCount} />;
+}
+
+export default function DashLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <DashShell
-      headerMeta={
-        <Suspense
-          fallback={
-            <span className="inline-block h-4 w-40 animate-pulse rounded bg-surface-muted" />
-          }
-        >
-          <HeaderMeta />
+      topMeta={
+        <Suspense fallback={<span className="inline-block h-4 w-32 animate-pulse rounded bg-data-muted/60" />}>
+          <TopMeta />
         </Suspense>
       }
-      mockBanner={
+      filterBar={
+        <Suspense fallback={<div className="no-print sticky top-14 z-20 h-11 border-b border-line bg-surface" />}>
+          <FilterBarSlot />
+        </Suspense>
+      }
+      banner={
         <Suspense fallback={null}>
-          <MockBannerSlot />
+          <BannerSlot />
         </Suspense>
       }
     >

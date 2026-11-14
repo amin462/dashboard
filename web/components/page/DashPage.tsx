@@ -1,0 +1,56 @@
+"use client";
+
+import { useEffect, useMemo, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
+import { applyFilters, filtersFromSearchParams, hasFilters, type Filters } from "@/lib/survey/filters";
+import type { Row } from "@/lib/survey/schema";
+import { setResultCount } from "../filters/result-count";
+import { EmptyState } from "../ui/EmptyState";
+
+export type PageData = {
+  /** แถวหลังกรองแล้ว (ใช้เป็นอินพุตของ lib/survey ทุกฟังก์ชัน) */
+  rows: Row[];
+  /** จำนวนผู้ตอบสมบูรณ์ทั้งหมด (ก่อนกรอง) */
+  total: number;
+  filters: Filters;
+  isFiltered: boolean;
+};
+
+type DashPageProps = {
+  /** แถวผู้ตอบสมบูรณ์ทั้งหมดจาก server */
+  rows: Row[];
+  /** คำอธิบายหน้า 1 บรรทัด (ชื่อหน้าอยู่ใน top bar แล้ว) */
+  description: string;
+  /** ปุ่มมุมขวาของหัวหน้า (เช่น ส่งออก/พิมพ์) */
+  actions?: (data: PageData) => ReactNode;
+  children: (data: PageData) => ReactNode;
+};
+
+/**
+ * เทมเพลตหน้าวิเคราะห์ทุกหน้า: อ่านตัวกรองจาก URL → กรองแถว → รายงานจำนวนให้แถวตัวกรอง
+ * → คำอธิบาย 1 บรรทัด → (ไม่มีข้อมูล = EmptyState | เนื้อหา)
+ */
+export function DashPage({ rows, description, actions, children }: DashPageProps) {
+  const searchParams = useSearchParams();
+  const filters = useMemo(() => filtersFromSearchParams(searchParams), [searchParams]);
+  const filtered = useMemo(() => applyFilters(rows, filters), [rows, filters]);
+  const isFiltered = hasFilters(filters);
+  const total = rows.length;
+  const count = filtered.length;
+  const data: PageData = { rows: filtered, total, filters, isFiltered };
+
+  useEffect(() => {
+    setResultCount({ filtered: count, total });
+    return () => setResultCount(null);
+  }, [count, total]);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <p className="max-w-3xl text-ink-2">{description}</p>
+        {actions && <div className="no-print flex shrink-0 flex-wrap gap-2">{actions(data)}</div>}
+      </div>
+      {count === 0 ? <EmptyState /> : children(data)}
+    </div>
+  );
+}

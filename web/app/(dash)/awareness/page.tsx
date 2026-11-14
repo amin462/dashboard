@@ -1,23 +1,12 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { getSurveyBundle } from "../_data";
-import DashLoading from "../loading";
+import { DashRoute } from "../_route";
 import { AwarenessClient } from "./AwarenessClient";
 
 export const metadata: Metadata = {
-  title: "วัตถุประสงค์ & ช่องทางรับรู้",
-  description: "วิเคราะห์วัตถุประสงค์การเดินทาง (SUR-05) และช่องทางรับรู้ (SUR-06)",
+  title: "วัตถุประสงค์ และช่องทางรับรู้",
+  description: "วัตถุประสงค์ (SUR-05) และช่องทางที่รู้จักสถานที่ (SUR-06) เพื่อวางแผนประชาสัมพันธ์",
 };
 
-async function AwarenessContent() {
-  const { rows } = await getSurveyBundle();
-  return <AwarenessClient rows={rows} />;
-}
-
 export default function AwarenessPage() {
-  return (
-    <Suspense fallback={<DashLoading />}>
-      <AwarenessContent />
-    </Suspense>
-  );
+  return <DashRoute render={({ rows }) => <AwarenessClient rows={rows} />} />;
 }

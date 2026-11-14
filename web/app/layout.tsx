@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Thai } from "next/font/google";
+import { IBM_Plex_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const notoSansThai = Noto_Sans_Thai({
+const plex = IBM_Plex_Sans_Thai({
   subsets: ["thai", "latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-noto-sans-thai",
+  variable: "--font-plex",
   display: "swap",
 });
 
@@ -43,12 +43,12 @@ export default function RootLayout({
       lang="th"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${notoSansThai.variable} h-full antialiased`}
+      className={`${plex.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full bg-canvas text-ink font-sans">
+      <body className="min-h-full bg-canvas font-sans text-ink">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

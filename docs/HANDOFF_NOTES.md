@@ -71,3 +71,17 @@
 - QA: ดู docs/QA_CHECKLIST.md (ชื่อ EXP/EVA สรุปจากบริบท DATA_CONTRACT ต้องตรวจกับเอกสารต้นฉบับ)
 - README.md ราก: เขียนแล้ว (ไม่มีค่า secret จริง)
 - (Opus) แก้รายงาน T4: snippet.js มี showOtherOption(true) ครบ 5 ข้อ (sur03/04/05/06/08) ตรง contract — ข้อ "+อื่น ไม่ตรง" ของ haiku ไม่ถูกต้อง ; QA_CHECKLIST เขียนตาราง EXP/EVA ใหม่ตามเครื่องมือจริง
+
+## Seed safety — opencode (2026-11-14)
+- `web/scripts/seed.ts`: insert ต้องมี `--yes`; ถ้ามี NEXT_PUBLIC_SUPABASE_URL แต่ไม่ใส่ จะพิมพ์คำเตือนภาษาไทยแล้ว exit 1 (ทดสอบแล้ว exit=1 และไม่แตะ DB)
+- `--clear` ไม่ต้องใช้ `--yes` และพิมพ์จำนวนแถวที่ลบจริง (ทดสอบลบ 300) ; เพิ่ม `seed:count` ใน package.json พิมพ์จำนวนแยก source google_form/csv/seed (ทดสอบ 0/0/300)
+- ผ่าน `pnpm -C web lint`, `tsc --noEmit`, `pnpm test` (3 ไฟล์/39 tests) ; ทดสอบครบวงจร clear → `seed -- --yes` → count แล้ว seed กลับครบ 300 แถว
+
+## UI redesign — sonnet
+- รื้อ UI ตาม docs/DESIGN.md ทั้งหมด: tokens ใหม่ใน globals.css (light+dark, ลบ teal/orange), ฟอนต์ IBM Plex Sans Thai ; โค้ดจัดเป็น `components/{shell,filters,charts,ui,page}/` (ลบ KpiCard/DashPageHeader/MockBanner/FilterBar/DashShell เดิม)
+- ทุกหน้าวิเคราะห์ใช้เทมเพลตเดียว: `app/(dash)/_route.tsx` (DashRoute = Suspense + getSurveyBundle) + `components/page/DashPage.tsx` (กรอง→description→EmptyState/เนื้อหา) ; หน้า admin ใช้ `shell/AdminFrame.tsx` ; ตัวเลขทั้งหมดยังมาจาก lib/survey (UI เลือกอันดับ 1 จาก freq()/topItem() เท่านั้น)
+- /admin/quality: สถานะซิงก์ Google Form นับเฉพาะ source='google_form' (ไม่มี → warn "ตรวจ syncToSupabase.gs", >24 ชม. → info) + แถวจำนวนต่อ source (google_form/csv/seed) ใน `admin/quality/sync-status.ts`
+- Print (/reports): A4, override token เป็นขาวดำ, ซ่อน `.no-print`, หัวรายงาน `.print-only` (ตัวกรอง+แหล่งข้อมูล+วันที่ข้อมูลล่าสุด)
+- ปรับจาก DESIGN.md เล็กน้อย: `--ink-3` เข้มขึ้นเป็น #667085 (ให้ผ่าน contrast 4.5:1), KPI ที่เป็นข้อความยาวใช้ 20/28 แทน 30/36, ตัวกรองแบบชิป ≥1024px (ต่ำกว่านั้นใช้ bottom sheet), ปุ่ม 7/30 วัน อิงวันล่าสุดของข้อมูล
+- ทอง: ขอบการ์ด InsightCard + แถบเมนู active อาจรวมเกิน 3 จุดต่อจอบนหน้าภาพรวม/ธุรกิจ (3 การ์ด + 1 แถบเมนู)
+- ตรวจแล้ว: typegen, tsc, test 39/39, lint, build ผ่าน ; dev server :3000 แสดง CSS เก่าค้าง (Turbopack cache) ต้อง restart `pnpm dev` ถึงจะเห็นหน้าตาใหม่

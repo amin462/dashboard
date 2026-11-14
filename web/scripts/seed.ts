@@ -1,7 +1,8 @@
 /**
  * seed.ts — เติมข้อมูลตัวอย่าง 300 แถว (makeMock จาก lib/survey/mock) ลง Supabase
- * ใช้: pnpm seed            → upsert (ข้าม dedupe_key ที่มีอยู่แล้ว รันซ้ำได้)
- *      pnpm seed -- --clear → ลบเฉพาะแถว source='seed' แล้วออก (ไม่แตะข้อมูลจริง)
+ * ใช้: pnpm seed -- --yes  → upsert (ข้าม dedupe_key ที่มีอยู่แล้ว รันซ้ำได้) ; ต้องมี --yes เพื่อกันเผลอเขียนฐานจริง
+ *      pnpm seed:clear    → ลบเฉพาะแถว source='seed' แล้วออก (ไม่แตะข้อมูลจริง, ไม่ต้องใช้ --yes)
+ *      pnpm seed:count    → พิมพ์จำนวนแถวแยกตาม source (google_form / csv / seed)
  * env: อ่านจาก .env.local (node --env-file) หรือ fallback อ่านไฟล์เอง — ต้องมี
  *      NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
  */
@@ -27,6 +28,8 @@ function loadEnvFile(): void {
 }
 
 const isClear = process.argv.includes("--clear");
+const isCount = process.argv.includes("--count");
+const isYes = process.argv.includes("--yes");
 
 function fail(message: string): never {
   console.error(`✗ ${message}`);
@@ -40,23 +43,68 @@ function main(): void {
   if (!url || !key) {
     fail('ต้องมี NEXT_PUBLIC_SUPABASE_URL และ SUPABASE_SERVICE_ROLE_KEY ใน .env.local (ดู PLAN.md)');
   }
+
+  if (isClear) {
+    runClear(url as string, key as string);
+    return;
+  }
+  if (isCount) {
+    runCount(url as string, key as string);
+    return;
+  }
+  if (!isYes) {
+    console.error("⚠ คำเตือน: พบ NEXT_PUBLIC_SUPABASE_URL (ฐานข้อมูลจริง) — การ seed จะเขียนข้อมูลตัวอย่างลงฐานจริง");
+    console.error("  ถ้าแน่ใจ ให้รันใหม่ด้วย flag --yes:");
+    console.error("    pnpm -C web seed -- --yes");
+    console.error("  ลบข้อมูลตัวอย่างภายหลังได้ด้วย: pnpm -C web seed:clear");
+    process.exit(1);
+  }
   run(url as string, key as string);
+}
+
+async function runClear(url: string, key: string): Promise<void> {
+  const supabase = createClient(url, key, { auth: { persistSession: false } });
+
+  const { count: before, error: e1 } = await supabase
+    .from("survey_responses")
+    .select("*", { count: "exact", head: true })
+    .eq("source", "seed");
+  if (e1) fail(`นับแถว seed ไม่สำเร็จ: ${e1.message}`);
+
+  const { error: e2 } = await supabase.from("survey_responses").delete().eq("source", "seed");
+  if (e2) fail(`ลบแถว seed ไม่สำเร็จ: ${e2.message}`);
+
+  const { count: after, error: e3 } = await supabase
+    .from("survey_responses")
+    .select("*", { count: "exact", head: true })
+    .eq("source", "seed");
+  if (e3) fail(`นับแถว seed หลังลบไม่สำเร็จ: ${e3.message}`);
+
+  const deleted = Math.max(0, (before ?? 0) - (after ?? 0));
+  console.log(`✓ ลบข้อมูลตัวอย่าง (source='seed') ${deleted} แถว — ข้อมูลจริง (google_form/csv) ไม่ถูกแตะ`);
+}
+
+async function runCount(url: string, key: string): Promise<void> {
+  const supabase = createClient(url, key, { auth: { persistSession: false } });
+  const sources = ["google_form", "csv", "seed"] as const;
+  let total = 0;
+
+  console.log("จำนวนแถวใน survey_responses แยกตาม source:");
+  for (const source of sources) {
+    const { count, error } = await supabase
+      .from("survey_responses")
+      .select("*", { count: "exact", head: true })
+      .eq("source", source);
+    if (error) fail(`นับแถว source='${source}' ไม่สำเร็จ: ${error.message}`);
+    const n = count ?? 0;
+    total += n;
+    console.log(`  ${source}: ${n} แถว`);
+  }
+  console.log(`  รวม: ${total} แถว`);
 }
 
 async function run(url: string, key: string): Promise<void> {
   const supabase = createClient(url, key, { auth: { persistSession: false } });
-
-  if (isClear) {
-    const { count: before, error: e1 } = await supabase
-      .from("survey_responses")
-      .select("*", { count: "exact", head: true })
-      .eq("source", "seed");
-    if (e1) fail(`นับแถว seed ไม่สำเร็จ: ${e1.message}`);
-    const { error: e2 } = await supabase.from("survey_responses").delete().eq("source", "seed");
-    if (e2) fail(`ลบแถว seed ไม่สำเร็จ: ${e2.message}`);
-    console.log(`✓ ลบข้อมูลตัวอย่าง (source='seed') ${before ?? 0} แถว — ข้อมูลจริง (google_form/csv) ไม่ถูกแตะ`);
-    return;
-  }
 
   const mock: RawRow[] = makeMock(300, 42);
   // แถวสำหรับ insert: ตัด id/is_complete (generated) ออก — dedupe_key ให้ trigger ตั้งเอง

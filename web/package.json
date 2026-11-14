@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "seed": "tsx scripts/seed.ts",
-    "seed:clear": "tsx scripts/seed.ts --clear"
+    "seed:clear": "tsx scripts/seed.ts --clear",
+    "seed:count": "tsx scripts/seed.ts --count"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",

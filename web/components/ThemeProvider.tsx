@@ -91,7 +91,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-ink-secondary transition-colors hover:bg-surface-muted hover:text-ink"
+      className="btn btn-secondary w-9 px-0 text-ink-2"
       aria-label={isDark ? "สลับเป็นโหมดสว่าง" : "สลับเป็นโหมดมืด"}
       title={isDark ? "โหมดสว่าง" : "โหมดมืด"}
     >
