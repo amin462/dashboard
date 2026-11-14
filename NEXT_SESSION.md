@@ -1,5 +1,7 @@
 # NEXT_SESSION — สถานะงาน ณ 15 พ.ย. 2569 (ส่งงาน 18 พ.ย.)
 
+> 🆕 15 พ.ย.: deploy Vercel แล้ว (https://dashboard-liart-six-41.vercel.app) · sync Google Form ทำงาน (google_form = 4 แถวจริง) · seed ลบแล้ว · **แผนถัดไป = แชต AI (T9–T11) + T12–T14 ดู `PLAN.md` หัวข้อ "แผนอัปเกรด D1–D4"** · รอผู้ใช้เอา `GEMINI_API_KEY` (ห้ามส่งในแชต) · smoke บน production ยังไม่ได้รัน (ผู้ใช้สั่งเลื่อน)
+
 > ✅ ไล่ตรวจหน้าย่อย v2 ทุกหน้า (1280/375 + admin) เสร็จ แก้จุดเพี้ยนแล้ว · ภาพคู่มือชุด v2 ถ่ายใหม่ครบ (`web/scripts/screenshots.mjs`) · print A4 /reports ตรวจแล้ว (รายละเอียด `docs/HANDOFF_NOTES.md` หัวข้อ "ไล่ตรวจหน้าย่อย v2")
 > ✅ T8 UI polish เสร็จ (sidebar พอดีจอไม่มี scroll, การ์ดทุกแถวสูงเท่ากัน, /satisfaction ใหม่, /business hero) ตรวจบน production build แล้ว
 > ⚠️ ถ้าเปิด dev แล้วกราฟไม่ขึ้น/ค้าง skeleton = dev server เก่าค้าง (HMR websocket fail) → ปิดแล้ว `pnpm -C web dev` ใหม่ หรือใช้ launch config `web-prod` (next start :3100 หลัง build)
