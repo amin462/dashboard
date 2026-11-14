@@ -30,7 +30,7 @@ export default function DashLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <DashShell
       topMeta={
-        <Suspense fallback={<span className="inline-block h-4 w-32 animate-pulse rounded bg-data-muted/60" />}>
+        <Suspense fallback={<span className="inline-block h-4 w-32 animate-pulse rounded bg-muted-bar/60" />}>
           <TopMeta />
         </Suspense>
       }

@@ -91,3 +91,11 @@
 - ทอง: ขอบการ์ด InsightCard + แถบเมนู active อาจรวมเกิน 3 จุดต่อจอบนหน้าภาพรวม/ธุรกิจ (3 การ์ด + 1 แถบเมนู)
 - ตรวจแล้ว: typegen, tsc, test 39/39, lint, build ผ่าน ; dev server :3000 แสดง CSS เก่าค้าง (Turbopack cache) ต้อง restart `pnpm dev` ถึงจะเห็นหน้าตาใหม่
 - (Opus) smoke --expect-real ไม่จับแบนเนอร์ seed ("ข้อมูลทดสอบ") → แก้แล้ว ; ใส่ภาพ 9 ตำแหน่งใน USER_MANUAL (เหลือ 10–12) ; สถานะรวมอยู่ใน NEXT_SESSION.md
+
+## UI v2 — sonnet
+- T7 เสร็จ: token v2 (navy/amber/muted-bar/diverging, light+dark) ใน `globals.css` ; ชื่อ token ใหม่: `navy` `navy-solid` `navy-2` `amber` `amber-soft` `amber-ink` `muted-bar` (เลิกใช้ brand/gold/data-muted) ; คลาส `.card` `.kpi-solid` ; `.btn-primary` = อำพันมน
+- ธีมกราฟกลางอยู่ที่ `components/charts/theme.ts` (สี/แกน/กริด/BAR_SIZE/ป้ายสั้น SUR-08) + `ChartTooltip` + `LegendDots` ; BarRows = navy, อันดับ 1 = amber, tail = muted
+- หน้าภาพรวมใหม่แยกที่ `components/overview/*` (OriginCompareCard, RevisitDonutCard, DailyCard+MonthHeat, overview-data.ts, overview-kpis.ts) ; ตัวเลขทุกค่าจาก `applyFilters`+`multiFreq`/`daily`/`freq`/`overview` ของ lib ; ลบ `DailyLine.tsx` (แทนด้วย DailyCard)
+- ส่วนต่างในการ์ดแท่งคู่ = round1(pct ต่างถิ่น − pct ยะลา) ของหมวดที่ต่างมากสุด ; แกน SUR-08 ตัด "ไม่มีความสนใจเป็นพิเศษ"/"อื่น ๆ" ; ป้ายค่าบนแท่งซ่อนบนจอ < 640px (ใช้ทูลทิป/ตาราง)
+- StatStrip เป็นการ์ดลอยแยก ใบแรก navy ทึบ (print = ขาว) ; ปฏิทินความเข้ม 4 ขั้นเพื่อให้ตัวอักษรผ่าน contrast ; โปสเตอร์ QR ใช้ค่าสี hex ตายตัวชุด v2 (พิมพ์)
+- ตรวจแล้ว: typegen, tsc, test 39/39, lint, build ผ่าน ; ทุกเส้นทาง 200 (admin import/quality 307 = fail-closed) ; ดูหน้า / ที่ 1024/375 + dark ไม่มี overflow ; ยังไม่ได้ดู admin import/quality ด้วยตา (ต้องล็อกอิน) และยังไม่ได้พิมพ์ /reports จริง

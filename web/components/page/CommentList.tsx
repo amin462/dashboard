@@ -14,7 +14,7 @@ export function CommentList({ comments }: { comments: Row[] }) {
   }, [comments, term]);
 
   return (
-    <section aria-label="ข้อเสนอแนะจากผู้ตอบ" className="rounded-xl border border-line bg-surface p-5">
+    <section aria-label="ข้อเสนอแนะจากผู้ตอบ" className="print-card card p-5">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">

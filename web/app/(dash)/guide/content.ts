@@ -17,7 +17,7 @@ export const DECISION_EXAMPLES = [
     key: "restaurant",
     title: "ร้านอาหารและเครื่องดื่ม",
     icon: Utensils,
-    tone: "bg-brand-soft text-brand",
+    tone: "bg-amber-soft text-navy",
     ifSee:
       "กลุ่ม “ครอบครัว / เครือญาติ” มาเยอะที่สุด และช่วงเวลาที่มาเยือนหนาแน่นที่สุดคือช่วงเช้า (06–11 น.) หรือบ่าย (12–15 น.)",
     tryDo:
@@ -27,7 +27,7 @@ export const DECISION_EXAMPLES = [
     key: "hotel",
     title: "โรงแรม / ที่พัก / โฮมสเตย์",
     icon: BedDouble,
-    tone: "bg-gold-soft text-gold-ink",
+    tone: "bg-amber-soft text-amber-ink",
     ifSee: `สัดส่วนผู้ตอบที่มาจากนอกจังหวัดยะลาตั้งแต่ ${THRESHOLDS.hotelOutsideYalaPct}% ขึ้นไป และมีกลุ่มที่ใช้จ่ายมากกว่า 1,000 บาทชัดเจน`,
     tryDo:
       "โปรโมตแพ็กเกจพักค้างคืน แนะนำจุดแวะเที่ยวต่อในอำเภอเมืองยะลา และเน้นช่องทางจองที่สะดวกสำหรับคนต่างจังหวัด",
@@ -36,7 +36,7 @@ export const DECISION_EXAMPLES = [
     key: "shop",
     title: "ร้านค้า / ของฝาก / ผลิตภัณฑ์ชุมชน",
     icon: Gift,
-    tone: "bg-brand-soft text-brand",
+    tone: "bg-amber-soft text-navy",
     ifSee: `ผู้ตอบส่วนใหญ่ (มากกว่า ${THRESHOLDS.shopLowSpendPct}%) มีค่าใช้จ่ายรวมไม่เกิน 600 บาท และมาเพื่อทำบุญหรือท่องเที่ยวเชิงวัฒนธรรม`,
     tryDo:
       "เน้นสินค้าและชุดของฝากที่หยิบซื้อง่ายในราคาไม่เกิน 300 บาท จัดเป็นแพ็กของฝากพร้อมมอบหรือสินค้าระลึกถึงวัดหน้าถ้ำ",
@@ -45,7 +45,7 @@ export const DECISION_EXAMPLES = [
     key: "tour",
     title: "นำเที่ยว / บริการเดินทาง / ขนส่ง",
     icon: Compass,
-    tone: "bg-gold-soft text-gold-ink",
+    tone: "bg-amber-soft text-amber-ink",
     ifSee: `ผู้ตอบที่ไม่ใช้รถส่วนตัว (รถโดยสาร / รถเช่า / รถทัวร์) มีตั้งแต่ ${THRESHOLDS.tourNoPrivateVehiclePct}% ขึ้นไป หรือสนใจบริการเดินทางและนำเที่ยวสูง`,
     tryDo:
       "เปิดบริการรับ-ส่งจากจุดเชื่อมต่อในเมือง หรือจัดแพ็กเกจนำเที่ยวสั้น ๆ ที่พาชมประวัติศาสตร์และจุดเด่นรอบวัดคูหาภิมุข",
@@ -76,25 +76,25 @@ export const FAQS = [
 ];
 
 export const SAT_LEVELS = [
-  { range: "4.21 – 5.00", label: "มากที่สุด", tone: "bg-brand text-brand-fg" },
+  { range: "4.21 – 5.00", label: "มากที่สุด", tone: "bg-[var(--div-5)] text-[var(--div-fg-5)]" },
   {
     range: "3.41 – 4.20",
     label: "มาก",
-    tone: "bg-brand-soft text-brand border border-brand/25",
+    tone: "bg-[var(--div-4)] text-[var(--div-fg-4)]",
   },
   {
     range: "2.61 – 3.40",
     label: "ปานกลาง",
-    tone: "bg-gold-soft text-gold-ink border border-line",
+    tone: "bg-[var(--div-3)] text-[var(--div-fg-3)]",
   },
   {
     range: "1.81 – 2.60",
     label: "น้อย",
-    tone: "bg-surface-2 text-ink-2 border border-line",
+    tone: "bg-[var(--div-2)] text-[var(--div-fg-2)]",
   },
   {
     range: "1.00 – 1.80",
     label: "น้อยที่สุด",
-    tone: "bg-danger-soft text-danger border border-danger/20",
+    tone: "bg-[var(--div-1)] text-[var(--div-fg-1)]",
   },
 ];

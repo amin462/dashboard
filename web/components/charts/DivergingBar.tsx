@@ -1,18 +1,11 @@
+import { divColor, divFg, type Tone } from "./theme";
+
 export type DivergingSegment = {
   label: string;
   count: number;
   pct: number;
   /** 1..5 : ตำแหน่งในสเกล diverging (--div-1 ... --div-5) */
-  tone: 1 | 2 | 3 | 4 | 5;
-};
-
-/** สีตัวอักษรบนแต่ละช่วง (เลือกให้ contrast ≥ 4.5:1) */
-const FG: Record<DivergingSegment["tone"], string> = {
-  1: "text-white",
-  2: "text-[#141b2d]",
-  3: "text-ink",
-  4: "text-[#141b2d]",
-  5: "text-white",
+  tone: Tone;
 };
 
 /** แท่งเดียว 100% แบ่งสีตามสเกล ไม่พอใจ→พอใจ + คำอธิบายสีด้านล่าง (segments เรียงจากต่ำไปสูง) */
@@ -23,13 +16,13 @@ export function DivergingBar({ segments, label }: { segments: DivergingSegment[]
       <div
         role="img"
         aria-label={`${label}: ${segments.map((s) => `${s.label} ${s.pct.toFixed(1)}%`).join(", ")}`}
-        className="flex h-8 w-full gap-px overflow-hidden rounded-md bg-surface"
+        className="flex h-9 w-full gap-0.5 overflow-hidden rounded-lg bg-surface"
       >
         {shown.map((s) => (
           <div
             key={s.label}
-            className={`flex min-w-0 items-center justify-center type-meta font-medium ${FG[s.tone]}`}
-            style={{ flexGrow: s.count, flexBasis: 0, backgroundColor: `var(--div-${s.tone})` }}
+            className="flex min-w-0 items-center justify-center type-meta font-medium"
+            style={{ flexGrow: s.count, flexBasis: 0, backgroundColor: divColor(s.tone), color: divFg(s.tone) }}
           >
             {s.pct >= 8 ? `${s.pct.toFixed(0)}%` : ""}
           </div>
@@ -39,8 +32,8 @@ export function DivergingBar({ segments, label }: { segments: DivergingSegment[]
         {segments.map((s) => (
           <li key={s.label} className="flex items-start gap-2 type-meta text-ink-2">
             <span
-              className="mt-1 h-2.5 w-2.5 shrink-0 rounded-sm"
-              style={{ backgroundColor: `var(--div-${s.tone})` }}
+              className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+              style={{ backgroundColor: divColor(s.tone) }}
               aria-hidden="true"
             />
             <span className="min-w-0 flex-1">{s.label}</span>
@@ -58,8 +51,8 @@ export function DivergingBar({ segments, label }: { segments: DivergingSegment[]
 export function HatchSwatch() {
   return (
     <span
-      className="inline-block h-2.5 w-2.5 shrink-0 rounded-sm border border-line"
-      style={{ backgroundImage: "repeating-linear-gradient(45deg, var(--data-muted) 0 2px, transparent 2px 4px)" }}
+      className="inline-block h-2 w-2 shrink-0 rounded-full border border-line"
+      style={{ backgroundImage: "repeating-linear-gradient(45deg, var(--muted-bar) 0 1px, transparent 1px 2px)" }}
       aria-hidden="true"
     />
   );

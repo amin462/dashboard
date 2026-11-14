@@ -23,7 +23,7 @@ export function CheckList({ options, selected, onChange, large = false }: CheckL
                 large ? "min-h-11 py-2" : "min-h-9 py-1.5"
               } ${checked ? "text-ink" : "text-ink-2"}`}
             >
-              <input type="checkbox" checked={checked} onChange={() => toggle(opt)} className="h-4 w-4 shrink-0 accent-brand" />
+              <input type="checkbox" checked={checked} onChange={() => toggle(opt)} className="h-4 w-4 shrink-0 accent-navy" />
               <span className="leading-5">{opt}</span>
             </label>
           </li>

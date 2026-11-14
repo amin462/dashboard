@@ -30,7 +30,7 @@ export function BottomTabBar() {
               key={t.href}
               href={query ? `${t.href}?${query}` : t.href}
               aria-current={active ? "page" : undefined}
-              className={`${cell} ${active ? "text-white" : "text-frame-ink"}`}
+              className={`${cell} ${active ? "text-white shadow-[inset_0_2px_0_var(--amber)]" : "text-frame-ink"}`}
             >
               <Icon className="h-5 w-5" aria-hidden="true" />
               {t.shortLabel}

@@ -19,7 +19,7 @@ export function FilterBar({ anchor }: { anchor: string | null }) {
   const dateActive = Boolean(filters.from || filters.to);
 
   return (
-    <section aria-label="ตัวกรองข้อมูล" className="no-print sticky top-14 z-20 h-11 border-b border-line bg-surface">
+    <section aria-label="ตัวกรองข้อมูล" className="no-print sticky top-14 z-20 h-11 bg-canvas">
       <div className="mx-auto flex h-full max-w-[1240px] items-center gap-2 px-4 lg:px-8">
         {/* จอเล็ก */}
         <button
@@ -27,7 +27,7 @@ export function FilterBar({ anchor }: { anchor: string | null }) {
           onClick={() => setSheetOpen(true)}
           aria-haspopup="dialog"
           className={`inline-flex h-8 items-center gap-1.5 rounded-lg border px-3 text-[13px] lg:hidden ${
-            active > 0 ? "border-brand/30 bg-brand-soft font-medium text-brand" : "border-line bg-surface text-ink-2"
+            active > 0 ? "border-amber/60 bg-amber-soft font-medium text-navy" : "border-transparent bg-surface text-ink-2 shadow-[0_1px_2px_rgb(20_40_80/.08)]"
           }`}
         >
           <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
@@ -52,7 +52,7 @@ export function FilterBar({ anchor }: { anchor: string | null }) {
             );
           })}
           {active > 0 && (
-            <button type="button" onClick={reset} className="px-1 text-[13px] text-brand hover:underline">
+            <button type="button" onClick={reset} className="px-1 text-[13px] text-navy hover:underline">
               ล้าง
             </button>
           )}

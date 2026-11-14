@@ -17,7 +17,7 @@ export function EmptyState({
   const pathname = usePathname();
 
   return (
-    <div role="status" className="flex flex-col items-center rounded-xl border border-dashed border-line bg-surface px-6 py-12 text-center">
+    <div role="status" className="flex flex-col items-center card border border-dashed border-line px-6 py-12 text-center">
       <SearchX className="h-10 w-10 text-ink-3" strokeWidth={1.25} aria-hidden="true" />
       <p className="mt-3 max-w-md text-ink-2">{reason}</p>
       {showReset && (

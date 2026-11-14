@@ -5,7 +5,7 @@ import { ChartCard } from "./ChartCard";
 /** ความเข้มสูงสุดของ heatmap (คงให้ตัวอักษรอ่านได้ ≥ 4.5:1 ทั้งโหมดสว่าง/มืด) */
 const MAX_ALPHA = 45;
 
-/** ตารางไขว้ heatmap: สี brand ตามสัดส่วนในแถว, ตัวเลขอยู่ในช่อง, คอลัมน์แรก sticky */
+/** ตารางไขว้ heatmap: สี navy ตามสัดส่วนในแถว, ตัวเลขอยู่ในช่อง, คอลัมน์แรก sticky */
 export function CrosstabTable({ result, title, code }: { result: CrosstabResult; title: string; code: string }) {
   const isMultiCol = QUESTIONS[result.b].type === "multi";
 
@@ -56,7 +56,7 @@ export function CrosstabTable({ result, title, code }: { result: CrosstabResult;
                           className="px-2 py-2 text-right text-ink"
                           style={
                             val > 0
-                              ? { backgroundColor: `color-mix(in srgb, var(--brand) ${Math.round(8 + share * (MAX_ALPHA - 8))}%, transparent)` }
+                              ? { backgroundColor: `color-mix(in srgb, var(--navy) ${Math.round(8 + share * (MAX_ALPHA - 8))}%, transparent)` }
                               : undefined
                           }
                         >

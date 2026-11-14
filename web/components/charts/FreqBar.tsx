@@ -21,9 +21,12 @@ function arrange(res: FreqResult): FreqItem[] {
 type FreqBarProps = {
   result: FreqResult;
   title?: string;
+  /** ประโยคสรุปแทนค่าอัตโนมัติ */
+  takeaway?: string;
+  cta?: { href: string; label: string };
 };
 
-export function FreqBar({ result, title }: FreqBarProps) {
+export function FreqBar({ result, title, takeaway, cta }: FreqBarProps) {
   const name = title ?? stripNumber(result.title);
   const items = useMemo(() => arrange(result), [result]);
   const tailLabels = useMemo(() => [...(QUESTIONS[result.code].notSpecified ?? []), OTHERS_LABEL], [result.code]);
@@ -47,12 +50,13 @@ export function FreqBar({ result, title }: FreqBarProps) {
     <ChartCard
       title={name}
       code={codeLabel(result.code)}
-      takeaway={freqTakeaway(result)}
+      takeaway={takeaway ?? freqTakeaway(result)}
       base={result.base}
       skipped={result.skipped}
       notSpecified={result.notSpecified}
       note={result.code === "sur08" ? "ตอบได้หลายข้อ (รวม > 100% ได้)" : undefined}
       tableData={tableData}
+      cta={cta}
     >
       {result.base === 0 ? (
         <p className="py-8 text-center text-ink-3">ไม่มีผู้ตอบข้อนี้ในกลุ่มที่เลือก</p>

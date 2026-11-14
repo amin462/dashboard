@@ -9,7 +9,7 @@ export default function DashError({ error, reset }: { error: Error & { digest?: 
   }, [error]);
 
   return (
-    <div role="alert" className="flex flex-col items-center rounded-xl border border-line bg-surface px-6 py-12 text-center">
+    <div role="alert" className="flex flex-col items-center card px-6 py-12 text-center">
       <AlertCircle className="h-10 w-10 text-danger" strokeWidth={1.25} aria-hidden="true" />
       <h2 className="mt-3 type-section">โหลดข้อมูลหน้านี้ไม่สำเร็จ</h2>
       <p className="mt-1 max-w-md text-ink-2">ระบบแสดงข้อมูลไม่ได้ชั่วคราว ลองโหลดใหม่อีกครั้ง</p>

@@ -45,8 +45,8 @@ export function FilterChip({ label, count, onClear, showCount = true, children }
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex h-8 items-center gap-1.5 rounded-lg border px-3 text-[13px] whitespace-nowrap transition-colors duration-150 ${
           active
-            ? "border-brand/30 bg-brand-soft font-medium text-brand"
-            : "border-line bg-surface text-ink-2 hover:bg-surface-2"
+            ? "border-amber/60 bg-amber-soft font-medium text-navy"
+            : "border-transparent bg-surface text-ink-2 shadow-[0_1px_2px_rgb(20_40_80/.08)] hover:bg-surface-2"
         }`}
       >
         {label}
@@ -58,11 +58,11 @@ export function FilterChip({ label, count, onClear, showCount = true, children }
         <div
           role="group"
           aria-label={label}
-          className="absolute top-full left-0 z-40 mt-1 w-64 rounded-lg border border-line bg-surface p-1 shadow-[0_1px_2px_rgb(0_0_0/.04)]"
+          className="absolute top-full left-0 z-40 mt-1 w-64 rounded-xl bg-surface p-1 shadow-[0_8px_24px_rgb(20_40_80/.16)]"
         >
           {active && (
             <div className="flex justify-end px-2 pt-1">
-              <button type="button" onClick={onClear} className="type-meta text-brand hover:underline">
+              <button type="button" onClick={onClear} className="type-meta text-navy hover:underline">
                 ล้างกลุ่มนี้
               </button>
             </div>

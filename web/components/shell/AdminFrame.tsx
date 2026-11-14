@@ -18,7 +18,7 @@ type AdminFrameProps = {
 export function AdminFrame({ title, description, actions, maxWidth = "max-w-[1000px]", children }: AdminFrameProps) {
   return (
     <div className="min-h-screen bg-canvas">
-      <header className="no-print sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-line bg-surface px-4 lg:px-8">
+      <header className="no-print sticky top-0 z-30 flex h-14 items-center justify-between gap-3 bg-canvas px-4 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <Link href="/" className="btn btn-secondary h-8 shrink-0 px-2.5 text-[13px]">
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />

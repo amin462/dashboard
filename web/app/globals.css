@@ -3,65 +3,79 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design tokens — "ถ้ำยามค่ำ · ทองคำเปลว" (docs/DESIGN.md)
- * กรอบสีกรมท่า (ถ้ำ) + กระดาษขาว + ทองคำ 1 จุดเน้น
- * หมายเหตุ: --ink-3 เข้มกว่าตารางใน DESIGN.md เล็กน้อย เพื่อให้ข้อความ meta ผ่าน contrast 4.5:1
+ * Design tokens v2 — กรมท่า + อำพัน (docs/DESIGN.md "v2 OVERRIDES")
+ * การ์ดขาวลอยบนพื้นเทาฟ้า ; ซีรีส์ข้อมูลมีแค่ navy / navy-2 / amber / muted-bar / diverging
+ * หมายเหตุ: ink-3 ปรับเข้มจากตารางเล็กน้อยในโหมดมืด เพื่อให้ meta ผ่าน contrast 4.5:1
  */
 :root {
-  --canvas: #f5f4f0;
+  --canvas: #eef1f6;
   --surface: #ffffff;
-  --surface-2: #faf9f6;
-  --line: #e6e3dc;
-  --ink: #141b2d;
-  --ink-2: #4a5265;
+  --surface-2: #f5f7fb;
+  --line: #e3e8f0;
+  --grid: #eef1f6;
+  --ink: #1b2433;
+  --ink-2: #4b5568;
   --ink-3: #667085;
-  --frame: #121a2b;
-  --frame-ink: #c5cddc;
-  --brand: #2f55c9;
-  --brand-soft: #eaf0fd;
-  --brand-fg: #ffffff;
-  --gold: #b7862c;
-  --gold-soft: #fbf4e4;
-  --gold-ink: #7a5a14;
-  --data-muted: #cdd3df;
+  --frame: #1e3a5f;
+  --frame-ink: #dce5f2;
+  /* navy = ตัวหนังสือ/ลิงก์/ซีรีส์หลัก ; navy-solid = พื้นทึบ (ตัวหนังสือขาว) */
+  --navy: #1e3a5f;
+  --navy-solid: #1e3a5f;
+  --navy-2: #3d6a9e;
+  --navy-fg: #ffffff;
+  --amber: #f4a52b;
+  --amber-fg: #1b2433;
+  --amber-soft: #fdf1dc;
+  --amber-ink: #7a4e00;
+  --muted-bar: #d5dce8;
   --warn: #a15c07;
   --warn-soft: #fff5df;
   --danger: #b42318;
   --danger-soft: #fef3f2;
   --ok: #157f3d;
   --ok-soft: #ecfdf3;
-  /* diverging 1 -> 5 (ความพึงพอใจ / ความตั้งใจกลับมา) */
-  --div-1: #c2410c;
-  --div-2: #e8a33d;
-  --div-3: #cdd3df;
-  --div-4: #7c9bea;
-  --div-5: #2f55c9;
+  --shadow-card: 0 4px 16px rgb(20 40 80 / 0.06);
+  /* diverging 1 -> 5 (ความพึงพอใจ / ความตั้งใจกลับมา) + สีตัวอักษรบนช่วงนั้น */
+  --div-1: #e4572e;
+  --div-2: #f4a52b;
+  --div-3: #d5dce8;
+  --div-4: #6e93c4;
+  --div-5: #1e3a5f;
+  --div-fg-1: #0b1220;
+  --div-fg-2: #0b1220;
+  --div-fg-3: #0b1220;
+  --div-fg-4: #0b1220;
+  --div-fg-5: #ffffff;
 }
 
 .dark {
-  --canvas: #0e1422;
-  --surface: #151d2e;
-  --surface-2: #1b2438;
-  --line: #263049;
-  --ink: #e8ecf4;
-  --ink-2: #a9b3c7;
-  --ink-3: #8791a6;
-  --frame: #0a0f1a;
-  --frame-ink: #c5cddc;
-  --brand: #6e8ff0;
-  --brand-soft: #1c2a4e;
-  --brand-fg: #0e1422;
-  --gold: #d9ae55;
-  --gold-soft: #2e2716;
-  --gold-ink: #d9ae55;
-  --data-muted: #34405a;
+  --canvas: #0b1322;
+  --surface: #142038;
+  --surface-2: #1b2a47;
+  --line: #263653;
+  --grid: #1f2e4a;
+  --ink: #e8eef8;
+  --ink-2: #aab6cb;
+  --ink-3: #8a97ae;
+  --frame: #0f2140;
+  --frame-ink: #d6e0ee;
+  --navy: #8db4e8;
+  --navy-solid: #24497d;
+  --navy-2: #5e8fc8;
+  --amber-soft: #33270f;
+  --amber-ink: #f7c06a;
+  --muted-bar: #2e405f;
   --warn: #f0b95a;
   --warn-soft: #33280f;
   --danger: #f97066;
   --danger-soft: #3a1a18;
   --ok: #4ade80;
   --ok-soft: #12301f;
-  --div-3: #4a5670;
+  --shadow-card: 0 4px 16px rgb(0 0 0 / 0.35);
+  --div-3: #4a5a78;
+  --div-5: #b5d0f5;
+  --div-fg-3: #ffffff;
+  --div-fg-5: #0b1220;
 }
 
 @theme inline {
@@ -76,13 +90,15 @@
   --color-ink-3: var(--ink-3);
   --color-frame: var(--frame);
   --color-frame-ink: var(--frame-ink);
-  --color-brand: var(--brand);
-  --color-brand-soft: var(--brand-soft);
-  --color-brand-fg: var(--brand-fg);
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
-  --color-gold-ink: var(--gold-ink);
-  --color-data-muted: var(--data-muted);
+  --color-navy: var(--navy);
+  --color-navy-solid: var(--navy-solid);
+  --color-navy-2: var(--navy-2);
+  --color-navy-fg: var(--navy-fg);
+  --color-amber: var(--amber);
+  --color-amber-fg: var(--amber-fg);
+  --color-amber-soft: var(--amber-soft);
+  --color-amber-ink: var(--amber-ink);
+  --color-muted-bar: var(--muted-bar);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
   --color-danger: var(--danger);
@@ -155,16 +171,20 @@ body {
     cursor: not-allowed;
     opacity: 0.5;
   }
+  /* CTA อำพันมน */
   .btn-primary {
-    background: var(--brand);
-    color: var(--brand-fg);
+    background: var(--amber);
+    color: var(--amber-fg);
+    border-radius: 999px;
+    font-weight: 600;
   }
   .btn-primary:hover:not(:disabled) {
-    opacity: 0.9;
+    filter: brightness(0.95);
   }
   .btn-secondary {
     background: var(--surface);
     border-color: var(--line);
+    box-shadow: 0 1px 2px rgb(20 40 80 / 0.05);
     color: var(--ink);
   }
   .btn-secondary:hover:not(:disabled) {
@@ -181,16 +201,27 @@ body {
     color: var(--ink);
   }
   .field:focus {
-    border-color: var(--brand);
+    border-color: var(--navy);
+  }
+  /* การ์ดลอย: ขาว, radius 14, เงานุ่ม, ไม่มีเส้นขอบ */
+  .card {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow-card);
+  }
+  /* KPI ใบแรก: พื้นกรมท่าทึบ */
+  .kpi-solid {
+    background: var(--navy-solid);
+    color: var(--navy-fg);
   }
   .print-only {
     display: none;
   }
 }
 
-/* Focus ring: 2px brand, offset 2 */
+/* Focus ring: 2px navy, offset 2 */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--brand);
+  outline: 2px solid var(--navy);
   outline-offset: 2px;
 }
 
@@ -218,21 +249,32 @@ body {
     --surface: #fff;
     --surface-2: #f4f4f4;
     --line: #c9c9c9;
+    --grid: #e5e5e5;
     --ink: #000;
     --ink-2: #222;
     --ink-3: #444;
-    --brand: #1d3a9e;
-    --brand-soft: #eee;
-    --brand-fg: #fff;
-    --gold: #8a6420;
-    --gold-soft: #f4f4f4;
-    --gold-ink: #000;
-    --data-muted: #bdbdbd;
+    --navy: #1e3a5f;
+    --navy-solid: #fff;
+    --navy-2: #3d6a9e;
+    --navy-fg: #000;
+    --amber: #f4a52b;
+    --amber-soft: #f4f4f4;
+    --amber-ink: #000;
+    --muted-bar: #bdbdbd;
     --warn: #5c3a05;
     --warn-soft: #f4f4f4;
     --danger: #8f1a10;
     --ok: #0f5c2b;
-    --div-3: #cdd3df;
+    --shadow-card: none;
+    --div-3: #d5dce8;
+    --div-5: #1e3a5f;
+    --div-fg-3: #0b1220;
+    --div-fg-5: #fff;
+  }
+
+  .card,
+  .kpi-solid {
+    border: 1px solid var(--line);
   }
 
   html,

@@ -15,6 +15,19 @@ export function useIsClient(): boolean {
   );
 }
 
+/** true เมื่อ media query ตรงเงื่อนไข (SSR = false) เช่น "(min-width: 640px)" */
+export function useMediaQuery(query: string): boolean {
+  return useSyncExternalStore(
+    (cb) => {
+      const m = window.matchMedia(query);
+      m.addEventListener("change", cb);
+      return () => m.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
+}
+
 /** sur07 -> SUR-07 */
 export function codeLabel(code: Code): string {
   return code.replace(/^([a-z]+)(\d+)$/, (_, a: string, n: string) => `${a.toUpperCase()}-${n}`);
@@ -37,23 +50,5 @@ export function freqTakeaway(res: FreqResult): string | undefined {
 }
 
 export function ChartLoadingBox({ height }: { height: number }) {
-  return <div className="w-full animate-pulse rounded-lg bg-data-muted/50" style={{ height }} aria-hidden="true" />;
-}
-
-type TooltipProps = {
-  active?: boolean;
-  payload?: { payload?: { dateLabel?: string; count?: number } }[];
-};
-
-export function CountTooltip({ active, payload }: TooltipProps) {
-  const p = payload?.[0]?.payload;
-  if (!active || !p) return null;
-  return (
-    <div className="rounded-lg border border-line bg-surface px-3 py-2 type-meta shadow-[0_1px_2px_rgb(0_0_0/.04)]">
-      <p className="font-medium text-ink">{p.dateLabel}</p>
-      <p className="text-ink-2">
-        ผู้ตอบ <strong className="text-ink">{(p.count ?? 0).toLocaleString("th-TH")}</strong> คน
-      </p>
-    </div>
-  );
+  return <div className="w-full animate-pulse rounded-lg bg-muted-bar/50" style={{ height }} aria-hidden="true" />;
 }

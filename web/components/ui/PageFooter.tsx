@@ -17,7 +17,7 @@ export function PageFooter() {
           href={EXTERNAL_LINKS.mainSite}
           target="_blank"
           rel="noopener noreferrer"
-          className="no-print inline-flex items-center gap-1 text-brand hover:underline"
+          className="no-print inline-flex items-center gap-1 text-navy hover:underline"
         >
           เว็บหลักโครงการ
           <ExternalLink className="h-3 w-3" aria-hidden="true" />

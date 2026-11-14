@@ -18,7 +18,7 @@ function AuthShell({ title, description, children }: { title: string; descriptio
     <main className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-4 py-10">
       <p className="text-lg leading-6 font-semibold">Yala Insight</p>
       <p className="type-meta text-ink-3">วัดคูหาภิมุข · อ.เมืองยะลา</p>
-      <div className="mt-4 rounded-xl border border-line bg-surface p-5">
+      <div className="mt-4 card p-5">
         <h1 className="type-title">{title}</h1>
         <p className="mt-1 text-ink-2">{description}</p>
         <div className="mt-4 space-y-3">{children}</div>
@@ -32,7 +32,7 @@ export default function AdminLoginPage({ searchParams }: Props) {
     <Suspense
       fallback={
         <AuthShell title="ผู้ดูแลระบบ" description="กำลังโหลด…">
-          <div className="h-24 animate-pulse rounded-lg bg-data-muted/60" />
+          <div className="h-24 animate-pulse rounded-lg bg-muted-bar/60" />
         </AuthShell>
       }
     >

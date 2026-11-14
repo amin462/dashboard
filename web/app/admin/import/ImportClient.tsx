@@ -24,7 +24,7 @@ export function ImportClient() {
           flow.pick(e.dataTransfer.files?.[0]);
         }}
         className={`flex flex-col items-center gap-2 rounded-xl border-2 border-dashed px-6 py-8 text-center transition-colors duration-150 ${
-          dragOver ? "border-brand bg-brand-soft" : "border-line bg-surface"
+          dragOver ? "border-navy bg-amber-soft" : "border-line bg-surface"
         }`}
       >
         <UploadCloud className="h-8 w-8 text-ink-3" strokeWidth={1.25} aria-hidden="true" />

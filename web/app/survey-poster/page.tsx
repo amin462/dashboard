@@ -25,7 +25,7 @@ export default function SurveyPosterPage() {
   return (
     <div className="min-h-screen bg-canvas px-4 py-6 text-ink sm:px-6 lg:py-10 print:min-h-0 print:bg-white print:p-0">
       {/* แถบควบคุมบนหน้าจอ (ซ่อนตอนพิมพ์) */}
-      <div className="no-print mx-auto mb-5 flex max-w-[186mm] flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3">
+      <div className="no-print mx-auto mb-5 flex max-w-[186mm] flex-wrap items-center justify-between gap-3 card px-4 py-3">
         <div className="flex items-center gap-3">
           <Link href="/" className="btn btn-secondary">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
@@ -50,29 +50,29 @@ export default function SurveyPosterPage() {
       <article
         aria-label="โปสเตอร์เชิญชวนตอบแบบสำรวจนักท่องเที่ยว วัดคูหาภิมุข"
         style={{ WebkitPrintColorAdjust: "exact", printColorAdjust: "exact" }}
-        className="mx-auto flex w-full max-w-[186mm] flex-col justify-between rounded-3xl border-[3px] border-[#121a2b] bg-white p-6 text-[#141b2d] sm:p-9 print:max-w-full print:rounded-2xl print:border-[2.5px] print:p-6 print:break-inside-avoid"
+        className="mx-auto flex w-full max-w-[186mm] flex-col justify-between rounded-3xl border-[3px] border-[#1e3a5f] bg-white p-6 text-[#1b2433] sm:p-9 print:max-w-full print:rounded-2xl print:border-[2.5px] print:p-6 print:break-inside-avoid"
       >
         {/* ส่วนหัวสถาบัน */}
-        <header className="border-b-2 border-[#e6e3dc] pb-4 print:pb-3">
+        <header className="border-b-2 border-[#e3e8f0] pb-4 print:pb-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div
                 aria-hidden="true"
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-[#b7862c] bg-[#121a2b] text-white print:h-11 print:w-11"
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-[#f4a52b] bg-[#1e3a5f] text-white print:h-11 print:w-11"
               >
                 <GraduationCap className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-base font-bold leading-tight text-[#121a2b] sm:text-lg">
+                <p className="text-base font-bold leading-tight text-[#1e3a5f] sm:text-lg">
                   มหาวิทยาลัยราชภัฏยะลา
                 </p>
-                <p className="text-sm font-semibold text-[#7a5a14]">
+                <p className="text-sm font-semibold text-[#7a4e00]">
                   คณะวิทยาการจัดการ · งานวิจัยเพื่อพัฒนาการท่องเที่ยวท้องถิ่น
                 </p>
               </div>
             </div>
 
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#b7862c]/40 bg-[#fbf4e4] px-3.5 py-1 text-xs font-bold text-[#7a5a14]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#f4a52b]/40 bg-[#fdf1dc] px-3.5 py-1 text-xs font-bold text-[#7a4e00]">
               <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
               <span>อำเภอเมืองยะลา</span>
             </span>
@@ -81,35 +81,35 @@ export default function SurveyPosterPage() {
 
         {/* หัวข้อหลัก */}
         <div className="my-5 text-center sm:my-6 print:my-4">
-          <p className="inline-block rounded-full bg-[#eaf0fd] px-4 py-1 text-xs font-bold tracking-wide text-[#2f55c9] sm:text-sm">
+          <p className="inline-block rounded-full bg-[#fdf1dc] px-4 py-1 text-xs font-bold tracking-wide text-[#1e3a5f] sm:text-sm">
             ขอเชิญนักท่องเที่ยวทุกท่านร่วมแสดงความคิดเห็น
           </p>
-          <h1 className="mt-3 text-2xl font-bold leading-snug tracking-tight text-[#141b2d] sm:text-3xl print:text-[24pt] print:leading-[1.28]">
+          <h1 className="mt-3 text-2xl font-bold leading-snug tracking-tight text-[#1b2433] sm:text-3xl print:text-[24pt] print:leading-[1.28]">
             ร่วมตอบแบบสำรวจนักท่องเที่ยว
-            <span className="mt-1 block text-[#121a2b]">
+            <span className="mt-1 block text-[#1e3a5f]">
               วัดคูหาภิมุข (วัดหน้าถ้ำ)
             </span>
           </h1>
-          <p className="mx-auto mt-2.5 max-w-xl text-sm leading-relaxed text-[#4a5265] sm:text-base print:text-[11pt]">
+          <p className="mx-auto mt-2.5 max-w-xl text-sm leading-relaxed text-[#4b5568] sm:text-base print:text-[11pt]">
             ความคิดเห็นของท่านจะนำไปใช้พัฒนาบริการ ร้านอาหาร ที่พัก ของฝาก และการต้อนรับนักท่องเที่ยวในพื้นที่อำเภอเมืองยะลาให้ดียิ่งขึ้น
           </p>
         </div>
 
         {/* กรอบ QR Code ขนาดใหญ่ */}
-        <div className="mx-auto flex w-full max-w-md flex-col items-center rounded-3xl border-2 border-[#121a2b]/25 bg-[#faf9f6] px-5 py-6 text-center print:py-5">
-          <div className="rounded-2xl border-2 border-[#121a2b] bg-white p-4 ">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center rounded-3xl border-2 border-[#1e3a5f]/25 bg-[#f5f7fb] px-5 py-6 text-center print:py-5">
+          <div className="rounded-2xl border-2 border-[#1e3a5f] bg-white p-4 ">
             <QRCodeSVG
               value={surveyUrl}
               size={248}
               level="M"
               bgColor="#ffffff"
-              fgColor="#141b2d"
+              fgColor="#1b2433"
               includeMargin={false}
               title="คิวอาร์โค้ดแบบสำรวจนักท่องเที่ยว วัดคูหาภิมุข"
             />
           </div>
 
-          <p className="mt-4 text-lg font-bold text-[#121a2b] sm:text-xl">
+          <p className="mt-4 text-lg font-bold text-[#1e3a5f] sm:text-xl">
             สแกน QR Code เพื่อตอบแบบสำรวจ
           </p>
           <p className="mt-1 break-all px-2 text-[11px] text-[#667085]">
@@ -118,7 +118,7 @@ export default function SurveyPosterPage() {
         </div>
 
         {/* แถบเงื่อนไขและความมั่นใจตามข้อกำหนด */}
-        <div className="my-5 rounded-2xl border border-[#e9d9ae] bg-[#fbf4e4] px-4 py-3 text-center text-sm font-bold text-[#7a5a14] sm:text-base print:my-4 print:py-2.5">
+        <div className="my-5 rounded-2xl border border-[#f4d79b] bg-[#fdf1dc] px-4 py-3 text-center text-sm font-bold text-[#7a4e00] sm:text-base print:my-4 print:py-2.5">
           <span className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
             <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span>ใช้เวลา 3–5 นาที · ไม่เก็บชื่อ เบอร์โทร อีเมล · อายุ 18 ปีขึ้นไป</span>
@@ -127,36 +127,36 @@ export default function SurveyPosterPage() {
 
         {/* วิธีสแกน 3 ขั้นตอนสั้น ๆ */}
         <div className="grid grid-cols-3 gap-2.5 text-center sm:gap-4">
-          <div className="rounded-2xl border border-[#e6e3dc] bg-[#faf9f6] p-3">
+          <div className="rounded-2xl border border-[#e3e8f0] bg-[#f5f7fb] p-3">
             <Camera
-              className="mx-auto h-5 w-5 text-[#121a2b]"
+              className="mx-auto h-5 w-5 text-[#1e3a5f]"
               aria-hidden="true"
             />
-            <p className="mt-1.5 text-xs font-bold text-[#141b2d] sm:text-sm">
+            <p className="mt-1.5 text-xs font-bold text-[#1b2433] sm:text-sm">
               1. เปิดกล้องมือถือ
             </p>
             <p className="mt-0.5 text-[11px] text-[#667085] sm:text-xs">
               หรือแอปสแกน QR
             </p>
           </div>
-          <div className="rounded-2xl border border-[#e6e3dc] bg-[#faf9f6] p-3">
+          <div className="rounded-2xl border border-[#e3e8f0] bg-[#f5f7fb] p-3">
             <Smartphone
-              className="mx-auto h-5 w-5 text-[#121a2b]"
+              className="mx-auto h-5 w-5 text-[#1e3a5f]"
               aria-hidden="true"
             />
-            <p className="mt-1.5 text-xs font-bold text-[#141b2d] sm:text-sm">
+            <p className="mt-1.5 text-xs font-bold text-[#1b2433] sm:text-sm">
               2. ส่องที่คิวอาร์โค้ด
             </p>
             <p className="mt-0.5 text-[11px] text-[#667085] sm:text-xs">
               แตะลิงก์ที่หน้าจอ
             </p>
           </div>
-          <div className="rounded-2xl border border-[#e6e3dc] bg-[#faf9f6] p-3">
+          <div className="rounded-2xl border border-[#e3e8f0] bg-[#f5f7fb] p-3">
             <CheckCircle2
-              className="mx-auto h-5 w-5 text-[#121a2b]"
+              className="mx-auto h-5 w-5 text-[#1e3a5f]"
               aria-hidden="true"
             />
-            <p className="mt-1.5 text-xs font-bold text-[#141b2d] sm:text-sm">
+            <p className="mt-1.5 text-xs font-bold text-[#1b2433] sm:text-sm">
               3. ตอบและกดส่ง
             </p>
             <p className="mt-0.5 text-[11px] text-[#667085] sm:text-xs">
@@ -166,15 +166,15 @@ export default function SurveyPosterPage() {
         </div>
 
         {/* ท้ายกระดาษ */}
-        <footer className="mt-5 space-y-1.5 border-t border-[#e6e3dc] pt-3 text-xs text-[#667085] print:mt-3 print:pt-2">
+        <footer className="mt-5 space-y-1.5 border-t border-[#e3e8f0] pt-3 text-xs text-[#667085] print:mt-3 print:pt-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="inline-flex items-center gap-1.5 font-medium">
-              <ShieldCheck className="h-4 w-4 text-[#121a2b]" aria-hidden="true" />
+              <ShieldCheck className="h-4 w-4 text-[#1e3a5f]" aria-hidden="true" />
               <span>
                 เก็บข้อมูลเพื่อการศึกษาวิจัยและพัฒนาการท่องเที่ยวอย่างเป็นความลับ
               </span>
             </span>
-            <span className="font-semibold text-[#121a2b]">
+            <span className="font-semibold text-[#1e3a5f]">
               คณะวิทยาการจัดการ มหาวิทยาลัยราชภัฏยะลา · ปีที่จัดทำ 2569
             </span>
           </div>
@@ -186,7 +186,7 @@ export default function SurveyPosterPage() {
               href={EXTERNAL_LINKS.mainSite}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#121a2b] hover:underline"
+              className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#1e3a5f] hover:underline"
             >
               <span>เว็บหลักโครงการ</span>
               <ExternalLink className="h-3 w-3" aria-hidden="true" />

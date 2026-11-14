@@ -6,7 +6,7 @@ export function FooterLinks({ tone }: { tone: "frame" | "surface" }) {
   const cls =
     tone === "frame"
       ? "text-frame-ink hover:text-white"
-      : "text-ink-2 hover:text-brand";
+      : "text-ink-2 hover:text-navy";
   return (
     <ul className="flex flex-wrap gap-x-4 gap-y-1 type-meta">
       <li>

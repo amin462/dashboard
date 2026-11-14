@@ -40,7 +40,7 @@ export default function GuidePage() {
           <a
             key={item.href}
             href={item.href}
-            className="rounded-lg border border-line bg-surface px-3 py-1 text-[13px] text-ink-2 transition-colors duration-150 hover:bg-brand-soft hover:text-brand"
+            className="rounded-lg bg-surface px-3 py-1 shadow-[0_1px_2px_rgb(20_40_80/.08)] text-[13px] text-ink-2 transition-colors duration-150 hover:bg-amber-soft hover:text-navy"
           >
             {item.label}
           </a>
@@ -53,9 +53,9 @@ export default function GuidePage() {
           1. ระบบนี้คืออะไร และข้อมูลมาจากไหน
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <article className="print-card rounded-xl border border-line bg-surface p-5">
+          <article className="print-card card p-5">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-soft text-navy">
                 <Store className="h-5 w-5" aria-hidden="true" />
               </span>
               <h3 className="type-section text-ink">
@@ -71,9 +71,9 @@ export default function GuidePage() {
             </p>
           </article>
 
-          <article className="print-card rounded-xl border border-line bg-surface p-5">
+          <article className="print-card card p-5">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-soft text-gold-ink">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-soft text-amber-ink">
                 <Info className="h-5 w-5" aria-hidden="true" />
               </span>
               <h3 className="type-section text-ink">
@@ -109,13 +109,13 @@ export default function GuidePage() {
         </h2>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <article className="print-card rounded-xl border border-line bg-surface p-5">
+          <article className="print-card card p-5">
             <h3 className="type-section text-ink">
               ฐาน n, ไม่ตอบ และ ไม่ประสงค์ระบุ ต่างกันอย่างไร
             </h3>
             <dl className="mt-3 space-y-3 text-sm">
-              <div className="rounded-xl border border-line bg-surface-2 p-3">
-                <dt className="font-bold text-brand">
+              <div className="rounded-xl bg-surface-2 p-3">
+                <dt className="font-bold text-navy">
                   ฐาน n = X คน (ตัวหารร้อยละ)
                 </dt>
                 <dd className="mt-1 text-ink-2">
@@ -125,7 +125,7 @@ export default function GuidePage() {
                   </span>
                 </dd>
               </div>
-              <div className="rounded-xl border border-line bg-surface-2 p-3">
+              <div className="rounded-xl bg-surface-2 p-3">
                 <dt className="font-bold text-ink">
                   ไม่ตอบ (ข้าม) vs ไม่ประสงค์ระบุ
                 </dt>
@@ -137,12 +137,12 @@ export default function GuidePage() {
             </dl>
           </article>
 
-          <article className="print-card rounded-xl border border-line bg-surface p-5">
+          <article className="print-card card p-5">
             <h3 className="type-section text-ink">
               ข้อที่เลือกได้หลายคำตอบ & ป้ายเตือนข้อมูลน้อย
             </h3>
             <div className="mt-3 space-y-3 text-sm text-ink-2">
-              <div className="rounded-xl border border-line bg-surface-2 p-3">
+              <div className="rounded-xl bg-surface-2 p-3">
                 <p className="font-bold text-ink">
                   ทำไมข้อ 8 “สินค้าและบริการที่สนใจ” ร้อยละเกิน 100% ได้?
                 </p>
@@ -152,7 +152,7 @@ export default function GuidePage() {
                 </p>
               </div>
 
-              <div className="rounded-xl border border-line bg-warn-soft p-3">
+              <div className="rounded-xl bg-warn-soft p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="font-bold text-warn">
                     เมื่อเห็นป้ายเตือนนี้:
@@ -168,7 +168,7 @@ export default function GuidePage() {
         </div>
 
         {/* เกณฑ์แปลผลความพึงพอใจ */}
-        <article className="print-card rounded-xl border border-line bg-surface p-5">
+        <article className="print-card card p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="type-section text-ink">
               วิธีอ่านคะแนนความพึงพอใจ (ข้อ 9)
@@ -201,11 +201,11 @@ export default function GuidePage() {
         <h2 className="type-section text-ink">
           3. ใช้แถบตัวกรองด้านบนอย่างไรให้ได้คำตอบตรงกลุ่มลูกค้า
         </h2>
-        <article className="print-card rounded-xl border border-line bg-surface p-5">
+        <article className="print-card card p-5">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-1.5 text-sm font-bold text-ink">
-                <Filter className="h-4 w-4 text-brand" aria-hidden="true" />
+                <Filter className="h-4 w-4 text-navy" aria-hidden="true" />
                 <span>กรองได้ 5 มิติทุกหน้า</span>
               </div>
               <p className="text-sm leading-relaxed text-ink-2">
@@ -218,7 +218,7 @@ export default function GuidePage() {
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-1.5 text-sm font-bold text-ink">
                 <SlidersHorizontal
-                  className="h-4 w-4 text-brand"
+                  className="h-4 w-4 text-navy"
                   aria-hidden="true"
                 />
                 <span>เลือกหลายข้อ = รวมกัน / ข้ามหัวข้อ = เจาะจง</span>
@@ -230,7 +230,7 @@ export default function GuidePage() {
 
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-1.5 text-sm font-bold text-ink">
-                <Info className="h-4 w-4 text-gold-ink" aria-hidden="true" />
+                <Info className="h-4 w-4 text-amber-ink" aria-hidden="true" />
                 <span>สลับดูตาราง & ล้างตัวกรอง</span>
               </div>
               <p className="text-sm leading-relaxed text-ink-2">
@@ -248,7 +248,7 @@ export default function GuidePage() {
           <h2 className="type-section text-ink">
             4. ตัวอย่างการนำข้อมูลไปตัดสินใจ (4 กลุ่มธุรกิจ)
           </h2>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-gold-soft px-2.5 py-0.5 text-xs font-semibold text-warn">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-amber-soft px-2.5 py-0.5 text-xs font-semibold text-warn">
             <Lightbulb className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{INSIGHT_DISCLAIMER}</span>
           </span>
@@ -260,7 +260,7 @@ export default function GuidePage() {
             return (
               <article
                 key={ex.key}
-                className="print-card flex flex-col justify-between rounded-xl border border-line bg-surface p-5"
+                className="print-card flex flex-col justify-between card p-5"
               >
                 <div>
                   <div className="flex items-center gap-2.5">
@@ -281,8 +281,8 @@ export default function GuidePage() {
                         {ex.ifSee}
                       </p>
                     </div>
-                    <div className="rounded-xl border border-brand/20 bg-brand-soft p-3">
-                      <p className="text-xs font-bold text-brand">
+                    <div className="rounded-xl bg-amber-soft p-3">
+                      <p className="text-xs font-bold text-navy">
                         → ลองนำไปปรับใช้…
                       </p>
                       <p className="mt-0.5 leading-relaxed text-ink">
@@ -296,9 +296,9 @@ export default function GuidePage() {
           })}
         </div>
 
-        <div className="rounded-xl border border-line bg-surface-2 px-4 py-3 text-sm text-ink-2">
+        <div className="rounded-xl bg-surface-2 px-4 py-3 text-sm text-ink-2">
           <strong className="font-semibold text-ink">สำหรับทุกประเภทธุรกิจ:</strong>{" "}
-          สามารถดูข้อ 6 (<Link href="/awareness" className="font-semibold text-brand underline-offset-2 hover:underline">วัตถุประสงค์ & ช่องทางรับรู้</Link>) เพื่อเช็กว่าช่องทางใดติดอันดับ 1 แล้วเน้นโพสต์โปรโมตหรือลงโฆษณาในช่องทางนั้นก่อน
+          สามารถดูข้อ 6 (<Link href="/awareness" className="font-semibold text-navy underline-offset-2 hover:underline">วัตถุประสงค์ & ช่องทางรับรู้</Link>) เพื่อเช็กว่าช่องทางใดติดอันดับ 1 แล้วเน้นโพสต์โปรโมตหรือลงโฆษณาในช่องทางนั้นก่อน
         </div>
       </section>
 
@@ -307,7 +307,7 @@ export default function GuidePage() {
         <h2 className="type-section text-ink">
           5. ข้อจำกัดของข้อมูลที่ควรรู้ก่อนตัดสินใจ
         </h2>
-        <article className="print-card rounded-xl border border-line bg-warn-soft p-5 text-warn">
+        <article className="print-card rounded-xl bg-warn-soft p-5 text-warn">
           <div className="flex items-start gap-3">
             <AlertTriangle
               className="mt-0.5 h-5 w-5 shrink-0"
@@ -336,7 +336,7 @@ export default function GuidePage() {
       {/* 6. FAQ 5 ข้อ (Accordion อ่านง่ายบนมือถือ) */}
       <section id="faq" className="scroll-mt-28 space-y-3">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-brand" aria-hidden="true" />
+          <HelpCircle className="h-5 w-5 text-navy" aria-hidden="true" />
           <h2 className="type-section text-ink">
             6. คำถามที่พบบ่อย (FAQ)
           </h2>
@@ -347,7 +347,7 @@ export default function GuidePage() {
             <details
               key={item.q}
               open={idx === 0}
-              className="print-card group rounded-xl border border-line bg-surface"
+              className="print-card group card"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 text-sm font-bold text-ink sm:px-5 sm:text-base [&::-webkit-details-marker]:hidden">
                 <span className="leading-snug">{item.q}</span>

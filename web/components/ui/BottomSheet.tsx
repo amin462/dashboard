@@ -43,7 +43,7 @@ export function BottomSheet({ open, title, onClose, children, footer }: BottomSh
         onClick={onClose}
         className="absolute inset-0 cursor-default bg-black/50"
       />
-      <div className="relative flex max-h-[85dvh] w-full flex-col rounded-t-xl border-t border-line bg-surface">
+      <div className="relative flex max-h-[85dvh] w-full flex-col rounded-t-2xl bg-surface shadow-[0_-8px_24px_rgb(20_40_80/.2)]">
         <div className="flex h-12 shrink-0 items-center justify-between border-b border-line px-4">
           <h2 className="type-section">{title}</h2>
           <button type="button" onClick={onClose} aria-label="ปิด" className="btn btn-secondary w-9 px-0">

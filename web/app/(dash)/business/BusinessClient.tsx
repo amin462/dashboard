@@ -21,7 +21,7 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
         const d = bizData(filtered);
         return (
           <>
-            <div role="tablist" aria-label="ประเภทธุรกิจ" className="no-print grid grid-cols-2 gap-1 rounded-xl border border-line bg-surface p-1 sm:inline-grid sm:grid-cols-4">
+            <div role="tablist" aria-label="ประเภทธุรกิจ" className="no-print grid grid-cols-2 gap-1 card p-1 sm:inline-grid sm:grid-cols-4">
               {BUSINESS_TYPES.map((b) => {
                 const Icon = ICONS[b.key];
                 const selected = b.key === type;
@@ -33,7 +33,7 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
                     aria-selected={selected}
                     onClick={() => setType(b.key)}
                     className={`flex h-9 items-center justify-center gap-2 rounded-lg px-3 whitespace-nowrap transition-colors duration-150 ${
-                      selected ? "bg-brand font-medium text-brand-fg" : "text-ink-2 hover:bg-surface-2"
+                      selected ? "bg-navy-solid font-medium text-navy-fg" : "text-ink-2 hover:bg-surface-2"
                     }`}
                   >
                     <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
