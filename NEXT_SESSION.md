@@ -1,5 +1,7 @@
 # NEXT_SESSION — สถานะงาน ณ 14 พ.ย. 2569 (ส่งงาน 18 พ.ย.)
 
+> ✅ T8 UI polish เสร็จ (sidebar พอดีจอไม่มี scroll, การ์ดทุกแถวสูงเท่ากัน, /satisfaction ใหม่, /business hero) ตรวจบน production build แล้ว
+> ⚠️ ถ้าเปิด dev แล้วกราฟไม่ขึ้น/ค้าง skeleton = dev server เก่าค้าง (HMR websocket fail) → ปิดแล้ว `pnpm -C web dev` ใหม่ หรือใช้ launch config `web-prod` (next start :3100 หลัง build)
 > ✅ T7 UI v2 เสร็จและตรวจแล้ว (Opus ดูหน้าภาพรวม 1280/375: ตรงภาพอ้างอิง ไม่มีล้นจอ) — ยังไม่ได้ดูด้วยตา: /admin/import, /admin/quality, print /reports, หน้าย่อยบนมือถือทีละหน้า
 
 ## เสร็จแล้ว ✅ (ตรวจโดย Claude Opus)
