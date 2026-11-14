@@ -17,7 +17,7 @@ export function NavList({ tone, onNavigate }: NavListProps) {
   const frame = tone === "frame";
 
   return (
-    <nav aria-label="เมนูหลัก" className="space-y-5">
+    <nav aria-label="เมนูหลัก" className={frame ? "space-y-3.5" : "space-y-5"}>
       {NAV_GROUPS.map((group) => (
         <div key={group.key}>
           <p className={`px-3 pb-1 type-meta ${frame ? "text-frame-ink/65" : "text-ink-3"}`}>{group.label}</p>
@@ -40,11 +40,11 @@ export function NavList({ tone, onNavigate }: NavListProps) {
                     prefetch={item.group === "admin" ? false : undefined}
                     onClick={onNavigate}
                     aria-current={active ? "page" : undefined}
-                    className={`relative flex h-10 items-center gap-3 rounded-lg px-3 transition-colors duration-150 ${tone2}`}
+                    className={`relative flex items-center ${frame ? "h-9" : "h-10"} gap-3 rounded-lg px-3 transition-colors duration-150 ${tone2}`}
                   >
                     {active && frame && <span className="absolute inset-y-1.5 left-0 w-[3px] rounded-full bg-amber" aria-hidden="true" />}
                     <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                    <span className="truncate">{item.label}</span>
+                    <span className="min-w-0 flex-1">{item.navLabel ?? item.label}</span>
                   </Link>
                 </li>
               );

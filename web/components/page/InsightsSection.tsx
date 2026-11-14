@@ -11,7 +11,7 @@ type InsightsSectionProps = {
   n: number;
   /** จำกัดจำนวนการ์ด (ค่าเริ่มต้น 3) */
   max?: number;
-  /** grid = 3 ใบเรียงข้างกัน ; panel = ซ้อนในการ์ดขาวเดียว (หน้าภาพรวม) */
+  /** grid = 3 ใบเท่ากันบนพื้นหลังหน้า ; panel = อยู่ในการ์ดขาวใบเดียวเต็มแถว (หน้าภาพรวม) หัวข้อซ้าย CTA ขวา */
   variant?: "grid" | "panel";
   cta?: { href: string; label: string };
 };
@@ -21,10 +21,13 @@ export function InsightsSection({ title, insights, n, max = 3, variant = "grid",
   const shown = insights.slice(0, max);
   const panel = variant === "panel";
   return (
-    <section aria-label={title} className={panel ? "card flex h-full min-w-0 flex-col gap-3 p-5" : "space-y-3"}>
-      <h2 className="type-section">{title}</h2>
+    <section aria-label={title} className={panel ? "print-card card flex min-w-0 flex-col gap-3 p-5" : "space-y-3"}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="type-section">{title}</h2>
+        {cta && <CtaLink href={cta.href}>{cta.label}</CtaLink>}
+      </div>
       {shown.length > 0 ? (
-        <div className={panel ? "flex flex-col gap-3" : "grid grid-cols-1 gap-4 md:grid-cols-3"}>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
           {shown.map((ins) => (
             <InsightCard key={ins.title} insight={ins} />
           ))}
@@ -35,11 +38,6 @@ export function InsightsSection({ title, insights, n, max = 3, variant = "grid",
             ผู้ตอบในกลุ่มที่กรองมีน้อยกว่า {SMALL_N} คนในข้อที่เกี่ยวข้อง จึงยังไม่สรุปข้อเสนอเพื่อกันการตีความคลาดเคลื่อน
           </p>
           <SmallSampleBadge n={n} />
-        </div>
-      )}
-      {cta && (
-        <div className={panel ? "mt-auto pt-1" : ""}>
-          <CtaLink href={cta.href}>{cta.label}</CtaLink>
         </div>
       )}
     </section>

@@ -225,6 +225,41 @@ body {
   outline-offset: 2px;
 }
 
+/* Scrollbar บางกลมกลืนกับพื้นกรมท่า (แถบข้าง) และพื้นการ์ดขาว (.thin-scroll) ; Firefox ใช้ scrollbar-color, Chromium/Safari ใช้ pseudo-element */
+.sidebar-scroll::-webkit-scrollbar,
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.sidebar-scroll::-webkit-scrollbar-track,
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 0.22);
+  border-radius: 999px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgb(255 255 255 / 0.35);
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--muted-bar);
+  border-radius: 999px;
+}
+.thin-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-3);
+}
+@supports (-moz-appearance: none) {
+  .sidebar-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.22) transparent;
+  }
+  .thin-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-bar) transparent;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

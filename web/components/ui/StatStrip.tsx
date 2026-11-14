@@ -27,11 +27,20 @@ const COLS: Record<number, string> = {
 const isLong = (v: string) => v.length > 9;
 
 /** แถว KPI การ์ดลอย: ใบแรกพื้นกรมท่าทึบ (ตัวหนังสือขาว) ใบอื่นขาว ; มือถือ 2 คอลัมน์ */
-export function StatStrip({ items, label = "ตัวชี้วัดสำคัญ" }: { items: Stat[]; label?: string }) {
+export function StatStrip({
+  items,
+  label = "ตัวชี้วัดสำคัญ",
+  solidFirst = true,
+}: {
+  items: Stat[];
+  label?: string;
+  /** ใบแรกพื้นกรมท่าทึบ (ปิดเมื่อวางคู่กับการ์ดกรมท่าอื่น) */
+  solidFirst?: boolean;
+}) {
   return (
     <section aria-label={label} className={`grid grid-cols-2 gap-3 sm:gap-4 ${COLS[items.length] ?? "lg:grid-cols-4"}`}>
       {items.map((s, i) => {
-        const first = i === 0;
+        const first = solidFirst && i === 0;
         const pct = typeof s.progress === "number" ? Math.max(0, Math.min(100, s.progress)) : null;
         const oddLast = items.length % 2 === 1 && i === items.length - 1;
         const Icon = s.icon ?? Activity;

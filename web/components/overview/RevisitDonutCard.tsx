@@ -17,6 +17,8 @@ const LEVELS: { label: string; tone: Tone }[] = [
 ];
 
 type Props = {
+  /** ซ่อนปุ่ม CTA (เมื่อวางในหน้าความพึงพอใจเอง) */
+  hideCta?: boolean;
   /** freq(rows, 'sur10') */
   result: FreqResult;
   /** overview().returnIntent */
@@ -24,7 +26,7 @@ type Props = {
 };
 
 /** donut ค่าเดียว (สัดส่วนตั้งใจกลับมา) + รายการ SUR-10 ครบ 4 ระดับ + CTA → /satisfaction */
-export function RevisitDonutCard({ result, intent }: Props) {
+export function RevisitDonutCard({ result, intent, hideCta = false }: Props) {
   const isClient = useIsClient();
   const size = 168;
   const rows = useMemo(
@@ -52,16 +54,16 @@ export function RevisitDonutCard({ result, intent }: Props) {
       base={result.base}
       skipped={result.skipped}
       tableData={tableData}
-      cta={{ href: "/satisfaction", label: "ดูความพึงพอใจ" }}
+      cta={hideCta ? undefined : { href: "/satisfaction", label: "ดูความพึงพอใจ" }}
     >
       {result.base === 0 ? (
         <p className="py-10 text-center text-ink-3">ไม่มีผู้ตอบข้อนี้ในกลุ่มที่เลือก</p>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-1 flex-col gap-4">
           <div
             role="img"
             aria-label={`ตั้งใจจะกลับมาอีก ${intent.pct.toFixed(1)}% (${intent.count} จาก ${intent.base} คน)`}
-            className="relative mx-auto"
+            className="relative mx-auto my-auto shrink-0"
             style={{ width: size, height: size }}
           >
             {!isClient ? (

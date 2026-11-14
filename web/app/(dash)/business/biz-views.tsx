@@ -12,6 +12,7 @@ import type { Stat } from "@/components/ui/StatStrip";
 export function bizData(rows: Row[]) {
   return {
     n: rows.length,
+    age: freq(rows, "sur01"),
     interest: multiFreq(rows),
     origin: freq(rows, "sur02"),
     comp: freq(rows, "sur03"),
@@ -40,8 +41,17 @@ function peakSlotStat(d: BizData): Stat {
   };
 }
 
-export const BIZ_VIEWS: Record<BusinessType, { stats: (d: BizData) => Stat[]; charts: (d: BizData) => ReactNode }> = {
+export const BIZ_VIEWS: Record<
+  BusinessType,
+  {
+    /** สิ่งที่ธุรกิจประเภทนี้ควรดูในหน้านี้ (ข้อความกำกับการ์ดโปรไฟล์) */
+    focus: string;
+    stats: (d: BizData) => Stat[];
+    charts: (d: BizData) => ReactNode;
+  }
+> = {
   restaurant: {
+    focus: "ความสนใจอาหาร ช่วงเวลาที่ลูกค้ามา และงบต่อคน",
     stats: (d) => [
       shareStat("ลูกค้าของคุณสนใจอาหารและเครื่องดื่ม", interestOf(d, "อาหารและเครื่องดื่ม"), d.interest, 8),
       topStat("ช่วงที่ลูกค้าใช้จ่ายมากที่สุด", spendTop(d), d.spend, 7),
@@ -55,6 +65,7 @@ export const BIZ_VIEWS: Record<BusinessType, { stats: (d: BizData) => Stat[]; ch
     ),
   },
   hotel: {
+    focus: "ความสนใจที่พัก ถิ่นพำนักของลูกค้า และงบต่อคน",
     stats: (d) => [
       shareStat("ลูกค้าของคุณสนใจที่พัก / โฮมสเตย์", interestOf(d, "โรงแรม / ที่พัก / โฮมสเตย์"), d.interest, 8),
       topStat("ลูกค้าส่วนใหญ่พำนักที่", topItem(d.origin, ["ไม่ประสงค์ระบุ"]), d.origin, 2, "ไม่ระบุ"),
@@ -68,6 +79,7 @@ export const BIZ_VIEWS: Record<BusinessType, { stats: (d: BizData) => Stat[]; ch
     ),
   },
   shop: {
+    focus: "ความสนใจของฝาก ช่วงราคาที่ใช้จ่าย และเหตุผลที่มา",
     stats: (d) => [
       shareStat("ลูกค้าของคุณสนใจของฝาก / ผลิตภัณฑ์ชุมชน", interestOf(d, "ของฝาก / ผลิตภัณฑ์ชุมชน"), d.interest, 8),
       topStat("ช่วงที่ลูกค้าใช้จ่ายมากที่สุด", spendTop(d), d.spend, 7),
@@ -81,6 +93,7 @@ export const BIZ_VIEWS: Record<BusinessType, { stats: (d: BizData) => Stat[]; ch
     ),
   },
   tour: {
+    focus: "ความสนใจนำเที่ยว/ขนส่ง พาหนะ และช่องทางที่ลูกค้ารู้จัก",
     stats: (d) => [
       shareStat("ลูกค้าของคุณสนใจบริการเดินทาง / ขนส่ง", interestOf(d, "บริการเดินทาง / ขนส่ง"), d.interest, 8),
       shareStat("ลูกค้าของคุณสนใจกิจกรรม / นำเที่ยว", interestOf(d, "กิจกรรมท่องเที่ยว / นำเที่ยว"), d.interest, 8),

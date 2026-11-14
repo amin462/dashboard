@@ -8,7 +8,7 @@ export function FooterLinks({ tone }: { tone: "frame" | "surface" }) {
       ? "text-frame-ink hover:text-white"
       : "text-ink-2 hover:text-navy";
   return (
-    <ul className="flex flex-wrap gap-x-4 gap-y-1 type-meta">
+    <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 type-meta whitespace-nowrap">
       <li>
         <a href={EXTERNAL_LINKS.mainSite} target="_blank" rel="noopener noreferrer" className={cls}>
           เว็บหลัก

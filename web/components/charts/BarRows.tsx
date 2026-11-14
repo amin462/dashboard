@@ -14,7 +14,7 @@ export type BarRow = {
 export function BarRows({ rows, highlight, label }: { rows: BarRow[]; highlight: string | null; label: string }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <ul aria-label={label} className="space-y-1">
+    <ul aria-label={label} className="flex flex-1 flex-col justify-evenly gap-1">
       {rows.map((r) => {
         const top = r.label === highlight && !r.tail;
         const width = r.count > 0 ? Math.max(0.5, (r.count / max) * 100) : 0;

@@ -99,3 +99,10 @@
 - ส่วนต่างในการ์ดแท่งคู่ = round1(pct ต่างถิ่น − pct ยะลา) ของหมวดที่ต่างมากสุด ; แกน SUR-08 ตัด "ไม่มีความสนใจเป็นพิเศษ"/"อื่น ๆ" ; ป้ายค่าบนแท่งซ่อนบนจอ < 640px (ใช้ทูลทิป/ตาราง)
 - StatStrip เป็นการ์ดลอยแยก ใบแรก navy ทึบ (print = ขาว) ; ปฏิทินความเข้ม 4 ขั้นเพื่อให้ตัวอักษรผ่าน contrast ; โปสเตอร์ QR ใช้ค่าสี hex ตายตัวชุด v2 (พิมพ์)
 - ตรวจแล้ว: typegen, tsc, test 39/39, lint, build ผ่าน ; ทุกเส้นทาง 200 (admin import/quality 307 = fail-closed) ; ดูหน้า / ที่ 1024/375 + dark ไม่มี overflow ; ยังไม่ได้ดู admin import/quality ด้วยตา (ต้องล็อกอิน) และยังไม่ได้พิมพ์ /reports จริง
+
+## UI polish T8 — sonnet
+- แถบข้าง 248px, เมนู 36px, ป้ายเมนูสั้น (`navLabel` ใน nav-config ; หัวหน้ายังใช้ `label` เต็ม) ไม่ถูกตัดที่ 1280, ไม่ต้องเลื่อนที่ 1280×800 ; scrollbar บาง/โปร่ง (`.sidebar-scroll`, `.thin-scroll` ใน globals.css) ; โหมด dev เว้นขอบล่างให้พ้นปุ่ม Next dev indicator
+- การ์ดสูงเท่ากันทุกแถวด้วย `ui/Cell` (flex stretch) + ChartCard/BarRows ยืดเนื้อหา ; ภาพรวมเรียงใหม่: 8/4 → daily 12 → slot 4/ช่องทาง 8 → มากับใคร 6/พาหนะ 6 → ข้อเสนอ 3 ใบเต็มแถว (FreqBar `hideOthers`)
+- /satisfaction ใหม่: `components/satisfaction/*` (ค่าเฉลี่ยตามถิ่นพำนัก/ผู้ร่วมเดินทางด้วย applyFilters+satisfaction, heatmap crosstab sur09×sur10) ; CommentList สูงคงที่ 520px เลื่อนในกรอบ + ค้นหา + ชิปกลุ่ม + แสดงเพิ่มทีละ 30 ; ลบ RevisitChart (ใช้ RevisitDonutCard แทน)
+- /business: tabs 4 ประเภทเต็มแถว → การ์ดโปรไฟล์กรมท่า 5 คอล + KPI 3 ใบ 7 คอล (StatStrip `solidFirst={false}`)
+- ตรวจ (build + start :3100): ทุกแถวสูงเท่ากันที่ 1280/1440 ทุกหน้า, ไม่มี overflow แนวนอนที่ 375 ; ภาพรวม 2,053→2,553px (เพิ่มการ์ดมากับใคร/พาหนะ), satisfaction ~5,5xx→1,729px

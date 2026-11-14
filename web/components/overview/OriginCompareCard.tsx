@@ -77,11 +77,16 @@ export function OriginCompareCard({ rows }: { rows: Row[] }) {
           ต้องมีผู้ตอบทั้งคนยะลา ({num(yala.base)} คน) และคนต่างถิ่น ({num(outside.base)} คน) ที่ตอบข้อ 8 จึงเปรียบเทียบได้
         </p>
       ) : (
-        <div role="img" aria-label={`แท่งคู่เปรียบเทียบสินค้า/บริการที่สนใจ คนยะลา ${yala.base} คน กับคนต่างถิ่น ${outside.base} คน`}>
+        <div
+          role="img"
+          aria-label={`แท่งคู่เปรียบเทียบสินค้า/บริการที่สนใจ คนยะลา ${yala.base} คน กับคนต่างถิ่น ${outside.base} คน`}
+          className="relative flex-1"
+          style={{ minHeight: height }}
+        >
           {!isClient ? (
             <ChartLoadingBox height={height} />
           ) : (
-            <ResponsiveContainer width="100%" height={height} minWidth={0} initialDimension={{ width: 640, height }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 640, height }} className="absolute inset-0">
               <BarChart data={data} margin={{ ...CHART_MARGIN, left: 0, top: 20 }} barGap={4} barCategoryGap="22%">
                 <CartesianGrid {...GRID} />
                 <XAxis dataKey="tick" tick={<WrapTick />} axisLine={AXIS_LINE} tickLine={false} interval={0} height={44} />

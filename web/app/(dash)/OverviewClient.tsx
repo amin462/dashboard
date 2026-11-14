@@ -12,6 +12,7 @@ import { dailyBoth, splitByOrigin } from "@/components/overview/overview-data";
 import { overviewStats } from "@/components/overview/overview-kpis";
 import { DashPage } from "@/components/page/DashPage";
 import { InsightsSection } from "@/components/page/InsightsSection";
+import { Cell } from "@/components/ui/Cell";
 import { StatStrip } from "@/components/ui/StatStrip";
 
 /** หน้าภาพรวม: grid 12 คอลัมน์ (มือถือ = คอลัมน์เดียว, KPI 2×2) ; ตัวเลขทุกค่ามาจาก lib/survey */
@@ -26,22 +27,28 @@ export function OverviewClient({ rows }: { rows: Row[] }) {
           <div className="space-y-4">
             <StatStrip items={overviewStats(ov)} />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-              <div className="min-w-0 lg:col-span-8">
+              <Cell span="lg:col-span-8">
                 <OriginCompareCard rows={filtered} />
-              </div>
-              <div className="min-w-0 lg:col-span-4">
+              </Cell>
+              <Cell span="lg:col-span-4">
                 <RevisitDonutCard result={freq(filtered, "sur10")} intent={ov.returnIntent} />
-              </div>
-              <div className="min-w-0 lg:col-span-8">
+              </Cell>
+              <Cell span="lg:col-span-12">
                 <DailyCard data={dailyBoth(filtered, outside)} total={ov.n} outsideTotal={outside.length} />
-              </div>
-              <div className="min-w-0 lg:col-span-4">
+              </Cell>
+              <Cell span="lg:col-span-4">
                 <SlotBar data={ov.slots} totalRows={ov.n} title="ช่วงเวลาที่มา" />
-              </div>
-              <div className="min-w-0 lg:col-span-6">
-                <FreqBar result={channel} title="ช่องทางที่รู้จัก" cta={{ href: "/awareness", label: "ดูรายละเอียด" }} />
-              </div>
-              <div className="min-w-0 lg:col-span-6">
+              </Cell>
+              <Cell span="lg:col-span-8">
+                <FreqBar result={channel} hideOthers title="ช่องทางที่รู้จัก" cta={{ href: "/awareness", label: "ดูรายละเอียด" }} />
+              </Cell>
+              <Cell span="lg:col-span-6">
+                <FreqBar result={freq(filtered, "sur03")} title="มากับใคร" hideOthers />
+              </Cell>
+              <Cell span="lg:col-span-6">
+                <FreqBar result={freq(filtered, "sur04")} title="พาหนะที่ใช้เดินทางมา" hideOthers cta={{ href: "/travel", label: "ดูการเดินทาง" }} />
+              </Cell>
+              <Cell span="lg:col-span-12">
                 <InsightsSection
                   variant="panel"
                   title="ข้อเสนอสำหรับธุรกิจ"
@@ -49,7 +56,7 @@ export function OverviewClient({ rows }: { rows: Row[] }) {
                   n={ov.n}
                   cta={{ href: "/business", label: "ดูตามประเภทธุรกิจ" }}
                 />
-              </div>
+              </Cell>
             </div>
           </div>
         );

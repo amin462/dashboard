@@ -70,12 +70,17 @@ export function DailyCard({ data, total, outsideTotal }: Props) {
       {chartData.length === 0 ? (
         <p className="py-8 text-center text-ink-3">ไม่มีข้อมูลวันที่ในช่วงที่เลือก</p>
       ) : (
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
-          <div className="min-w-0 flex-1" role="img" aria-label={`กราฟพื้นที่จำนวนผู้ตอบรายวัน รวม ${total} คน นอกจังหวัด ${outsideTotal} คน`}>
+        <div className="flex flex-1 flex-col gap-5 lg:flex-row">
+          <div
+            className="relative min-w-0 flex-1"
+            style={{ minHeight: height }}
+            role="img"
+            aria-label={`กราฟพื้นที่จำนวนผู้ตอบรายวัน รวม ${total} คน นอกจังหวัด ${outsideTotal} คน`}
+          >
             {!isClient ? (
               <ChartLoadingBox height={height} />
             ) : (
-              <ResponsiveContainer width="100%" height={height} minWidth={0} initialDimension={{ width: 480, height }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 480, height }} className="absolute inset-0">
                 <AreaChart data={chartData} margin={CHART_MARGIN}>
                   <defs>
                     <Fade id="fade-all" color={SERIES.primary} top={0.35} />

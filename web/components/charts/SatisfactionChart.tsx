@@ -52,7 +52,7 @@ export function SatisfactionChart({ result }: { result: SatResult }) {
       {result.n === 0 ? (
         <p className="py-8 text-center text-ink-3">ไม่มีผู้ให้คะแนน 1–5 ในกลุ่มที่เลือก</p>
       ) : (
-        <>
+        <div className="flex flex-1 flex-col">
           <p className="text-ink">
             <span className="type-kpi">{result.mean?.toFixed(2)}</span>
             <span className="ml-1 text-ink-2">/ 5 · {result.level}</span>
@@ -65,10 +65,10 @@ export function SatisfactionChart({ result }: { result: SatResult }) {
             <HatchSwatch />
             ยังไม่สามารถประเมินได้ {result.cannotRate.toLocaleString("th-TH")} คน (แสดงแยก ไม่รวมในค่าเฉลี่ย)
           </p>
-          <p className="mt-2 type-meta text-ink-3">
+          <p className="mt-auto pt-3 type-meta text-ink-3">
             เกณฑ์แปลผล: 4.21–5.00 มากที่สุด · 3.41–4.20 มาก · 2.61–3.40 ปานกลาง · 1.81–2.60 น้อย · 1.00–1.80 น้อยที่สุด
           </p>
-        </>
+        </div>
       )}
     </ChartCard>
   );

@@ -24,9 +24,11 @@ type FreqBarProps = {
   /** ประโยคสรุปแทนค่าอัตโนมัติ */
   takeaway?: string;
   cta?: { href: string; label: string };
+  /** ซ่อนรายการคำตอบพิมพ์เองของหมวด "อื่น ๆ" (หน้าสรุปที่ต้องการการ์ดกะทัดรัด ; ดูครบได้ในหน้าละเอียด) */
+  hideOthers?: boolean;
 };
 
-export function FreqBar({ result, title, takeaway, cta }: FreqBarProps) {
+export function FreqBar({ result, title, takeaway, cta, hideOthers = false }: FreqBarProps) {
   const name = title ?? stripNumber(result.title);
   const items = useMemo(() => arrange(result), [result]);
   const tailLabels = useMemo(() => [...(QUESTIONS[result.code].notSpecified ?? []), OTHERS_LABEL], [result.code]);
@@ -68,7 +70,7 @@ export function FreqBar({ result, title, takeaway, cta }: FreqBarProps) {
         />
       )}
 
-      {otherTexts.length > 0 && (
+      {!hideOthers && otherTexts.length > 0 && (
         <div className="mt-4 border-t border-line pt-3">
           <p className="type-meta text-ink-3">คำตอบที่ผู้ตอบพิมพ์เองในหมวด “อื่น ๆ” ({result.others.length} รายการ)</p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
