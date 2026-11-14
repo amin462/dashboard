@@ -43,7 +43,7 @@ export function EmptyState({
         <button
           type="button"
           onClick={handleReset}
-          className="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
+          className="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover dark:bg-[#0d736b] dark:hover:bg-[#0f857b]"
         >
           <FilterX className="h-4 w-4" aria-hidden="true" />
           <span>ล้างตัวกรองทั้งหมด</span>

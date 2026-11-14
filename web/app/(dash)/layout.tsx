@@ -19,8 +19,8 @@ async function HeaderMeta() {
 }
 
 async function MockBannerSlot() {
-  const { source, error } = await getSurveyBundle();
-  return <MockBanner source={source} error={error} />;
+  const { source, error, seedCount } = await getSurveyBundle();
+  return <MockBanner source={source} error={error} seedCount={seedCount} />;
 }
 
 export default function DashLayout({

@@ -7,12 +7,14 @@ import {
   Camera,
   CheckCircle2,
   Clock,
+  ExternalLink,
   GraduationCap,
   MapPin,
   Printer,
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
+import { EXTERNAL_LINKS } from "@/components/nav-config";
 
 const DEFAULT_SURVEY_URL =
   "https://docs.google.com/forms/d/1uuheFOZgCXhNJBBLb62gnB3x0V10J6gxwmO3HiMLYc8/viewform";
@@ -167,14 +169,32 @@ export default function SurveyPosterPage() {
         </div>
 
         {/* ท้ายกระดาษ */}
-        <footer className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#dfd9cd] pt-3 text-xs text-[#5d6a67] print:mt-4">
-          <span className="inline-flex items-center gap-1.5 font-medium">
-            <ShieldCheck className="h-4 w-4 text-[#0f5e59]" aria-hidden="true" />
-            <span>เก็บข้อมูลเพื่อการศึกษาวิจัยและพัฒนาการท่องเที่ยวอย่างเป็นความลับ</span>
-          </span>
-          <span className="font-semibold text-[#0f5e59]">
-            คณะวิทยาการจัดการ มหาวิทยาลัยราชภัฏยะลา
-          </span>
+        <footer className="mt-5 space-y-1.5 border-t border-[#dfd9cd] pt-3 text-xs text-[#5d6a67] print:mt-3 print:pt-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <ShieldCheck className="h-4 w-4 text-[#0f5e59]" aria-hidden="true" />
+              <span>
+                เก็บข้อมูลเพื่อการศึกษาวิจัยและพัฒนาการท่องเที่ยวอย่างเป็นความลับ
+              </span>
+            </span>
+            <span className="font-semibold text-[#0f5e59]">
+              คณะวิทยาการจัดการ มหาวิทยาลัยราชภัฏยะลา · ปีที่จัดทำ 2569
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#5d6a67]">
+            <span>
+              โครงการวิจัย: ระบบแดชบอร์ดวิเคราะห์ข้อมูลนักท่องเที่ยวเพื่อสนับสนุนการตัดสินใจของผู้ประกอบการท่องเที่ยว (วัดคูหาภิมุข อ.เมืองยะลา)
+            </span>
+            <a
+              href={EXTERNAL_LINKS.mainSite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#0f5e59] hover:underline"
+            >
+              <span>เว็บหลักโครงการ</span>
+              <ExternalLink className="h-3 w-3" aria-hidden="true" />
+            </a>
+          </div>
         </footer>
       </article>
     </div>

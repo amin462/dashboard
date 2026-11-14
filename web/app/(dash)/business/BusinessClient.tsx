@@ -112,7 +112,7 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
               onClick={() => setBizType(b.key)}
               className={`flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold transition-all ${
                 selected
-                  ? "bg-brand text-white shadow-sm"
+                  ? "bg-brand text-white shadow-sm dark:bg-[#0d736b]"
                   : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
               }`}
             >

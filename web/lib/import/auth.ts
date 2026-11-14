@@ -1,7 +1,6 @@
 // สิทธิ์ผู้ดูแล (DATA_CONTRACT ข้อ 6 — EXP-09 ไม่ทำล็อกอินเต็ม)
 // ADMIN_PASSCODE (env) -> cookie httpOnly เก็บ sha256(passcode) ไม่เก็บรหัสดิบ
-// ถ้าไม่ได้ตั้ง ADMIN_PASSCODE = โหมดเดโม่: หน้า /admin เปิดให้ดูได้ (ไม่มีข้อมูลจริง)
-// แต่ API เขียนยัง 503 เพราะไม่มี Supabase env
+// ไม่ได้ตั้ง ADMIN_PASSCODE = ปิด /admin และ /api/admin ทั้งหมด (fail closed)
 import crypto from 'node:crypto'
 
 export const ADMIN_COOKIE = 'admin_auth'

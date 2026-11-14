@@ -35,38 +35,54 @@ function NavLinksList({
   const searchParams = useSearchParams();
   const query = searchParams.toString();
 
+  const renderItem = (item: (typeof NAV_ITEMS)[number]) => {
+    const isActive =
+      item.href === "/"
+        ? pathname === "/"
+        : pathname === item.href || pathname.startsWith(`${item.href}/`);
+    const Icon = item.icon;
+    const href =
+      query && item.preserveQuery !== false
+        ? `${item.href}?${query}`
+        : item.href;
+
+    return (
+      <Link
+        key={item.href}
+        href={href}
+        onClick={onNavigate}
+        aria-current={isActive ? "page" : undefined}
+        className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+          isActive
+            ? "bg-brand text-white shadow-sm dark:bg-[#0d736b]"
+            : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
+        }`}
+      >
+        <Icon
+          className={`h-4 w-4 shrink-0 ${
+            isActive ? "text-white" : "text-ink-muted group-hover:text-brand"
+          }`}
+          aria-hidden="true"
+        />
+        <span className="truncate">{item.label}</span>
+      </Link>
+    );
+  };
+
+  const analysisItems = NAV_ITEMS.filter((item) => item.section !== "resource");
+  const resourceItems = NAV_ITEMS.filter((item) => item.section === "resource");
+
   return (
     <nav aria-label="เมนูวิเคราะห์ข้อมูล" className="space-y-1">
-      {NAV_ITEMS.map((item) => {
-        const isActive =
-          item.href === "/"
-            ? pathname === "/"
-            : pathname === item.href || pathname.startsWith(`${item.href}/`);
-        const Icon = item.icon;
-        const href = query ? `${item.href}?${query}` : item.href;
-
-        return (
-          <Link
-            key={item.href}
-            href={href}
-            onClick={onNavigate}
-            aria-current={isActive ? "page" : undefined}
-            className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-              isActive
-                ? "bg-brand text-white shadow-sm"
-                : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
-            }`}
-          >
-            <Icon
-              className={`h-4 w-4 shrink-0 ${
-                isActive ? "text-white" : "text-ink-muted group-hover:text-brand"
-              }`}
-              aria-hidden="true"
-            />
-            <span className="truncate">{item.label}</span>
-          </Link>
-        );
-      })}
+      {analysisItems.map(renderItem)}
+      {resourceItems.length > 0 && (
+        <div className="mt-2 space-y-1 border-t border-line/80 pt-2">
+          <p className="px-3 pb-0.5 text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+            ช่วยเหลือ &amp; เครื่องมือ
+          </p>
+          {resourceItems.map(renderItem)}
+        </div>
+      )}
     </nav>
   );
 }
@@ -195,7 +211,7 @@ export function DashShell({
   }, [drawerOpen]);
 
   return (
-    <div className="flex min-h-screen bg-canvas text-ink">
+    <div className="flex min-h-screen bg-canvas text-ink print:block print:min-h-0 print:bg-white print:text-gray-900">
       {/* Desktop Sidebar */}
       <aside
         aria-label="แถบนำทางหลัก"
@@ -287,7 +303,7 @@ export function DashShell({
               href={EXTERNAL_LINKS.survey}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-brand-hover sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-brand-hover dark:bg-[#0d736b] dark:hover:bg-[#0f857b] sm:inline-flex"
             >
               <span>แบบสำรวจ</span>
               <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -306,7 +322,7 @@ export function DashShell({
         </Suspense>
 
         {/* Page Body */}
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-5 pb-24 sm:px-6 lg:px-8 lg:pb-10">
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-5 pb-24 sm:px-6 lg:px-8 lg:pb-10 print:max-w-full print:p-0">
           {/* Print-only header */}
           <div className="print-only mb-4 hidden border-b border-gray-300 pb-3">
             <h1 className="text-lg font-bold text-gray-900">

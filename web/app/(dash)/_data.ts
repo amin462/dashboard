@@ -18,6 +18,8 @@ export async function getSurveyBundle() {
   return {
     source: res.source,
     error: res.error,
+    // แถวทดสอบจาก scripts/seed.ts ที่อยู่ในฐานข้อมูลจริง -> ต้องเตือนบนจอ ห้ามปนกับข้อมูลจริงโดยไม่รู้ตัว
+    seedCount: res.rows.filter((r) => r.source === "seed").length,
     rows,
     totalAll: all.length,
     lastSubmittedAt: q.lastSubmittedAt,

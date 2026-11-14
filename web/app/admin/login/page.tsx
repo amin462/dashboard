@@ -42,7 +42,7 @@ async function LoginCard({ searchParams }: Props) {
   const next =
     sp.next && sp.next.startsWith("/") && !sp.next.startsWith("//") ? sp.next : "/admin/import";
 
-  // โหมดเดโม่: ไม่ได้ตั้ง ADMIN_PASSCODE — หน้าผู้ดูแลเปิดอยู่แล้ว (proxy ไม่บัง)
+  // ไม่ได้ตั้ง ADMIN_PASSCODE — ปิดหน้าผู้ดูแลทั้งหมด (fail closed)
   if (!adminConfigured()) {
     return (
       <div className="rounded-3xl border border-border-line bg-surface p-8 shadow-sm">
@@ -51,19 +51,16 @@ async function LoginCard({ searchParams }: Props) {
             <FlaskConical className="h-5 w-5" aria-hidden="true" />
           </span>
           <div>
-            <h1 className="text-lg font-bold text-ink">โหมดเดโม่ (ผู้ดูแล)</h1>
+            <h1 className="text-lg font-bold text-ink">ปิดการเข้าถึงส่วนผู้ดูแล</h1>
             <p className="text-sm text-ink-muted">ยังไม่ได้ตั้งค่า ADMIN_PASSCODE</p>
           </div>
         </div>
         <p className="mt-4 text-sm leading-relaxed text-ink-secondary">
-          ระบบทำงานด้วยข้อมูลตัวอย่าง เปิดหน้าผู้ดูแลให้เข้าชมได้เลย
-          แต่การยืนยันนำเข้าต้องมีการเชื่อมต่อ Supabase (ใส่ค่า env ตาม PLAN.md)
+          เพื่อความปลอดภัย ระบบจะไม่เปิดหน้าผู้ดูแลจนกว่าจะตั้งค่า ADMIN_PASSCODE
+          ในไฟล์ .env.local หรือ Environment Variables ของ Vercel
         </p>
-        <Link
-          href="/admin/import"
-          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-hover"
-        >
-          ไปหน้านำเข้าข้อมูล
+        <Link href="/" className="mt-6 inline-flex w-full items-center justify-center rounded-2xl border border-border-line px-4 py-3 text-sm font-bold text-ink">
+          กลับหน้าแดชบอร์ด
         </Link>
       </div>
     );

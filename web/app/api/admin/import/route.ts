@@ -111,7 +111,7 @@ async function countRows(admin: NonNullable<ReturnType<typeof getSupabaseAdmin>>
 
 export async function POST(request: NextRequest) {
   // สิทธิ์: ตรวจซ้ำใน route ด้วย (proxy ตรวจก่อนแล้ว แต่กันเผื่อการตั้งค่า matcher)
-  if (adminConfigured() && !isValidAdminCookie(request.cookies.get(ADMIN_COOKIE)?.value)) {
+  if (!adminConfigured() || !isValidAdminCookie(request.cookies.get(ADMIN_COOKIE)?.value)) {
     return jsonFail("ไม่ได้รับอนุญาต — โปรดเข้าสู่ระบบผู้ดูแลอีกครั้ง", 401);
   }
 

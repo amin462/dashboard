@@ -30,11 +30,16 @@ export type Row = RawRow & { sur08list: string[]; sat: number|null; slot: 'เ�
 |---|---|---|---|---|---|---|
 | T0 | contract, schema.sql, syncToSupabase.gs, ตรวจแบบสำรวจ, scaffold `web/` | Claude Opus | docs/*, supabase/*, script_googleForm/* | D0 | – | ✅ |
 | T1 | แกนข้อมูล lib/survey/* + vitest + data.ts (Supabase/mock) | **Claude sonnet** (`survey-core`) | `web/lib/**`, `web/tests/**`, `web/vitest.config.mts` | D1 เช้า | T0 | ✅ |
-| T2 | Design system + layout + 8 หน้าวิเคราะห์ + ตัวกรอง + print/export | **Gemini Antigravity** (`prompts/gemini-antigravity.md`) | `web/app/(dash)/**`, `web/app/layout.tsx`, `web/app/globals.css`, `web/components/**` | D1–D3 | T1 (layout เริ่มก่อนได้) | ⬜ |
-| T3 | admin: passcode, import CSV, quality page, API, seed script | **opencode** (`prompts/opencode.md`) | `web/app/admin/**`, `web/app/api/**`, `web/proxy.ts`, `web/lib/import/**`, `web/scripts/**` | D2 | T1 | ⬜ |
+| T2 | Design system + layout + 8 หน้าวิเคราะห์ + ตัวกรอง + print/export | **Gemini Antigravity** (`prompts/gemini-antigravity.md`) | `web/app/(dash)/**`, `web/app/layout.tsx`, `web/app/globals.css`, `web/components/**` | D1–D3 | T1 (layout เริ่มก่อนได้) | ✅ |
+| T3 | admin: passcode, import CSV, quality page, API, seed script | **opencode** (`prompts/opencode.md`) | `web/app/admin/**`, `web/app/api/**`, `web/proxy.ts`, `web/lib/import/**`, `web/scripts/**` | D2 | T1 | ✅ |
 | T4 | QA checklist EVA/EXP ↔ ฟีเจอร์, README/deploy, ตรวจตัวเลือกตรง contract | **Claude haiku** (`qa-docs`) | `docs/QA_CHECKLIST.md`, `README.md` | D3 | T2,T3 | ⬜ |
 | T5 | แก้ฟอร์มจริงด้วยมือ (docs/SURVEY_REVIEW.md), ติดตั้ง sync script, ใส่ `.env`, deploy Vercel | **คุณ (ผู้ใช้)** | `web/.env.local` | D1–D4 | – | ⬜ |
 | T6 | review รวม + แก้บั๊ก + ทดสอบตัวเลขเทียบ Google Sheets | Claude sonnet | ทุกไฟล์ (หลังทุกคนเสร็จ) | D4 | ทั้งหมด | ⬜ |
+| G1 | หน้าคู่มือผู้ประกอบการ `/guide` (อ่านกราฟ ตัวกรอง 4 ตัวอย่าง FAQ 5 ข้อ) | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `web/app/(dash)/guide/page.tsx` | D3 | T2 | ✅ |
+| G2 | โปสเตอร์ QR พิมพ์ A4 `/survey-poster` (ติดตั้ง `qrcode.react`) | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `web/app/survey-poster/page.tsx`, `web/package.json` | D3 | T0 | ✅ |
+| G3 | เอกสารบทพัฒนาระบบวิชาการ 7 หัวข้อ + Mermaid + Data Dictionary | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `docs/REPORT_SYSTEM.md` | D3 | T0–T3 | ✅ |
+| G4 | ปรับ Responsive, dark mode, label กราฟไทย, mobile filter drawer, contrast AA, A4 `/reports` *(แก้โค้ดแล้ว · ภาพหน้าจอ `docs/screenshots/` ยังไม่ได้บันทึกหลังยกเลิก browser)* | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `web/components/**`, `web/app/(dash)/**` | D3 | G1 | ✅ (โค้ดแล้ว · รอภาพหน้าจอ) |
+| G5 | เพิ่มเมนู `คู่มือ` (`/guide`) และ `โปสเตอร์ QR` (`/survey-poster`) ใน nav, ส่วนท้ายทุกหน้า (เว็บหลัก + ชื่อโครงการ + ปี 2569), อัปเดต PLAN & HANDOFF | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `web/components/nav-config.ts`, `web/components/DashShell.tsx`, `web/components/Disclaimer.tsx`, `PLAN.md`, `docs/HANDOFF_NOTES.md` | D3 | G1–G4 | ✅ |
 
 ## ลำดับสั่งงาน
 1. **วันนี้/D1 เช้า:** สั่ง Claude `survey-core` ทำ T1 ⟶ พร้อมกันสั่ง Gemini ทำ T2 ขั้น 1 (design system + layout เท่านั้น)

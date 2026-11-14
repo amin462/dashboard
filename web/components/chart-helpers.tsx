@@ -50,27 +50,35 @@ export function categoryColor(code: Code, label: string): string {
   return CHART_COLORS[safeIdx % 5];
 }
 
-/** ตัดแบ่งข้อความภาษาไทยยาว ๆ เป็นสูงสุด 2 บรรทัดสำหรับแกน Y ของ Recharts */
+const thaiWordSegmenter =
+  typeof Intl !== "undefined" && "Segmenter" in Intl
+    ? new Intl.Segmenter("th", { granularity: "word" })
+    : null;
+
+/** แบ่งข้อความภาษาไทยยาว ๆ ตามขอบเขตคำสูงสุด 3 บรรทัด โดยไม่ตัดคำกลางพยางค์ */
 export function splitLabelLines(text: string, maxPerLine: number): string[] {
   if (text.length <= maxPerLine) return [text];
 
-  const breakChars = [" / ", " (", " ", "/"];
-  for (const sep of breakChars) {
-    const idx = text.indexOf(sep);
-    if (idx > 2 && idx <= maxPerLine + 2) {
-      const first = text.slice(0, idx).trim();
-      const rest = text.slice(idx).trim();
-      const line2 =
-        rest.length > maxPerLine ? `${rest.slice(0, maxPerLine - 1)}…` : rest;
-      return [first, line2];
+  const tokens: string[] = thaiWordSegmenter
+    ? Array.from(thaiWordSegmenter.segment(text), (s) => s.segment)
+    : text.split(/(\s+|\/)/).filter(Boolean);
+
+  const lines: string[] = [];
+  let current = "";
+
+  for (const token of tokens) {
+    const candidate = current + token;
+    if (candidate.trim().length <= maxPerLine || current.trim() === "") {
+      current = candidate;
+    } else {
+      lines.push(current.trim());
+      current = token.trimStart();
     }
   }
+  if (current.trim()) lines.push(current.trim());
 
-  const first = text.slice(0, maxPerLine).trim();
-  const rest = text.slice(maxPerLine).trim();
-  const line2 =
-    rest.length > maxPerLine ? `${rest.slice(0, maxPerLine - 1)}…` : rest;
-  return [first, line2];
+  if (lines.length <= 3) return lines;
+  return [lines[0], lines[1], lines.slice(2).join(" ")];
 }
 
 type YTickProps = {
@@ -84,10 +92,12 @@ export function WrappedYAxisTick({
   x = 0,
   y = 0,
   payload,
-  maxChars = 22,
+  maxChars = 24,
 }: YTickProps) {
   const text = String(payload?.value ?? "");
   const lines = splitLabelLines(text, maxChars);
+  const lineHeight = 14;
+  const startDy = -((lines.length - 1) * lineHeight) / 2 + 4;
 
   return (
     <g transform={`translate(${x},${y})`}>
@@ -97,23 +107,14 @@ export function WrappedYAxisTick({
         y={0}
         textAnchor="end"
         fill="var(--ink-secondary)"
-        fontSize={12}
+        fontSize={11.5}
         fontWeight={500}
       >
-        {lines.length === 1 ? (
-          <tspan x={-6} dy={4}>
-            {lines[0]}
+        {lines.map((line, idx) => (
+          <tspan key={idx} x={-6} dy={idx === 0 ? startDy : lineHeight}>
+            {line}
           </tspan>
-        ) : (
-          <>
-            <tspan x={-6} dy={-3}>
-              {lines[0]}
-            </tspan>
-            <tspan x={-6} dy={15}>
-              {lines[1]}
-            </tspan>
-          </>
-        )}
+        ))}
       </text>
     </g>
   );

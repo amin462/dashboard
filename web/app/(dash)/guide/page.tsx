@@ -104,7 +104,7 @@ const FAQS = [
 ];
 
 const SAT_LEVELS = [
-  { range: "4.21 – 5.00", label: "มากที่สุด", tone: "bg-brand text-white" },
+  { range: "4.21 – 5.00", label: "มากที่สุด", tone: "bg-brand text-white dark:bg-[#0d736b]" },
   {
     range: "3.41 – 4.20",
     label: "มาก",
@@ -155,7 +155,7 @@ export default function GuidePage() {
             </Link>
             <Link
               href="/business"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-hover dark:bg-[#0d736b] dark:hover:bg-[#0f857b]"
             >
               <span>ดูมุมมองธุรกิจของฉัน</span>
               <ArrowRight className="h-4 w-4" aria-hidden="true" />

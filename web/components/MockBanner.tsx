@@ -3,6 +3,7 @@ import { Database, FlaskConical } from "lucide-react";
 type MockBannerProps = {
   source: "supabase" | "mock";
   error?: string;
+  seedCount?: number;
 };
 
 export function DataSourceBadge({ source }: { source: "supabase" | "mock" }) {
@@ -23,7 +24,18 @@ export function DataSourceBadge({ source }: { source: "supabase" | "mock" }) {
   );
 }
 
-export function MockBanner({ source, error }: MockBannerProps) {
+export function MockBanner({ source, error, seedCount = 0 }: MockBannerProps) {
+  if (source === "supabase" && seedCount > 0) {
+    return (
+      <div role="alert" className="no-print mb-5 flex items-center gap-2 rounded-2xl border border-accent-border bg-accent-soft px-4 py-2.5 text-sm text-accent-ink">
+        <FlaskConical className="h-4 w-4 shrink-0" aria-hidden="true" />
+        <p>
+          <strong className="font-bold">มีข้อมูลทดสอบปนอยู่ {seedCount.toLocaleString("th-TH")} แถว: </strong>
+          ผลบนจอนี้ยังไม่ใช่ข้อมูลจริงทั้งหมด ผู้ดูแลต้องลบด้วยคำสั่ง <code>pnpm seed:clear</code> ก่อนนำผลไปใช้
+        </p>
+      </div>
+    );
+  }
   if (source === "supabase") return null;
 
   return (

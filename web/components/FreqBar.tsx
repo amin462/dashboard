@@ -80,9 +80,12 @@ export function FreqBar({
       .sort((a, b) => b.count - a.count);
   }, [result.others]);
 
-  const chartHeight = Math.max(200, chartData.length * 46 + 24);
-  const yAxisWidth = isCompact ? 128 : 196;
-  const maxLabelChars = isCompact ? 16 : 25;
+  const chartHeight = Math.max(
+    220,
+    chartData.length * (isCompact ? 56 : 50) + 28
+  );
+  const yAxisWidth = isCompact ? 138 : 216;
+  const maxLabelChars = isCompact ? 20 : 28;
 
   return (
     <ChartCard
@@ -116,7 +119,7 @@ export function FreqBar({
                 <BarChart
                   data={chartData}
                   layout="vertical"
-                  margin={{ top: 6, right: isCompact ? 94 : 108, bottom: 6, left: 4 }}
+                  margin={{ top: 6, right: isCompact ? 86 : 108, bottom: 6, left: 4 }}
                 >
                   <CartesianGrid
                     stroke="var(--border-line)"

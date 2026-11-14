@@ -1,10 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  BookOpen,
   Compass,
   FileSpreadsheet,
   HeartHandshake,
   LayoutDashboard,
   Megaphone,
+  QrCode,
   Store,
   Users,
   Wallet,
@@ -16,6 +18,8 @@ export type NavItem = {
   shortLabel: string;
   description: string;
   icon: LucideIcon;
+  preserveQuery?: boolean;
+  section?: "analysis" | "resource";
 };
 
 export const NAV_ITEMS: NavItem[] = [
@@ -74,6 +78,23 @@ export const NAV_ITEMS: NavItem[] = [
     shortLabel: "รายงาน",
     description: "ตารางสรุปทุกข้อ ส่งออก CSV และพิมพ์ A4",
     icon: FileSpreadsheet,
+  },
+  {
+    href: "/guide",
+    label: "คู่มือ",
+    shortLabel: "คู่มือ",
+    description: "วิธีอ่านกราฟ ใช้ตัวกรอง และตัวอย่างตัดสินใจ",
+    icon: BookOpen,
+    section: "resource",
+  },
+  {
+    href: "/survey-poster",
+    label: "โปสเตอร์ QR",
+    shortLabel: "โปสเตอร์ QR",
+    description: "โปสเตอร์ A4 สำหรับพิมพ์ติดพื้นที่วัด",
+    icon: QrCode,
+    preserveQuery: false,
+    section: "resource",
   },
 ];
 

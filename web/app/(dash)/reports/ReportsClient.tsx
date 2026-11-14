@@ -190,7 +190,7 @@ export function ReportsClient({ rows }: { rows: Row[] }) {
               type="button"
               onClick={handleExportCsv}
               disabled={filtered.length === 0}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#0d736b] dark:hover:bg-[#0f857b]"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               <span>ส่งออก CSV</span>
@@ -252,7 +252,7 @@ export function ReportsClient({ rows }: { rows: Row[] }) {
           </section>
 
           {/* ตารางสรุปทุกข้อ (SUR-01 ถึง SUR-10) */}
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 print:grid-cols-2 print:gap-3">
             {results.map((res) => {
               const isMulti = QUESTIONS[res.code].type === "multi";
               const sorted = [...res.items].sort((a, b) => b.count - a.count);

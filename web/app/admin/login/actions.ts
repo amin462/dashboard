@@ -19,7 +19,7 @@ export async function loginAction(formData: FormData): Promise<void> {
   const passcode = String(formData.get("passcode") ?? "");
   const next = safeNext(formData.get("next"));
 
-  if (!adminConfigured() || isValidPasscode(passcode)) {
+  if (adminConfigured() && isValidPasscode(passcode)) {
     const store = await cookies();
     store.set(ADMIN_COOKIE, sessionToken(), cookieOptions);
     redirect(next);
