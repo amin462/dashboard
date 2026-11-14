@@ -23,7 +23,8 @@ export function sessionToken(): string {
 /** ตรวจรหัสที่กรอกในหน้าล็อกอิน (เทียบแบบ timing-safe) */
 export function isValidPasscode(input: string): boolean {
   if (!adminConfigured()) return false
-  const a = sha256(input)
+  // เติม prefix เดียวกับ sessionToken() ไม่งั้นจะเทียบกับ sha256 ของรหัสดิบและไม่มีทางตรงกัน
+  const a = sha256(`admin:${input}`)
   const b = sessionToken()
   return a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b))
 }

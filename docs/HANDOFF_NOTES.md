@@ -10,6 +10,10 @@
 - Filters ใน URL: key `from,to,age,origin,companion,transport` ค่าหลายตัวใช้ key ซ้ำ (`filtersToQuery` คืน string ไม่มี `?`) ; ค่าในตาราง (Row) ยังเป็นข้อความดิบ (trim + en dash) — "อื่น ๆ" จัดกลุ่มใน freq/crosstab
 - ความพึงพอใจ: sd = sample (n-1), mean/sd ปัด 2 ตำแหน่ง, % ปัด 1 ตำแหน่ง ; ข้อค้นพบ/insight แต่ละข้อมี n ของตัวเอง ถ้า n<5 ไม่แสดง
 - `pnpm exec tsc --noEmit` เหลือ error เดียวใน app/layout.tsx (`LayoutProps` ไม่พบ — เป็นไฟล์ของ T2/scaffold ไม่ใช่ lib)
+
+## T2 — Gemini Antigravity (2026-11-14)
+- เพิ่มหน้า `web/app/(dash)/guide/page.tsx` (`/guide`) คู่มือผู้ประกอบการภาษาไทย (วิธีอ่านกราฟ ฐาน n/ไม่ตอบ/ไม่ประสงค์ระบุ/% > 100, ตัวกรอง, 4 ตัวอย่างธุรกิจ, ข้อจำกัด, FAQ 5 ข้อ)
+- **คำขอเพิ่มเมนู (ไม่ได้แก้ไฟล์เดิมตามคำสั่ง):** ขอให้เพิ่มรายการ `{ href: "/guide", label: "คู่มือผู้ประกอบการ", ... }` ใน `web/components/nav-config.ts` (และลิงก์ใน `DashShell.tsx` ถ้าต้องการ) เพื่อเข้าถึง `/guide` จากแถบเมนูได้สะดวก
 - (Opus) vitest.config.ts → vitest.config.mts (โหลดเป็น CJS แล้วพัง) ; ก่อน tsc ต้องรัน `pnpm -C web exec next typegen` เพื่อสร้าง LayoutProps
 
 ## T3 — opencode (2026-11-14): web/lib/import/csv.ts
