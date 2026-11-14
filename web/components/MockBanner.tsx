@@ -37,6 +37,11 @@ export function MockBanner({ source, error }: MockBannerProps) {
           <strong className="font-bold">ข้อมูลตัวอย่าง (Demo 300 ชุด): </strong>
           แสดงผลด้วยข้อมูลจำลองอัตโนมัติเนื่องจากยังไม่ได้เชื่อมต่อฐานข้อมูล Supabase จริง
           {error ? " (ไม่สามารถอ่านข้อมูลจากฐานข้อมูลได้ในขณะนี้)" : ""}
+          {error && (
+            <span className="mt-0.5 block text-xs opacity-80">
+              สาเหตุ: {error}
+            </span>
+          )}
         </p>
       </div>
     </div>

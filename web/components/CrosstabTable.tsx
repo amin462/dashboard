@@ -123,7 +123,7 @@ export function CrosstabTable({
                   </td>
                 ))}
                 <td className="tabular-nums border-l border-line px-3 py-2.5 text-right">
-                  {result.colTotals.reduce((a, b) => a + b, 0).toLocaleString("th-TH")}
+                  {result.n.toLocaleString("th-TH")}
                 </td>
               </tr>
             </tfoot>

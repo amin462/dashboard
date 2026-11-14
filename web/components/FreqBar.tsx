@@ -91,7 +91,7 @@ export function FreqBar({
       base={result.base}
       skipped={result.skipped}
       notSpecified={result.notSpecified}
-      extraNote={extraNote}
+      extraNote={extraNote ?? (result.code === "sur08" ? "ตอบได้หลายข้อ (รวม > 100% ได้)" : undefined)}
       tableData={tableData}
     >
       {result.base === 0 ? (

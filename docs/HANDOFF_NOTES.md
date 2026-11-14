@@ -15,3 +15,9 @@
 ## T3 — opencode (2026-11-14): web/lib/import/csv.ts
 - เพิ่ม `web/lib/import/csv.ts` + `web/lib/import/csv.test.ts`: `parseGoogleSheetsCsv(text)` → `{ rows: InsertRow[]; errors: {line, reason}[] }` — map คอลัมน์ตรรกะเดียวกับ `codeOf_` (GS), เวลา Asia/Bangkok + พ.ศ.>2400, ตัด ms, แก้ขีด→en dash เฉพาะเมื่อตรงตัวเลือก (ใช้ `cleanValue` จาก `lib/survey/normalize` — ไม่แก้ lib/survey, import อย่างเดียว) ; สถานะ: tsc/lint/test ผ่าน
 - ⚠️ ให้เจ้าของ `web/vitest.config.mts` (T1/survey-core) เพิ่ม `'lib/**/*.test.ts'` ใน `test.include` — ตอนนี้ `pnpm -C web test` ยังไม่รัน test ใน lib (run ตรง ๆ ได้ที่ `pnpm -C web exec vitest run --config lib/import/vitest.import.mts`, config ชั่วคราวของ T3 จะลบเมื่อ include ถูกแก้)
+
+## T2 review (Sonnet): freshness + contract pass
+- _data.ts: เปลี่ยนจาก react cache() เป็น 'use cache' + cacheLife({stale:30, revalidate:60, expire:3600}) -> build แสดง Revalidate 1m ทุกหน้า, แถวใหม่ขึ้นภายใน ~1 นาที
+- MockBanner แสดง "สาเหตุ: <error>" เมื่อ fallback เป็น mock; ไม่ crash (error.tsx มีอยู่แล้ว)
+- CrosstabTable: ยอดรวมมุมล่างขวาใช้ result.n แทน reduce ใน UI; FreqBar ใส่โน้ต "ตอบได้หลายข้อ >100%" อัตโนมัติสำหรับ sur08
+- ผ่าน: next typegen, tsc, vitest 25, eslint, next build

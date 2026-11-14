@@ -35,7 +35,6 @@ async function readInput(
   if (contentType.includes("multipart/form-data")) {
     const fd = await request.formData();
     const mode = normalizeMode(fd.get("mode"));
-    if (typeof mode === "string") return jsonFail(mode, 400);
     const file = fd.get("file");
     if (!(file instanceof File)) {
       return jsonFail("แนบไฟล์ CSV ในฟิลด์ file", 400);
@@ -50,7 +49,6 @@ async function readInput(
     const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
     if (!body || typeof body !== "object") return jsonFail("body ต้องเป็น JSON", 400);
     const mode = normalizeMode(body.mode);
-    if (typeof mode === "string") return jsonFail(mode, 400);
     if (typeof body.csv === "string") {
       if (body.csv.length > MAX_CSV_BYTES) return jsonFail("ข้อมูลใหญ่เกิน 5 MB", 400);
       const fileName = typeof body.fileName === "string" ? body.fileName : "inline.csv";
@@ -66,10 +64,9 @@ async function readInput(
   return jsonFail("content-type ไม่รองรับ (ใช้ multipart/form-data หรือ application/json)", 400);
 }
 
-function normalizeMode(v: FormDataEntryValue | unknown): "preview" | "commit" | string {
-  const s = typeof v === "string" ? v.trim() : "";
-  if (s === "preview" || s === "commit") return s;
-  return "mode ต้องเป็น preview หรือ commit";
+/** mode: ค่าเริ่มต้น/ค่าที่ไม่รู้จัก = preview (ปลอดภัยสุด — ไม่เขียนฐานข้อมูล) */
+function normalizeMode(v: unknown): "preview" | "commit" {
+  return typeof v === "string" && v.trim() === "commit" ? "commit" : "preview";
 }
 
 /** แถวจาก JSON — ตรวจรูปแบบและเลือกเฉพาะฟิลด์ที่อนุญาต (กันฝัง id/source) */
@@ -148,6 +145,23 @@ export async function POST(request: NextRequest) {
   }
 
   // mode = commit
+  if (rows.length === 0) {
+    // ไม่มีแถวที่นำเข้าได้ — ไม่แตะฐานข้อมูลเลย (ไม่เขียน import_logs)
+    return Response.json({
+      ok: true,
+      mode,
+      total,
+      valid: 0,
+      inserted: 0,
+      duplicates: 0,
+      errors: errors.slice(0, MAX_ERRORS_RETURNED),
+      errorsTruncated: errors.length > MAX_ERRORS_RETURNED,
+      failedRows: 0,
+      note: "ไม่มีแถวที่นำเข้าได้ จึงไม่มีการบันทึกลงฐานข้อมูล",
+      fileName: input.fileName,
+    });
+  }
+
   const admin = getSupabaseAdmin();
   if (!admin) {
     return jsonFail(
