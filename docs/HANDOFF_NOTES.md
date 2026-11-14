@@ -58,3 +58,16 @@
 - แก้ช่องโหว่: ไม่ตั้ง ADMIN_PASSCODE เดิมเปิด /admin + import API ให้ทุกคน → ตอนนี้ fail closed (proxy.ts, route.ts, login/actions.ts, login/page.tsx)
 - Supabase จริงมี seed 300 แถว → เพิ่ม banner เตือน seedCount (_data.ts, MockBanner.tsx, (dash)/layout.tsx) ; ต้อง `pnpm -C web seed:clear` ก่อนเก็บข้อมูลจริง
 - smoke test localhost:3000: หน้าภาพรวมอ่าน Supabase ได้, /api/admin ไม่ล็อกอิน=401, login→/admin/quality ได้
+
+## T4 (qa-docs, Claude Haiku) — ตรวจตัวเลือกเทียบ DATA_CONTRACT §1 และ script_googleForm/snippet.js
+
+ผล: `web/lib/survey/schema.ts` ตรงกับ DATA_CONTRACT §1 ทุกข้อ (ข้อความ, en dash, ลำดับ) และตรงกับ snippet.js ทุกตัวเลือกที่ตั้งไว้ใน setChoiceValues/createChoice
+ความไม่ตรงที่พบ (ไม่ได้แก้โค้ด):
+1. **"+อื่น" ตาม DATA_CONTRACT §1 ไม่ถูกตั้งใน snippet.js** — contract ระบุ sur03, sur04, sur05, sur06, sur08 เป็น "+อื่น" แต่ snippet.js ไม่มี `addOtherOption` ที่ข้อใดเลย (มีเฉพาะคอมเมนต์ sur02 ว่าตั้งใจไม่เปิด) → ต้องตัดสินใจ: เพิ่ม "อื่น ๆ" ในฟอร์มจริง หรือแก้ contract ให้ตรงฟอร์ม (ตัวเลือกจริงในฟอร์มยังไม่รวม "อื่น ๆ" จึงไม่มีผลกับ schema.ts ที่คำนวณ "อื่น ๆ" จากค่านอกรายการ)
+2. sur02 ใน DATA_CONTRACT ไม่มี "+อื่น" ตรงกับ snippet.js แล้ว — ไม่ใช่ความไม่ตรง (บันทึกไว้เพื่อยืนยัน)
+3. ชื่อหัวข้อ Form (title) ไม่ตรงตัวอักษรกับ contract ในบางข้อ (เช่น sur02 "2. ปัจจุบันท่านอาศัยอยู่…" vs "2. อาศัยอยู่") — ไม่กระทบ เพราะ `codeOf_` ใน syncToSupabase.gs จับด้วยเลขนำหน้า/ข้อความขึ้นต้น แต่ควรระวังหากเปลี่ยนชื่อข้อใน Form ในอนาคต
+ข้อสังเกต: ฟอร์มจริงยังต้องแก้มือ (SURVEY_REVIEW) — ข้อ 2 ของคำชี้แจงและ help text ข้อ 8 อยู่ใน snippet.js แล้ว แต่ฟอร์มจริงต้องตรวจเอง
+
+- QA: ดู docs/QA_CHECKLIST.md (ชื่อ EXP/EVA สรุปจากบริบท DATA_CONTRACT ต้องตรวจกับเอกสารต้นฉบับ)
+- README.md ราก: เขียนแล้ว (ไม่มีค่า secret จริง)
+- (Opus) แก้รายงาน T4: snippet.js มี showOtherOption(true) ครบ 5 ข้อ (sur03/04/05/06/08) ตรง contract — ข้อ "+อื่น ไม่ตรง" ของ haiku ไม่ถูกต้อง ; QA_CHECKLIST เขียนตาราง EXP/EVA ใหม่ตามเครื่องมือจริง
