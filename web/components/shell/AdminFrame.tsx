@@ -24,7 +24,7 @@ export function AdminFrame({ title, description, actions, maxWidth = "max-w-[100
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             แดชบอร์ด
           </Link>
-          <h1 className="min-w-0 truncate text-lg leading-7 font-semibold lg:type-title">{title}</h1>
+          <h1 className="min-w-0 line-clamp-2 text-base leading-6 font-semibold sm:text-lg sm:leading-7 lg:type-title">{title}</h1>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {actions}

@@ -79,7 +79,9 @@ async function QualityBody() {
   // สถานะซิงก์ Google Form นับเฉพาะแถว source='google_form' ; แยกจำนวนตามแหล่งข้อมูล
   // eslint-disable-next-line react-hooks/purity -- server component: ตั้งใจอ่านเวลาจริง ณ ตอนตอบคำขอ เพื่อวัดอายุของข้อมูลล่าสุด
   const sync = googleFormStatus(all, Date.now());
-  const sources: Stat[] = sourceStats(all).map((s) => ({
+  const sourceCounts = sourceStats(all);
+  const seedRows = sourceCounts.find((s) => s.source === "seed")?.count ?? 0;
+  const sources: Stat[] = sourceCounts.map((s) => ({
     label: s.source,
     value: num(s.count),
     context: s.latest ? `ล่าสุด ${formatThaiDateTimeShort(s.latest)}` : "ไม่มีแถวจากแหล่งนี้",
@@ -88,8 +90,12 @@ async function QualityBody() {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        {raw.source === "supabase" ? (
-          <Notice tone="info">ข้อมูลจริงจาก Supabase</Notice>
+        {raw.source === "supabase" && seedRows > 0 ? (
+          <Notice tone="warn">
+            เชื่อมต่อ Supabase แล้ว แต่มีข้อมูลทดสอบ (source=&apos;seed&apos;) ปนอยู่ {num(seedRows)} แถว — ลบด้วย pnpm seed:clear ก่อนนำผลไปใช้
+          </Notice>
+        ) : raw.source === "supabase" ? (
+          <Notice tone="ok">ข้อมูลจริงจาก Supabase</Notice>
         ) : (
           <Notice tone="warn">ข้อมูลตัวอย่าง — ยังไม่เชื่อมต่อฐานข้อมูล ตัวเลขด้านล่างไม่ใช่ผลสำรวจจริง</Notice>
         )}

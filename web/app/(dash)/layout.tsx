@@ -7,10 +7,10 @@ import { SourcePill } from "@/components/shell/SourcePill";
 import { getSurveyBundle } from "./_data";
 
 async function TopMeta() {
-  const { source, lastSubmittedAt } = await getSurveyBundle();
+  const { source, lastSubmittedAt, seedCount } = await getSurveyBundle();
   return (
     <>
-      <SourcePill source={source} />
+      <SourcePill source={source} seedCount={seedCount} />
       <span className="hidden type-meta text-ink-3 md:inline">อัปเดต {formatThaiDateTimeShort(lastSubmittedAt)}</span>
     </>
   );

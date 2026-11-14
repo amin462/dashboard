@@ -30,9 +30,9 @@ export function DataBanner({ source, error, seedCount = 0 }: DataBannerProps) {
 
   return (
     <details role={role} className="no-print group border-b border-line bg-warn-soft text-warn">
-      <summary className="mx-auto flex h-9 max-w-[1240px] cursor-pointer list-none items-center gap-2 px-4 type-meta lg:px-8 [&::-webkit-details-marker]:hidden">
+      <summary className="mx-auto flex min-h-9 max-w-[1240px] cursor-pointer list-none items-center gap-2 px-4 py-1 type-meta lg:px-8 [&::-webkit-details-marker]:hidden">
         <FlaskConical className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-        <span className="min-w-0 flex-1 truncate font-medium">{summary}</span>
+        <span className="min-w-0 flex-1 line-clamp-2 font-medium">{summary}</span>
         <span className="shrink-0 underline group-open:no-underline">รายละเอียด</span>
       </summary>
       <p className="mx-auto max-w-[1240px] px-4 pb-2 type-meta lg:px-8">{detail}</p>

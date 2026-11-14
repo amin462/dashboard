@@ -16,11 +16,11 @@ export type Stat = {
 };
 
 const COLS: Record<number, string> = {
-  2: "lg:grid-cols-2",
-  3: "lg:grid-cols-3",
-  4: "lg:grid-cols-4",
-  5: "lg:grid-cols-5",
-  6: "lg:grid-cols-6",
+  2: "lg:grid-cols-2 print:grid-cols-2",
+  3: "lg:grid-cols-3 print:grid-cols-3",
+  4: "lg:grid-cols-4 print:grid-cols-4",
+  5: "lg:grid-cols-5 print:grid-cols-5",
+  6: "lg:grid-cols-6 print:grid-cols-6",
 };
 
 /** ค่าที่เป็นข้อความยาว (เช่น ชื่อช่วงค่าใช้จ่าย) ใช้ขนาดเล็กลงเพื่อไม่ให้ล้นช่อง */
@@ -38,7 +38,7 @@ export function StatStrip({
   solidFirst?: boolean;
 }) {
   return (
-    <section aria-label={label} className={`grid grid-cols-2 gap-3 sm:gap-4 ${COLS[items.length] ?? "lg:grid-cols-4"}`}>
+    <section aria-label={label} className={`grid grid-cols-2 gap-3 sm:gap-4 ${COLS[items.length] ?? "lg:grid-cols-4 print:grid-cols-4"}`}>
       {items.map((s, i) => {
         const first = solidFirst && i === 0;
         const pct = typeof s.progress === "number" ? Math.max(0, Math.min(100, s.progress)) : null;
@@ -47,7 +47,7 @@ export function StatStrip({
         return (
           <div
             key={s.label}
-            className={`print-card card flex min-w-0 flex-col p-4 ${first ? "kpi-solid" : ""} ${oddLast ? "col-span-2 lg:col-span-1" : ""}`}
+            className={`print-card card flex min-w-0 flex-col p-4 ${first ? "kpi-solid" : ""} ${oddLast ? "col-span-2 lg:col-span-1 print:col-span-1" : ""}`}
           >
             <div className="flex items-start justify-between gap-2">
               <p className={`type-meta ${first ? "opacity-85" : "text-ink-3"}`}>{s.label}</p>

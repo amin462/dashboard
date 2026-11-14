@@ -1,8 +1,9 @@
-# NEXT_SESSION — สถานะงาน ณ 14 พ.ย. 2569 (ส่งงาน 18 พ.ย.)
+# NEXT_SESSION — สถานะงาน ณ 15 พ.ย. 2569 (ส่งงาน 18 พ.ย.)
 
+> ✅ ไล่ตรวจหน้าย่อย v2 ทุกหน้า (1280/375 + admin) เสร็จ แก้จุดเพี้ยนแล้ว · ภาพคู่มือชุด v2 ถ่ายใหม่ครบ (`web/scripts/screenshots.mjs`) · print A4 /reports ตรวจแล้ว (รายละเอียด `docs/HANDOFF_NOTES.md` หัวข้อ "ไล่ตรวจหน้าย่อย v2")
 > ✅ T8 UI polish เสร็จ (sidebar พอดีจอไม่มี scroll, การ์ดทุกแถวสูงเท่ากัน, /satisfaction ใหม่, /business hero) ตรวจบน production build แล้ว
 > ⚠️ ถ้าเปิด dev แล้วกราฟไม่ขึ้น/ค้าง skeleton = dev server เก่าค้าง (HMR websocket fail) → ปิดแล้ว `pnpm -C web dev` ใหม่ หรือใช้ launch config `web-prod` (next start :3100 หลัง build)
-> ✅ T7 UI v2 เสร็จและตรวจแล้ว (Opus ดูหน้าภาพรวม 1280/375: ตรงภาพอ้างอิง ไม่มีล้นจอ) — ยังไม่ได้ดูด้วยตา: /admin/import, /admin/quality, print /reports, หน้าย่อยบนมือถือทีละหน้า
+> ✅ T7 UI v2 เสร็จและตรวจแล้ว
 
 ## เสร็จแล้ว ✅ (ตรวจโดย Claude Opus)
 - T0–T4, G1–G5, R3, R4: แกนข้อมูล `web/lib/survey` (39 tests), UI redesign ตาม `docs/DESIGN.md`, admin (passcode, fail-closed), import CSV + กันซ้ำ, หน้าคุณภาพข้อมูล, seed guard (`--yes`), smoke test, คู่มือ + สคริปต์ทดลองใช้ + QA checklist + บทระบบ (docs/)
@@ -21,14 +22,11 @@
 ## ค้าง — AI ทำ
 | งาน | ใคร | เงื่อนไข |
 |---|---|---|
-| ไล่ดูหน้าย่อยทุกหน้า (v2) บน 1280/375 + admin (ล็อกอิน) แก้จุดเพี้ยน | Claude | ทำได้เลย |
-| ภาพ /admin/import, /admin/quality → แทน [ภาพที่ 10–11] ใน docs/USER_MANUAL.md | Claude (มี passcode ใน .env.local) | ทำได้เลย |
-| ตรวจ print `/reports` บน A4 จริง (Ctrl+P) | Claude | ทำได้เลย |
 | ช่วยติดตั้ง/ดีบัก sync Google Form → Supabase | Claude | เมื่อผู้ใช้ติดตั้งสคริปต์ |
 | ลบแถวทดสอบจากฟอร์ม + `seed:clear` | Claude | หลังข้อ 3 |
 | ช่วย deploy Vercel + smoke | Claude | หลังผู้ใช้สร้างโปรเจกต์ Vercel |
 | T6: เทียบตัวเลขเว็บกับ Google Sheets (EXP-01/04) | Claude sonnet | มีข้อมูลจริง |
-| ถ่ายภาพชุด real → docs/screenshots/real/ | Gemini | มีข้อมูลจริง ≥ 30 |
+| ถ่ายภาพชุด real → docs/screenshots/real/ (`node web/scripts/screenshots.mjs docs/screenshots/real http://localhost:3100` ; ภาพ demo ใน USER_MANUAL ใช้ชุดนี้แทน) | Gemini / Claude | มีข้อมูลจริง ≥ 30 |
 | R4-G2 ร่างบทผล `docs/REPORT_RESULTS_DRAFT.md` | Gemini | มีข้อมูลจริง ≥ 30 |
 
 ## ข้อควรรู้
@@ -45,10 +43,8 @@
 อ่าน NEXT_SESSION.md, AGENTS.md, PLAN.md (ไม่ต้องอ่าน new_docs/ old_docs/ ui/)
 โปรเจกต์: แดชบอร์ดช่วยผู้ประกอบการ (Next.js ใน web/, Supabase) ส่งงาน 18 พ.ย. 2569 ตอบภาษาไทยสั้น ๆ ประหยัด token
 ใช้ subagent ตามความเหมาะสม (sonnet งานโค้ด, haiku งานเอกสาร) แต่ตรวจผลเองทุกครั้งก่อนรายงาน
-เริ่มจาก "ค้าง — AI ทำ" ตามลำดับ:
-0) UI v2 (T7) เสร็จแล้ว หน้าภาพรวมผ่าน: ไล่ดูหน้าย่อยที่เหลือ (/visitors /travel /awareness /spending /satisfaction /business /reports /guide /survey-poster /admin/*) ที่ 1280 และ 375 px เทียบ docs/DESIGN.md "v2 OVERRIDES" แก้จุดเพี้ยน/ล้น/สีหลุดชุด ; ตัวเลขต้องมาจาก web/lib/survey เท่านั้น
-1) ถ่ายภาพ /admin/import และ /admin/quality (ล็อกอินด้วย ADMIN_PASSCODE จาก web/.env.local) บันทึก docs/screenshots/demo/ แล้วแทน [ภาพที่ 10–11] ใน docs/USER_MANUAL.md ; ภาพ 1–9 เดิมเป็นหน้าตา v1 → ถ่ายใหม่ทั้งชุดหลัง v2 (ชื่อไฟล์เดิม)
-2) ตรวจหน้า /reports ตอนพิมพ์ A4 แก้ print CSS ถ้าจำเป็น
-3) ถามผมว่าทำข้อ "ค้าง — ผู้ใช้ทำ" ถึงข้อไหนแล้ว แล้วช่วยต่อจากตรงนั้น (sync / seed:clear / Vercel)
+ข้อ 0–2 เดิม (ไล่หน้าย่อย v2 / ภาพ admin / print A4) เสร็จแล้ว (ดู HANDOFF_NOTES) เริ่มที่:
+3) ถามผมว่าทำข้อ "ค้าง — ผู้ใช้ทำ" ถึงข้อไหนแล้ว แล้วช่วยต่อจากตรงนั้น (sync Google Form / seed:clear / Vercel + smoke)
+4) เมื่อมีข้อมูลจริง ≥ 30: ถ่ายภาพ real ด้วย screenshots.mjs, T6 เทียบตัวเลขกับ Google Sheets
 ทุกครั้งที่แก้โค้ด: typegen, tsc, test, lint, build ต้องผ่าน แล้ว commit + push
 ```

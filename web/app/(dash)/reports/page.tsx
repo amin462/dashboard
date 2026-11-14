@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 export default function ReportsPage() {
   return (
     <DashRoute
-      render={({ rows, source, lastSubmittedAt }) => (
-        <ReportsClient rows={rows} source={source} updatedAt={lastSubmittedAt} />
+      render={({ rows, source, lastSubmittedAt, seedCount }) => (
+        <ReportsClient rows={rows} source={source} updatedAt={lastSubmittedAt} seedCount={seedCount} />
       )}
     />
   );

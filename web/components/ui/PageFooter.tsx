@@ -12,7 +12,7 @@ export function PageFooter() {
       </p>
       <p className="mt-1">
         โครงการวิจัยแดชบอร์ดวิเคราะห์ข้อมูลนักท่องเที่ยว (กรณีศึกษาวัดคูหาภิมุข อ.เมืองยะลา) · คณะวิทยาการจัดการ มหาวิทยาลัยราชภัฏยะลา · 2569
-        {" · "}
+        <span className="no-print">{" · "}</span>
         <a
           href={EXTERNAL_LINKS.mainSite}
           target="_blank"

@@ -52,9 +52,9 @@ function ReportActions({ data }: { data: PageData }) {
   );
 }
 
-type ReportsClientProps = { rows: Row[]; source: "supabase" | "mock"; updatedAt: string | null };
+type ReportsClientProps = { rows: Row[]; source: "supabase" | "mock"; updatedAt: string | null; seedCount?: number };
 
-export function ReportsClient({ rows, source, updatedAt }: ReportsClientProps) {
+export function ReportsClient({ rows, source, updatedAt, seedCount = 0 }: ReportsClientProps) {
   return (
     <DashPage
       rows={rows}
@@ -71,7 +71,13 @@ export function ReportsClient({ rows, source, updatedAt }: ReportsClientProps) {
               <p className="text-lg font-semibold">รายงานสรุปผลแบบสำรวจนักท่องเที่ยว ณ วัดคูหาภิมุข</p>
               <p>ตัวกรอง: {filterText || "ไม่มี (ทั้งหมด)"}</p>
               <p>
-                แหล่งข้อมูล: {source === "supabase" ? "ข้อมูลจริง (Supabase)" : "ข้อมูลตัวอย่าง (ไม่ใช่ผลสำรวจจริง)"} · ข้อมูลล่าสุด {formatThaiDateTime(updatedAt)} · ผู้ตอบสมบูรณ์ {num(data.rows.length)} คน
+                แหล่งข้อมูล:{" "}
+                {source !== "supabase"
+                  ? "ข้อมูลตัวอย่าง (ไม่ใช่ผลสำรวจจริง)"
+                  : seedCount > 0
+                    ? `ฐานข้อมูล Supabase — มีข้อมูลทดสอบปนอยู่ ${num(seedCount)} แถว (ไม่ใช่ผลสำรวจจริงทั้งหมด)`
+                    : "ข้อมูลจริง (Supabase)"}{" "}
+                · ข้อมูลล่าสุด {formatThaiDateTime(updatedAt)} · ผู้ตอบสมบูรณ์ {num(data.rows.length)} คน
               </p>
             </div>
 

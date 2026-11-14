@@ -106,3 +106,11 @@
 - /satisfaction ใหม่: `components/satisfaction/*` (ค่าเฉลี่ยตามถิ่นพำนัก/ผู้ร่วมเดินทางด้วย applyFilters+satisfaction, heatmap crosstab sur09×sur10) ; CommentList สูงคงที่ 520px เลื่อนในกรอบ + ค้นหา + ชิปกลุ่ม + แสดงเพิ่มทีละ 30 ; ลบ RevisitChart (ใช้ RevisitDonutCard แทน)
 - /business: tabs 4 ประเภทเต็มแถว → การ์ดโปรไฟล์กรมท่า 5 คอล + KPI 3 ใบ 7 คอล (StatStrip `solidFirst={false}`)
 - ตรวจ (build + start :3100): ทุกแถวสูงเท่ากันที่ 1280/1440 ทุกหน้า, ไม่มี overflow แนวนอนที่ 375 ; ภาพรวม 2,053→2,553px (เพิ่มการ์ดมากับใคร/พาหนะ), satisfaction ~5,5xx→1,729px
+
+## ไล่ตรวจหน้าย่อย v2 + ภาพคู่มือชุดใหม่ — Claude (15 พ.ย. 2569)
+- ตรวจ production build (:3100) ทุกหน้าที่ 1280 และ 375 ด้วย JS audit (ล้นจอแนวนอน / สีนอกชุด token / ข้อความถูกตัด) + ดูภาพจริงจาก Edge headless ; ไม่พบสีหลุดชุด, ไม่มีหน้าล้นจอ (ตาราง crosstab เลื่อนแนวนอนในการ์ดตามตั้งใจ)
+- แก้: ชื่อหน้าบน top bar ถูกตัด (`...`) บนมือถือ → ขึ้น 2 บรรทัดได้ (`line-clamp-2`, TopBar + AdminFrame) ; แบนเนอร์เตือนข้อมูลทดสอบถูกตัด → ขึ้น 2 บรรทัดได้
+- แก้ความขัดแย้ง: ป้ายมุมขวาบนเคยเขียน "ข้อมูลจริง" ทั้งที่มี seed 300 แถวปน → ตอนนี้เป็น "ข้อมูลทดสอบปนอยู่" (สีเหลือง) เมื่อ `seedCount > 0` ; `/admin/quality` แจ้งเตือนเดียวกันพร้อมคำสั่ง `pnpm seed:clear` ; หัวรายงานตอนพิมพ์ `/reports` บอกจำนวนแถวทดสอบด้วย ; ข้อความท้ายใน `/guide` อัปเดต (smoke `--expect-real` ยังจับข้อความ "ข้อมูลทดสอบ" ได้เหมือนเดิม)
+- Print A4 `/reports`: ตรวจทีละหน้าจาก PDF จริง (6 หน้า) — การ์ดไม่ถูกตัดกลาง, KPI 3 ใบขึ้นแถวเดียว (`print:grid-cols-N` ใน StatStrip), ตัดจุด `·` ที่ท้ายหมายเหตุที่เหลือเดี่ยวตอนพิมพ์ ; รายการข้อเสนอแนะ SUR-11 (79 รายการ) ไหลข้าม 3 หน้า ยอมรับได้
+- เพิ่ม `web/scripts/screenshots.mjs`: ถ่ายภาพคู่มือทั้งชุด (desktop 1280×800 + mobile 390×844 + popover/sheet/ตาราง/พรีวิวนำเข้า CSV/print A4) ด้วย Edge ที่ติดตั้งอยู่ (CDP, ไม่ลง browser เพิ่ม) ; ใช้ซ้ำกับข้อมูลจริง: `node web/scripts/screenshots.mjs docs/screenshots/real http://localhost:3100` (ต้องเปิดเว็บ production ที่ :3100 ก่อน ; `--pdf-preview` ถ่ายทีละหน้า A4 ไว้ใน `.tmp/print-preview/`)
+- ภาพ `docs/screenshots/demo/*` ถ่ายใหม่ทั้งชุดเป็นหน้าตา v2 (ชื่อไฟล์เดิม) + เพิ่ม admin-import / admin-import-preview / admin-quality (desktop, mobile) ; USER_MANUAL แทน [ภาพที่ 10–11] แล้ว เหลือเฉพาะ [ภาพที่ 12] (Apps Script ผู้ใช้ถ่ายเอง)

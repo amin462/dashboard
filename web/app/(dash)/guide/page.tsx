@@ -96,7 +96,7 @@ export default function GuidePage() {
               คน)
             </p>
             <p className="mt-2 text-xs text-ink-3">
-              * หากด้านบนหน้าจอมีป้าย <strong className="text-warn">“ข้อมูลตัวอย่าง”</strong> แสดงว่าระบบกำลังใช้ข้อมูลจำลอง 300 ชุดเพื่อสาธิตการใช้งาน
+              * หากด้านบนหน้าจอมีป้าย <strong className="text-warn">“ข้อมูลตัวอย่าง”</strong> หรือ <strong className="text-warn">“ข้อมูลทดสอบปนอยู่”</strong> แสดงว่าตัวเลขบนจอยังมีข้อมูลจำลอง 300 ชุดเพื่อสาธิตการใช้งาน ยังไม่ใช่ผลสำรวจจริงทั้งหมด
             </p>
           </article>
         </div>
