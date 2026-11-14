@@ -41,6 +41,7 @@ export type Row = RawRow & { sur08list: string[]; sat: number|null; slot: 'เ�
 | G4 | ปรับ Responsive, dark mode, label กราฟไทย, mobile filter drawer, contrast AA, A4 `/reports` *(แก้โค้ดแล้ว · ภาพหน้าจอ `docs/screenshots/` ยังไม่ได้บันทึกหลังยกเลิก browser)* | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `web/components/**`, `web/app/(dash)/**` | D3 | G1 | ✅ (โค้ดแล้ว · รอภาพหน้าจอ) |
 | G5 | เพิ่มเมนู `คู่มือ` (`/guide`) และ `โปสเตอร์ QR` (`/survey-poster`) ใน nav, ส่วนท้ายทุกหน้า (เว็บหลัก + ชื่อโครงการ + ปี 2569), อัปเดต PLAN & HANDOFF | **Gemini Antigravity** (`prompts/gemini-round2.md`) | `web/components/nav-config.ts`, `web/components/DashShell.tsx`, `web/components/Disclaimer.tsx`, `PLAN.md`, `docs/HANDOFF_NOTES.md` | D3 | G1–G4 | ✅ |
 | T7 | UI v2: สีกรมท่า+อำพัน, การ์ดลอย, หน้าภาพรวมใหม่ (แท่งคู่ ยะลา vs ต่างถิ่น, donut, area+ปฏิทิน, ช่วงเวลา, ช่องทาง, ข้อเสนอ) + ปรับทุกหน้าให้เข้าชุด ตาม docs/DESIGN.md "v2 OVERRIDES" | Claude sonnet | `web/app/**`, `web/components/**`, `web/app/globals.css` | D1 | – | ✅ |
+| T8 | UI polish: sidebar scrollbar/ป้ายเมนู, สมดุลความสูงการ์ดหน้าภาพรวม, ออกแบบ /satisfaction ใหม่ (ข้อเสนอแนะ 5,500px), แถวแรก /business | Claude sonnet | `web/app/**`, `web/components/**`, `web/app/globals.css` | D1 | T7 | 🔄 |
 
 ## ลำดับสั่งงาน
 1. **วันนี้/D1 เช้า:** สั่ง Claude `survey-core` ทำ T1 ⟶ พร้อมกันสั่ง Gemini ทำ T2 ขั้น 1 (design system + layout เท่านั้น)
