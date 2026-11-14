@@ -1,6 +1,6 @@
 # NEXT_SESSION — สถานะงาน ณ 14 พ.ย. 2569 (ส่งงาน 18 พ.ย.)
 
-> ⚠️ ตอนปิด session เก่า: sonnet กำลังทำ **T7 UI v2** อยู่ (commit เองเมื่อเสร็จ ยังไม่ push)
+> ✅ T7 UI v2 เสร็จและตรวจแล้ว (Opus ดูหน้าภาพรวม 1280/375: ตรงภาพอ้างอิง ไม่มีล้นจอ) — ยังไม่ได้ดูด้วยตา: /admin/import, /admin/quality, print /reports, หน้าย่อยบนมือถือทีละหน้า
 
 ## เสร็จแล้ว ✅ (ตรวจโดย Claude Opus)
 - T0–T4, G1–G5, R3, R4: แกนข้อมูล `web/lib/survey` (39 tests), UI redesign ตาม `docs/DESIGN.md`, admin (passcode, fail-closed), import CSV + กันซ้ำ, หน้าคุณภาพข้อมูล, seed guard (`--yes`), smoke test, คู่มือ + สคริปต์ทดลองใช้ + QA checklist + บทระบบ (docs/)
@@ -19,7 +19,7 @@
 ## ค้าง — AI ทำ
 | งาน | ใคร | เงื่อนไข |
 |---|---|---|
-| **T7 UI v2** (กรมท่า+อำพัน, หน้าภาพรวมใหม่) — ตรวจผลงาน sonnet: ดูในเบราว์เซอร์ 1280/375, เทียบ DESIGN.md "v2 OVERRIDES", แก้จุดเพี้ยน, push | Claude | ถ้า PLAN.md T7 ยัง 🔄 = sonnet ทำไม่จบ ให้ดู `git log`/`git status` แล้วทำต่อ |
+| ไล่ดูหน้าย่อยทุกหน้า (v2) บน 1280/375 + admin (ล็อกอิน) แก้จุดเพี้ยน | Claude | ทำได้เลย |
 | ภาพ /admin/import, /admin/quality → แทน [ภาพที่ 10–11] ใน docs/USER_MANUAL.md | Claude (มี passcode ใน .env.local) | ทำได้เลย |
 | ตรวจ print `/reports` บน A4 จริง (Ctrl+P) | Claude | ทำได้เลย |
 | ช่วยติดตั้ง/ดีบัก sync Google Form → Supabase | Claude | เมื่อผู้ใช้ติดตั้งสคริปต์ |
@@ -44,7 +44,7 @@
 โปรเจกต์: แดชบอร์ดช่วยผู้ประกอบการ (Next.js ใน web/, Supabase) ส่งงาน 18 พ.ย. 2569 ตอบภาษาไทยสั้น ๆ ประหยัด token
 ใช้ subagent ตามความเหมาะสม (sonnet งานโค้ด, haiku งานเอกสาร) แต่ตรวจผลเองทุกครั้งก่อนรายงาน
 เริ่มจาก "ค้าง — AI ทำ" ตามลำดับ:
-0) ตรวจ T7 UI v2 (PLAN.md): รัน pnpm -C web dev แล้วเปิดทุกหน้าที่ 1280 และ 375 px เทียบกับ docs/DESIGN.md หัวข้อ "v2 OVERRIDES" (สไตล์อ้างอิง: sidebar กรมท่า, การ์ดขาวลอย, กราฟกรมท่า+อำพัน, KPI ใบแรกกรมท่าทึบ, donut ค่าเดียว, area ไล่สี + ปฏิทิน) แก้จุดเพี้ยน/ล้น/สีหลุดชุด ; ตัวเลขต้องมาจาก web/lib/survey เท่านั้น ; ถ้า T7 ยังไม่เสร็จ ทำต่อจากที่ค้าง แล้ว push
+0) UI v2 (T7) เสร็จแล้ว หน้าภาพรวมผ่าน: ไล่ดูหน้าย่อยที่เหลือ (/visitors /travel /awareness /spending /satisfaction /business /reports /guide /survey-poster /admin/*) ที่ 1280 และ 375 px เทียบ docs/DESIGN.md "v2 OVERRIDES" แก้จุดเพี้ยน/ล้น/สีหลุดชุด ; ตัวเลขต้องมาจาก web/lib/survey เท่านั้น
 1) ถ่ายภาพ /admin/import และ /admin/quality (ล็อกอินด้วย ADMIN_PASSCODE จาก web/.env.local) บันทึก docs/screenshots/demo/ แล้วแทน [ภาพที่ 10–11] ใน docs/USER_MANUAL.md ; ภาพ 1–9 เดิมเป็นหน้าตา v1 → ถ่ายใหม่ทั้งชุดหลัง v2 (ชื่อไฟล์เดิม)
 2) ตรวจหน้า /reports ตอนพิมพ์ A4 แก้ print CSS ถ้าจำเป็น
 3) ถามผมว่าทำข้อ "ค้าง — ผู้ใช้ทำ" ถึงข้อไหนแล้ว แล้วช่วยต่อจากตรงนั้น (sync / seed:clear / Vercel)
