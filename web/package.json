@@ -10,7 +10,8 @@
     "test": "vitest run",
     "seed": "tsx scripts/seed.ts",
     "seed:clear": "tsx scripts/seed.ts --clear",
-    "seed:count": "tsx scripts/seed.ts --count"
+    "seed:count": "tsx scripts/seed.ts --count",
+    "smoke": "tsx scripts/smoke.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",

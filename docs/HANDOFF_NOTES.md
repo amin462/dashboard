@@ -77,6 +77,11 @@
 - `--clear` ไม่ต้องใช้ `--yes` และพิมพ์จำนวนแถวที่ลบจริง (ทดสอบลบ 300) ; เพิ่ม `seed:count` ใน package.json พิมพ์จำนวนแยก source google_form/csv/seed (ทดสอบ 0/0/300)
 - ผ่าน `pnpm -C web lint`, `tsc --noEmit`, `pnpm test` (3 ไฟล์/39 tests) ; ทดสอบครบวงจร clear → `seed -- --yes` → count แล้ว seed กลับครบ 300 แถว
 
+## Smoke test — opencode (2026-11-14)
+- สร้าง `web/scripts/smoke.ts` + script `smoke`: ใช้ fetch ล้วน ตรวจ 11 route (200 + คำว่า "วัดคูหาภิมุข"), `/admin/quality` ไม่มี cookie ต้อง 307/308 → `/admin/login`, POST `/api/admin/import` ต้อง 401, และ `--expect-real` ตรวจหน้า / ว่าไม่มี "ข้อมูลตัวอย่าง"
+- พิมพ์ตาราง ✓/✗ ภาษาไทย + exit 1 เมื่อมีข้อไม่ผ่าน ; ทดสอบ localhost:3000 ผ่าน 13/13, โหมด `--expect-real` ผ่าน 14/14, ยิง URL ที่ไม่มีเซิร์ฟเวอร์ได้ exit=1
+- ผ่าน `pnpm -C web lint`, `tsc --noEmit`, `pnpm test` (3 ไฟล์/39 tests) ; ไม่แตะ `web/app/**`, `web/components/**`, `web/lib/**`
+
 ## UI redesign — sonnet
 - รื้อ UI ตาม docs/DESIGN.md ทั้งหมด: tokens ใหม่ใน globals.css (light+dark, ลบ teal/orange), ฟอนต์ IBM Plex Sans Thai ; โค้ดจัดเป็น `components/{shell,filters,charts,ui,page}/` (ลบ KpiCard/DashPageHeader/MockBanner/FilterBar/DashShell เดิม)
 - ทุกหน้าวิเคราะห์ใช้เทมเพลตเดียว: `app/(dash)/_route.tsx` (DashRoute = Suspense + getSurveyBundle) + `components/page/DashPage.tsx` (กรอง→description→EmptyState/เนื้อหา) ; หน้า admin ใช้ `shell/AdminFrame.tsx` ; ตัวเลขทั้งหมดยังมาจาก lib/survey (UI เลือกอันดับ 1 จาก freq()/topItem() เท่านั้น)
@@ -85,3 +90,4 @@
 - ปรับจาก DESIGN.md เล็กน้อย: `--ink-3` เข้มขึ้นเป็น #667085 (ให้ผ่าน contrast 4.5:1), KPI ที่เป็นข้อความยาวใช้ 20/28 แทน 30/36, ตัวกรองแบบชิป ≥1024px (ต่ำกว่านั้นใช้ bottom sheet), ปุ่ม 7/30 วัน อิงวันล่าสุดของข้อมูล
 - ทอง: ขอบการ์ด InsightCard + แถบเมนู active อาจรวมเกิน 3 จุดต่อจอบนหน้าภาพรวม/ธุรกิจ (3 การ์ด + 1 แถบเมนู)
 - ตรวจแล้ว: typegen, tsc, test 39/39, lint, build ผ่าน ; dev server :3000 แสดง CSS เก่าค้าง (Turbopack cache) ต้อง restart `pnpm dev` ถึงจะเห็นหน้าตาใหม่
+- (Opus) smoke --expect-real ไม่จับแบนเนอร์ seed ("ข้อมูลทดสอบ") → แก้แล้ว ; ใส่ภาพ 9 ตำแหน่งใน USER_MANUAL (เหลือ 10–12) ; สถานะรวมอยู่ใน NEXT_SESSION.md
