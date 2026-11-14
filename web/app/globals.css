@@ -226,21 +226,22 @@ body {
 }
 
 /* Scrollbar บางกลมกลืนกับพื้นกรมท่า (แถบข้าง) และพื้นการ์ดขาว (.thin-scroll) ; Firefox ใช้ scrollbar-color, Chromium/Safari ใช้ pseudo-element */
-.sidebar-scroll::-webkit-scrollbar,
+/* Sidebar: ซ่อน scrollbar ทุกเบราว์เซอร์ (Windows classic scrollbar สีอ่อนตัดกับพื้นกรมท่า) ยังเลื่อนด้วยล้อเมาส์/ทัชได้
+   + เงาจาง ๆ บน/ล่างบอกว่ามีเมนูเพิ่ม (scroll-driven mask) */
+.sidebar-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 12px, #000 calc(100% - 28px), transparent 100%);
+}
+.sidebar-scroll::-webkit-scrollbar {
+  display: none;
+}
 .thin-scroll::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-.sidebar-scroll::-webkit-scrollbar-track,
 .thin-scroll::-webkit-scrollbar-track {
   background: transparent;
-}
-.sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgb(255 255 255 / 0.22);
-  border-radius: 999px;
-}
-.sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgb(255 255 255 / 0.35);
 }
 .thin-scroll::-webkit-scrollbar-thumb {
   background: var(--muted-bar);
@@ -250,10 +251,6 @@ body {
   background: var(--ink-3);
 }
 @supports (-moz-appearance: none) {
-  .sidebar-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(255 255 255 / 0.22) transparent;
-  }
   .thin-scroll {
     scrollbar-width: thin;
     scrollbar-color: var(--muted-bar) transparent;

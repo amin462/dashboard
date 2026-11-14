@@ -10,9 +10,9 @@ const FOOTER_PB = process.env.NODE_ENV === "development" ? "pb-16" : "pb-4";
 export function Sidebar() {
   return (
     <aside aria-label="แถบนำทาง" className="no-print sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col bg-frame lg:flex">
-      <Link href="/" className="block shrink-0 px-5 pt-5 pb-3">
+      <Link href="/" className="block shrink-0 px-5 pt-5 pb-3 [@media(max-height:760px)]:pt-3 [@media(max-height:760px)]:pb-2">
         <span className="block text-lg leading-6 font-semibold text-white">Yala Insight</span>
-        <span className="block type-meta text-frame-ink">วัดคูหาภิมุข · อ.เมืองยะลา</span>
+        <span className="block type-meta text-frame-ink [@media(max-height:760px)]:hidden">วัดคูหาภิมุข · อ.เมืองยะลา</span>
       </Link>
       <div className="sidebar-scroll min-h-0 flex-1 overflow-y-auto px-3 py-2">
         <Suspense fallback={null}>
