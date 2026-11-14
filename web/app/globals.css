@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design Tokens — Yala Insight (วัดคูหาภิมุข)
+ * แรงบันดาลใจจากถ้ำหินปูน ธรรมชาติยะลา และแสงทองของวัดหน้าถ้ำ
+ * - Surface: หินปูนอุ่น (Warm Stone)
+ * - Primary: Teal เข้ม (Deep Cave Teal)
+ * - Accent: ทอง/อำพัน 1 สี (Temple Amber)
+ */
+:root {
+  --canvas: #f5f2eb;
+  --surface: #ffffff;
+  --surface-subtle: #faf8f3;
+  --surface-muted: #ede9df;
+  --ink: #1b2423;
+  --ink-secondary: #42504e;
+  --ink-muted: #5d6a67;
+  --border-line: #dfd9cd;
+  --border-strong: #c9c0b0;
+
+  --brand: #0f5e59;
+  --brand-hover: #0b4a46;
+  --brand-soft: #e4f2f0;
+  --brand-ink: #0a4541;
+
+  --accent: #b45309;
+  --accent-bright: #d97706;
+  --accent-soft: #fef3c7;
+  --accent-border: #f3d27a;
+  --accent-ink: #78350f;
+
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
+
+  /* สีหมวดกราฟคงที่ทุกหน้า */
+  --chart-1: #0f6b64;
+  --chart-2: #d97706;
+  --chart-3: #475569;
+  --chart-4: #2e7d5b;
+  --chart-5: #b85d43;
+  --chart-muted: #8c857b;
+}
+
+.dark {
+  --canvas: #111615;
+  --surface: #18201f;
+  --surface-subtle: #1e2726;
+  --surface-muted: #263130;
+  --ink: #f1eee7;
+  --ink-secondary: #cbd4d1;
+  --ink-muted: #98a6a2;
+  --border-line: #2d3937;
+  --border-strong: #3e4d4b;
+
+  --brand: #14b8a6;
+  --brand-hover: #2dd4bf;
+  --brand-soft: #133835;
+  --brand-ink: #7eeae0;
+
+  --accent: #f59e0b;
+  --accent-bright: #fbbf24;
+  --accent-soft: #3a290f;
+  --accent-border: #784f12;
+  --accent-ink: #fcd34d;
+
+  --danger: #f87171;
+  --danger-soft: #3f1d1d;
+
+  --chart-1: #2dd4bf;
+  --chart-2: #fbbf24;
+  --chart-3: #94a3b8;
+  --chart-4: #4ade80;
+  --chart-5: #fb923c;
+  --chart-muted: #64748b;
+}
+
+@theme inline {
+  --font-sans: var(--font-noto-sans-thai), "Noto Sans Thai", system-ui, -apple-system, sans-serif;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--border-line);
+  --color-line-strong: var(--border-strong);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-border: var(--accent-border);
+  --color-accent-ink: var(--accent-ink);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --radius-card: 1rem;
+  --radius-control: 0.75rem;
+  --shadow-card: 0 1px 2px rgba(27, 36, 35, 0.05), 0 6px 20px rgba(27, 36, 35, 0.04);
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem; /* 15px base body */
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus ring เพื่อการเข้าถึง (a11y) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Print CSS สำหรับหน้า /reports และทุกหน้า */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11pt !important;
+    line-height: 1.45 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-card {
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
