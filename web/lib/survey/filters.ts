@@ -59,3 +59,68 @@ export function applyFilters(rows: Row[], f: Filters): Row[] {
     return true
   })
 }
+
+// ---------- ตัวกรองเดือน/ปี (T15) ----------
+
+export type MonthInfo = { ym: string; year: number; month: number; count: number }
+
+const MONTH_RE = /^(\d{4})-(\d{2})$/
+
+/** เดือนที่มีผู้ตอบจริง เรียงใหม่ → เก่า (ใช้เลือกเดือนในตัวกรอง) */
+export function monthsWithData(rows: Row[]): MonthInfo[] {
+  const m = new Map<string, number>()
+  for (const r of rows) {
+    if (!r.date) continue
+    const ym = r.date.slice(0, 7)
+    m.set(ym, (m.get(ym) ?? 0) + 1)
+  }
+  return Array.from(m.entries())
+    .sort((a, b) => (a[0] < b[0] ? 1 : -1))
+    .map(([ym, count]) => ({ ym, year: Number(ym.slice(0, 4)), month: Number(ym.slice(5, 7)), count }))
+}
+
+/** ช่วงวันที่ทั้งเดือน จาก 'YYYY-MM' ; ไม่ถูกต้อง → null */
+export function monthRange(ym: string): { from: string; to: string } | null {
+  const m = MONTH_RE.exec(ym)
+  if (!m) return null
+  const y = Number(m[1])
+  const mo = Number(m[2])
+  if (mo < 1 || mo > 12) return null
+  const last = new Date(Date.UTC(y, mo, 0)).getUTCDate()
+  return { from: `${m[1]}-${m[2]}-01`, to: `${m[1]}-${m[2]}-${String(last).padStart(2, '0')}` }
+}
+
+export function yearRange(year: number): { from: string; to: string } {
+  return { from: `${year}-01-01`, to: `${year}-12-31` }
+}
+
+export type QuickRangeKind = 'thisMonth' | 'lastMonth' | 'thisYear'
+
+/** ปุ่มลัด อ้างอิงวันนี้ (today = YYYY-MM-DD เวลาไทย ส่งเข้ามาเพื่อให้ทดสอบได้) */
+export function quickRange(kind: QuickRangeKind, today: string): { from: string; to: string } | null {
+  const m = MONTH_RE.exec(today.slice(0, 7))
+  if (!m) return null
+  const y = Number(m[1])
+  const mo = Number(m[2])
+  if (kind === 'thisYear') return yearRange(y)
+  if (kind === 'thisMonth') return monthRange(today.slice(0, 7))
+  const py = mo === 1 ? y - 1 : y
+  const pm = mo === 1 ? 12 : mo - 1
+  return monthRange(`${py}-${String(pm).padStart(2, '0')}`)
+}
+
+/** ตัวกรองวันที่ตรงกับ "ทั้งเดือน" ใด → 'YYYY-MM' ; ไม่ตรง → null */
+export function filterMonth(f: Filters): string | null {
+  if (!f.from || !f.to) return null
+  const ym = f.from.slice(0, 7)
+  const r = monthRange(ym)
+  return r && r.from === f.from && r.to === f.to ? ym : null
+}
+
+/** ตัวกรองวันที่ตรงกับ "ทั้งปี" ใด → ปี ค.ศ. ; ไม่ตรง → null */
+export function filterYear(f: Filters): number | null {
+  if (!f.from || !f.to) return null
+  const y = Number(f.from.slice(0, 4))
+  const r = yearRange(y)
+  return Number.isFinite(y) && r.from === f.from && r.to === f.to ? y : null
+}

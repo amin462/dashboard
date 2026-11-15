@@ -221,6 +221,26 @@ describe('collectionProgress', () => {
     expect(p.last7).toBe(4) // ช่วง 8–14 พ.ย.: วันที่ 10 (3 คน) + วันที่ 14 (1 คน) ; วันที่ 1 อยู่นอกช่วง
   })
 
+  it('7 วันล่าสุดนับย้อนจากวันนี้ (ส่ง today) ไม่ใช่จากวันที่ตอบล่าสุด', () => {
+    const rows = normalize([
+      ...many(2, () => ({ submitted_at: '2026-11-10T03:00:00Z' })),
+      ...many(1, () => ({ submitted_at: '2026-11-14T03:00:00Z' })),
+    ]).rows
+    expect(collectionProgress(rows, '2026-11-14').last7).toBe(3)
+    expect(collectionProgress(rows, '2026-11-16').last7).toBe(3) // 10–16
+    expect(collectionProgress(rows, '2026-11-17').last7).toBe(1) // 11–17 : วันที่ 10 หลุดช่วง
+    expect(collectionProgress(rows, '2026-11-25').last7).toBe(0) // เงียบมาหลายวัน
+    expect(collectionProgress(rows, 'bad').last7).toBe(3) // รูปแบบผิด -> ย้อนจากวันที่ตอบล่าสุด
+  })
+
+  it('เกินเป้าเต็ม -> surplus = จำนวนที่เกิน', () => {
+    expect(collectionProgress(normalize(many(300, () => ({}))).rows).surplus).toBe(0)
+    const p = collectionProgress(normalize(many(312, () => ({}))).rows)
+    expect(p.surplus).toBe(12)
+    expect(p.status).toBe('reached_full')
+    expect(collectionProgress(normalize(many(10, () => ({}))).rows).surplus).toBe(0)
+  })
+
   it('สถานะตามเกณฑ์', () => {
     expect(collectionProgress(normalize(many(267, () => ({}))).rows).status).toBe('reached_min')
     expect(collectionProgress(normalize(many(300, () => ({}))).rows).status).toBe('reached_full')

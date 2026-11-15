@@ -3,9 +3,10 @@
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import { applyFilters, filtersFromSearchParams, hasFilters, type Filters } from "@/lib/survey/filters";
-import type { Row } from "@/lib/survey/schema";
+import { SMALL_PAGE_N, type Row } from "@/lib/survey/schema";
 import { setResultCount } from "../filters/result-count";
 import { EmptyState } from "../ui/EmptyState";
+import { SmallPageNotice } from "../ui/SmallPageNotice";
 
 export type PageData = {
   /** แถวหลังกรองแล้ว (ใช้เป็นอินพุตของ lib/survey ทุกฟังก์ชัน) */
@@ -50,6 +51,7 @@ export function DashPage({ rows, description, actions, children }: DashPageProps
         <p className="max-w-3xl text-ink-2">{description}</p>
         {actions && <div className="no-print flex shrink-0 flex-wrap gap-2">{actions(data)}</div>}
       </div>
+      {count > 0 && count < SMALL_PAGE_N && <SmallPageNotice n={count} total={total} isFiltered={isFiltered} />}
       {count === 0 ? <EmptyState /> : children(data)}
     </div>
   );

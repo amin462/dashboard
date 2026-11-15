@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from "react";
 import { bangkokDate, formatThaiDateTimeShort } from "@/components/format";
+import { monthsWithData } from "@/lib/survey/filters";
 import { FilterBar } from "@/components/filters/FilterBar";
 import { DataBanner } from "@/components/shell/Banner";
 import { DashShell } from "@/components/shell/DashShell";
@@ -16,9 +17,19 @@ async function TopMeta() {
   );
 }
 
+const YMD = /^\d{4}-\d{2}-\d{2}$/;
+
+/** ช่วงข้อมูลวิจัย (วันตัดข้อมูลของรายงาน) จาก env ; ไม่ตั้ง/รูปแบบผิด = null (ซ่อนปุ่ม) */
+function researchRange(): { from?: string; to?: string } | null {
+  const from = process.env.NEXT_PUBLIC_RESEARCH_FROM?.trim();
+  const to = process.env.NEXT_PUBLIC_RESEARCH_TO?.trim();
+  const r = { from: from && YMD.test(from) ? from : undefined, to: to && YMD.test(to) ? to : undefined };
+  return r.from || r.to ? r : null;
+}
+
 async function FilterBarSlot() {
-  const { lastSubmittedAt } = await getSurveyBundle();
-  return <FilterBar anchor={bangkokDate(lastSubmittedAt)} />;
+  const { lastSubmittedAt, rows } = await getSurveyBundle();
+  return <FilterBar anchor={bangkokDate(lastSubmittedAt)} months={monthsWithData(rows)} research={researchRange()} />;
 }
 
 async function BannerSlot() {

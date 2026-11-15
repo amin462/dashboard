@@ -1,5 +1,5 @@
 import { QUESTIONS } from "@/lib/survey/schema";
-import type { Filters } from "@/lib/survey/filters";
+import { filterMonth, filterYear, type Filters } from "@/lib/survey/filters";
 import { formatThaiDate } from "../format";
 
 export type MultiFilterKey = "age" | "origin" | "companion" | "transport";
@@ -16,9 +16,21 @@ export function countActive(f: Filters): number {
   return (f.from || f.to ? 1 : 0) + FILTER_GROUPS.reduce((n, g) => n + (f[g.key]?.length ?? 0), 0);
 }
 
-/** ข้อความย่อบนชิปวันที่ */
-export function dateLabel(f: Filters): string {
+/** เดือน+ปี พ.ศ. จาก 'YYYY-MM' เช่น "พ.ย. 2569" */
+export function formatThaiMonthShort(ym: string): string {
+  const d = new Date(`${ym}-15T12:00:00+07:00`);
+  if (Number.isNaN(d.getTime())) return ym;
+  return new Intl.DateTimeFormat("th-TH", { timeZone: "Asia/Bangkok", month: "short", year: "numeric" }).format(d);
+}
+
+/** ข้อความย่อบนชิปวันที่ (ทั้งเดือน/ทั้งปี/ช่วงวิจัย แสดงชื่อสั้น) */
+export function dateLabel(f: Filters, research?: { from?: string; to?: string } | null): string {
   if (!f.from && !f.to) return "ช่วงวันที่";
+  if (research && (research.from || research.to) && research.from === f.from && research.to === f.to) return "ช่วงข้อมูลวิจัย";
+  const ym = filterMonth(f);
+  if (ym) return formatThaiMonthShort(ym);
+  const y = filterYear(f);
+  if (y) return `ปี ${y + 543}`;
   const a = f.from ? formatThaiDate(f.from) : "…";
   const b = f.to ? formatThaiDate(f.to) : "…";
   return `${a} – ${b}`;

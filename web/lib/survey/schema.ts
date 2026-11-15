@@ -134,5 +134,7 @@ export const DISCLAIMER =
   'ผลนี้สรุปจากผู้ตอบแบบสำรวจ ณ วัดคูหาภิมุข (เลือกตัวอย่างแบบสะดวก) ไม่ใช่ยอดนักท่องเที่ยวทั้งหมด'
 export const SMALL_N_WARNING = 'จำนวนน้อย ตีความด้วยความระมัดระวัง'
 export const SMALL_N = 5
+/** ทั้งหน้า: ผู้ตอบหลังกรองน้อยกว่านี้ -> แสดงแถบเตือนกลุ่มตัวอย่างน้อย */
+export const SMALL_PAGE_N = 30
 export const TARGET_MIN = 267
 export const TARGET_FULL = 300

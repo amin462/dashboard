@@ -1,6 +1,6 @@
 "use client";
 
-import { collectionProgress, freq, overview } from "@/lib/survey/aggregate";
+import { freq, overview } from "@/lib/survey/aggregate";
 import { overviewInsights } from "@/lib/survey/insights";
 import type { Row } from "@/lib/survey/schema";
 import { FreqBar } from "@/components/charts/FreqBar";
@@ -26,7 +26,7 @@ export function OverviewClient({ rows, totalAll }: { rows: Row[]; totalAll?: num
         const channel = freq(filtered, "sur06");
         return (
           <div className="space-y-4">
-            <CollectionProgressCard progress={collectionProgress(rows)} totalSubmitted={totalAll} />
+            <CollectionProgressCard rows={rows} totalSubmitted={totalAll} />
             <StatStrip items={overviewStats(ov, rows.length)} />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cell span="lg:col-span-8">

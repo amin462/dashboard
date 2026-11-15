@@ -1,4 +1,5 @@
 import type { Insight } from "@/lib/survey/insights";
+import { INSIGHT_DISCLAIMER } from "@/lib/survey/insights";
 import { SMALL_N } from "@/lib/survey/schema";
 import { CtaLink } from "../ui/CtaLink";
 import { InsightCard } from "../ui/InsightCard";
@@ -23,13 +24,16 @@ export function InsightsSection({ title, insights, n, max = 3, variant = "grid",
   return (
     <section aria-label={title} className={panel ? "print-card card flex min-w-0 flex-col gap-3 p-5" : "space-y-3"}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="type-section">{title}</h2>
+        <div>
+          <h2 className="type-section">{title}</h2>
+          {shown.length > 0 && <p className="type-meta text-ink-3">{INSIGHT_DISCLAIMER} · ไม่ใช่คำแนะนำที่แน่นอน ตัดสินใจร่วมกับประสบการณ์หน้างาน</p>}
+        </div>
         {cta && <CtaLink href={cta.href}>{cta.label}</CtaLink>}
       </div>
       {shown.length > 0 ? (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
-          {shown.map((ins) => (
-            <InsightCard key={ins.title} insight={ins} />
+          {shown.map((ins, i) => (
+            <InsightCard key={ins.title} insight={ins} index={i} />
           ))}
         </div>
       ) : (

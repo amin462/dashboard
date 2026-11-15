@@ -1,7 +1,11 @@
+"use client";
+
 import { ClipboardList } from "lucide-react";
-import type { CollectionProgress } from "@/lib/survey/aggregate";
+import { collectionProgress, type CollectionProgress } from "@/lib/survey/aggregate";
+import type { Row } from "@/lib/survey/schema";
 import { formatThaiDateTimeShort, num } from "../format";
 import { CtaLink } from "../ui/CtaLink";
+import { useBangkokToday } from "./useBangkokToday";
 
 const STATUS: Record<CollectionProgress["status"], { label: string; chip: string }> = {
   none: { label: "ยังไม่เริ่มเก็บข้อมูล", chip: "bg-surface-2 text-ink-2" },
@@ -19,15 +23,19 @@ function headline(p: CollectionProgress): string {
     case "reached_min":
       return `ถึงเป้าขั้นต่ำแล้ว · อีก ${num(p.remainingToFull)} ชุดถึงเป้าเต็ม ${num(p.full)} ชุด`;
     default:
-      return `ครบเป้าเต็ม ${num(p.full)} ชุดแล้ว`;
+      return p.surplus > 0
+        ? `ข้อมูลสะสม ${num(p.n)} ชุด (เกินเป้าเต็ม +${num(p.surplus)} ชุด)`
+        : `ครบเป้าเต็ม ${num(p.full)} ชุดแล้ว`;
   }
 }
 
 /**
  * ความคืบหน้าการเก็บข้อมูล (นับผู้ตอบสมบูรณ์ทั้งหมด ไม่ขึ้นกับตัวกรอง)
- * แถบยาวแทน 0–เป้าเต็ม ; เส้นอำพัน = เป้าขั้นต่ำ ; ตัวเลขทุกค่ามาจาก collectionProgress() ของ lib
+ * แถบยาวแทน 0–เป้าเต็ม ; เส้นอำพัน = เป้าขั้นต่ำ ; ตัวเลขทุกค่ามาจาก collectionProgress() ของ lib (7 วันล่าสุดนับย้อนจากวันนี้)
  */
-export function CollectionProgressCard({ progress: p, totalSubmitted }: { progress: CollectionProgress; totalSubmitted?: number }) {
+export function CollectionProgressCard({ rows, totalSubmitted }: { rows: Row[]; totalSubmitted?: number }) {
+  const today = useBangkokToday();
+  const p = collectionProgress(rows, today);
   const excluded = typeof totalSubmitted === "number" ? Math.max(0, totalSubmitted - p.n) : 0;
   const fillPct = Math.min(100, (p.n / p.full) * 100);
   const minPct = (p.min / p.full) * 100;

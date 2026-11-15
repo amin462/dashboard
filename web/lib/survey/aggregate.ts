@@ -284,12 +284,17 @@ export type CollectionProgress = {
   /** จำนวนวันที่มีผู้ตอบจริง และค่าเฉลี่ยต่อวันที่มีผู้ตอบ */
   activeDays: number
   perActiveDay: number
-  /** ผู้ตอบใน 7 วันล่าสุด (นับย้อนจากวันที่ตอบล่าสุด รวมวันนั้น) */
+  /** ผู้ตอบใน 7 วันล่าสุด (นับย้อนจาก today ถ้าส่งมา ไม่งั้นจากวันที่ตอบล่าสุด ; รวมวันนั้น) */
   last7: number
+  /** จำนวนที่เกินเป้าเต็ม (0 ถ้ายังไม่ถึง) — ใช้แสดง "ข้อมูลสะสม" */
+  surplus: number
 }
 
-/** ความคืบหน้าการเก็บข้อมูลเทียบเป้า (ใช้กับข้อมูลทั้งหมด ไม่ใช่ข้อมูลหลังกรอง) */
-export function collectionProgress(rows: Row[]): CollectionProgress {
+/**
+ * ความคืบหน้าการเก็บข้อมูลเทียบเป้า (ใช้กับข้อมูลทั้งหมด ไม่ใช่ข้อมูลหลังกรอง)
+ * today = YYYY-MM-DD (เวลาไทย) วันนี้ ; ส่งมาเพื่อนับ "7 วันล่าสุด" ย้อนจากวันนี้ (ไม่ส่ง = ย้อนจากวันที่ตอบล่าสุด)
+ */
+export function collectionProgress(rows: Row[], today?: string | null): CollectionProgress {
   const n = rows.length
   const days = new Map<string, number>()
   let last: string | null = null
@@ -299,8 +304,9 @@ export function collectionProgress(rows: Row[]): CollectionProgress {
   }
   const dates = Array.from(days.keys()).sort()
   const lastDate = dates.length ? dates[dates.length - 1] : null
-  const cutoff = lastDate ? new Date(Date.parse(lastDate + 'T00:00:00Z') - 6 * 86400000).toISOString().slice(0, 10) : null
-  const last7 = cutoff ? rows.filter((r) => r.date && r.date >= cutoff).length : 0
+  const ref = today && /^\d{4}-\d{2}-\d{2}$/.test(today) ? today : lastDate
+  const cutoff = ref ? new Date(Date.parse(ref + 'T00:00:00Z') - 6 * 86400000).toISOString().slice(0, 10) : null
+  const last7 = cutoff && ref ? rows.filter((r) => r.date && r.date >= cutoff && r.date <= ref).length : 0
   const status: CollectionStatus = n === 0 ? 'none' : n < TARGET_MIN ? 'collecting' : n < TARGET_FULL ? 'reached_min' : 'reached_full'
   return {
     n,
@@ -317,6 +323,7 @@ export function collectionProgress(rows: Row[]): CollectionProgress {
     activeDays: dates.length,
     perActiveDay: dates.length ? round1(n / dates.length) : 0,
     last7,
+    surplus: Math.max(0, n - TARGET_FULL),
   }
 }
 

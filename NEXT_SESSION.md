@@ -4,20 +4,17 @@
 - **Production:** https://dashboard-liart-six-41.vercel.app (Vercel root `web`, auto-deploy จาก main) · sync Google Form → Supabase ทำงาน (trigger อัตโนมัติ) · seed ลบแล้ว
 - **ข้อมูลจริง:** 6 ชุดในฐานข้อมูล (4 สมบูรณ์ + 2 ไม่ผ่านคัดกรอง = ตัดออกตามกฎ ไม่ใช่บั๊ก) เป้าขั้นต่ำ 267 / เต็ม 300
 - **แชต AI (T9–T11):** `/api/chat` + ปุ่ม "ถามผู้ช่วย" ใช้ Gemini ผ่าน `GEMINI_API_KEY` (อยู่ใน `.env.local` และ Vercel) ; รุ่นเริ่มต้น `gemini-flash-lite-latest` (รุ่น flash ปกติ 503/ช้า) ; ประโยค "…เป็นใคร" เคยถูก Gemini บล็อกผิด (เลี่ยงในปุ่มสำเร็จรูปแล้ว) ; T11 จูนเพิ่มเมื่อมีข้อมูลมากขึ้น
-- **เสร็จแล้ว:** T0–T10, T13 (ดาวน์โหลดกราฟเป็น PNG + หน้า `/about`), T12 ส่วนแถบความคืบหน้า ; ไล่ตรวจ UI v2 ทุกหน้า ; ภาพคู่มือชุด demo (`web/scripts/screenshots.mjs`)
+- **เสร็จแล้ว:** T0–T10, T12, T13, T15, T16 (ดาวน์โหลดกราฟเป็น PNG + หน้า `/about`), T12 ส่วนแถบความคืบหน้า ; ไล่ตรวจ UI v2 ทุกหน้า ; ภาพคู่มือชุด demo (`web/scripts/screenshots.mjs`)
 - ตรวจล่าสุด: tsc ✓ lint ✓ test 56/56 ✓ build ✓ (commit ล่าสุดบน main)
 
 ## งานถัดไป (AI ทำ — ดูรายละเอียดใน PLAN.md ตาราง T11–T16 และหัวข้อ "แผนอัปเกรด D1–D4")
-1. **T15** ตัวกรองเดือน/ปี (ปุ่มลัด + เลือกเดือน/ปี พ.ศ. เฉพาะเดือนที่มีข้อมูล) → ใช้ from/to เดิม
-2. **T16** ปุ่ม "ช่วงข้อมูลวิจัย" (env วันตัดข้อมูล) + ปรับการ์ดความคืบหน้า (7 วันนับจากวันนี้, เกินเป้า = ข้อมูลสะสม)
-3. **T12 ส่วนที่เหลือ** ข้อเสนอรายธุรกิจอ่านง่ายขึ้น + เตือน n น้อยทั้งหน้า
-4. **T11** ทดสอบ/จูนแชตบน production + มือถือจริง
-5. **T14** เมื่อมีข้อมูลจริง ≥ 30: T6 เทียบตัวเลขกับ Google Sheets, ถ่ายภาพ real (`node web/scripts/screenshots.mjs docs/screenshots/real <base-url>`), ร่างบทผล `docs/REPORT_RESULTS_DRAFT.md`, อัปเดตภาพใน USER_MANUAL
-6. smoke บน production: `pnpm -C web smoke -- https://dashboard-liart-six-41.vercel.app --expect-real` (ผู้ใช้สั่งเลื่อนไว้ก่อน — รันเมื่อผู้ใช้สั่ง)
+1. **T11** ทดสอบ/จูนแชตบน production + มือถือจริง
+2. **T14** เมื่อมีข้อมูลจริง ≥ 30: T6 เทียบตัวเลขกับ Google Sheets, ถ่ายภาพ real (`node web/scripts/screenshots.mjs docs/screenshots/real <base-url>`), ร่างบทผล `docs/REPORT_RESULTS_DRAFT.md`, อัปเดตภาพใน USER_MANUAL
+3. smoke บน production: `pnpm -C web smoke -- https://dashboard-liart-six-41.vercel.app --expect-real` (ผู้ใช้สั่งเลื่อนไว้ก่อน — รันเมื่อผู้ใช้สั่ง)
 
 ## ค้าง — ผู้ใช้ทำ
 - เก็บข้อมูลให้ถึง ≥ 267 ชุดสมบูรณ์ (แชร์ QR/ลิงก์ ; โปสเตอร์ที่ `/survey-poster`)
-- **บอกวันตัดข้อมูลสำหรับรายงาน** (สำหรับ T16 ; ยังไม่กำหนดก็ได้)
+- **บอกวันตัดข้อมูลสำหรับรายงาน** → ตั้ง `NEXT_PUBLIC_RESEARCH_FROM` / `NEXT_PUBLIC_RESEARCH_TO` (YYYY-MM-DD) ใน Vercel แล้ว redeploy จะมีปุ่ม "ช่วงข้อมูลวิจัย" ในตัวกรองวันที่ (ไม่ตั้ง = ซ่อนปุ่ม)
 - (ไม่บังคับ) ตั้ง `NEXT_PUBLIC_RESEARCH_CREDIT` ใน Vercel เพื่อแสดงชื่อผู้จัดทำ/อาจารย์ที่ปรึกษาใน `/about`
 - **Rotate คีย์ก่อนส่งงาน:** Gemini (เคยถูกวางในแชต) และ Supabase service key (เคยโผล่ในภาพหน้าจอ) → แก้ใน `web/.env.local`, Vercel env, และ Apps Script Script properties (Supabase)
 - ภาพที่ 12 ในคู่มือ (หน้าจอ Apps Script บันทึกการดำเนินการ — ห้ามให้เห็นค่าคีย์)
@@ -35,10 +32,10 @@
 
 ## Prompt สำหรับเปิด session ใหม่ (Claude Code, โฟลเดอร์ D:\project-next\dashboard)
 ```
-อ่าน NEXT_SESSION.md แล้วลุยตาม "งานถัดไป" ข้อ 1→3 (T15, T16, T12 ที่เหลือ) ; อ่าน PLAN.md เฉพาะแถว T11–T16 และ AGENTS.md ตามต้องการ ห้ามอ่าน new_docs/ old_docs/ ui/
+อ่าน NEXT_SESSION.md แล้วถามผมว่าจะทำ "งานถัดไป" ข้อไหน (T11 / T14 / smoke) ; อ่าน PLAN.md เฉพาะแถว T11–T16 และ AGENTS.md ตามต้องการ ห้ามอ่าน new_docs/ old_docs/ ui/
 โปรเจกต์: แดชบอร์ดผลสำรวจนักท่องเที่ยววัดคูหาภิมุข (Next.js ใน web/, Supabase, Vercel) ส่งงาน 18 พ.ย. 2569 ตอบไทยสั้น ๆ ประหยัด token
 กฎ: ตัวเลขทั้งหมดคำนวณใน web/lib/survey เท่านั้น (UI ไม่คำนวณ) · แก้ไฟล์ให้คงสไตล์ LF/CRLF เดิม · ทุกครั้งที่แก้โค้ด: typegen, tsc, lint, test, build ต้องผ่าน แล้ว commit + push (commit ต้องมีบรรทัด Co-Authored-By ตามที่ระบบกำหนด)
 ตรวจหน้าตาด้วย `pnpm -C web build` + `next start -p 3101` + `node web/scripts/screenshots.mjs .tmp/shots http://localhost:3101 --only=<ชื่อ>` แล้ว Read ภาพ (อย่าถ่ายทั้งชุดถ้าไม่จำเป็น) ; ปิดเซิร์ฟเวอร์ 3101 เมื่อเสร็จ
 ใช้ subagent เฉพาะงานที่แยกอิสระจริง ๆ (sonnet งานโค้ด, haiku งานเอกสาร) และตรวจผลเองก่อนรายงาน
-เมื่อทำครบ 3 ข้อ ให้ถามผมว่าจะรัน smoke บน production / จูนแชต (T11) / ทำ T14 (ถ้าข้อมูลจริงถึง 30 ชุดแล้ว) ต่อไหม
+
 ```

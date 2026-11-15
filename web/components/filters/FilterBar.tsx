@@ -3,15 +3,16 @@
 import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { CheckList } from "./CheckList";
-import { DateRangeFilter } from "./DateRangeFilter";
+import { DateRangeFilter, type ResearchRange } from "./DateRangeFilter";
 import { FilterChip } from "./FilterChip";
 import { FilterSheet } from "./FilterSheet";
 import { FILTER_GROUPS, countActive, dateLabel } from "./filter-config";
 import { useResultCount } from "./result-count";
 import { useFilters } from "./useFilters";
+import type { MonthInfo } from "@/lib/survey/filters";
 
 /** แถวตัวกรอง 44px (sticky ใต้ top bar): ชิปดรอปดาวน์ ≥1024px, ปุ่มเดียว + bottom sheet บนจอเล็ก */
-export function FilterBar({ anchor }: { anchor: string | null }) {
+export function FilterBar({ anchor, months, research }: { anchor: string | null; months: MonthInfo[]; research: ResearchRange | null }) {
   const { filters, update, reset } = useFilters();
   const [sheetOpen, setSheetOpen] = useState(false);
   const result = useResultCount();
@@ -36,8 +37,8 @@ export function FilterBar({ anchor }: { anchor: string | null }) {
 
         {/* จอใหญ่ */}
         <div className="hidden items-center gap-2 lg:flex">
-          <FilterChip label={dateLabel(filters)} count={dateActive ? 1 : 0} showCount={false} onClear={() => update({ ...filters, from: undefined, to: undefined })}>
-            <DateRangeFilter from={filters.from} to={filters.to} anchor={anchor} onChange={(r) => update({ ...filters, ...r })} />
+          <FilterChip label={dateLabel(filters, research)} wide count={dateActive ? 1 : 0} showCount={false} onClear={() => update({ ...filters, from: undefined, to: undefined })}>
+            <DateRangeFilter from={filters.from} to={filters.to} anchor={anchor} months={months} research={research} onChange={(r) => update({ ...filters, ...r })} />
           </FilterChip>
           {FILTER_GROUPS.map((g) => {
             const selected = filters[g.key] ?? [];
@@ -72,7 +73,7 @@ export function FilterBar({ anchor }: { anchor: string | null }) {
         </p>
       </div>
 
-      <FilterSheet open={sheetOpen} onClose={() => setSheetOpen(false)} filters={filters} anchor={anchor} update={update} reset={reset} />
+      <FilterSheet open={sheetOpen} onClose={() => setSheetOpen(false)} filters={filters} anchor={anchor} months={months} research={research} update={update} reset={reset} />
     </section>
   );
 }

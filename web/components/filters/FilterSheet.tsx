@@ -2,21 +2,23 @@
 
 import { BottomSheet } from "../ui/BottomSheet";
 import { CheckList } from "./CheckList";
-import { DateRangeFilter } from "./DateRangeFilter";
+import { DateRangeFilter, type ResearchRange } from "./DateRangeFilter";
 import { FILTER_GROUPS, countActive } from "./filter-config";
-import type { Filters } from "@/lib/survey/filters";
+import type { Filters, MonthInfo } from "@/lib/survey/filters";
 
 type FilterSheetProps = {
   open: boolean;
   onClose: () => void;
   filters: Filters;
   anchor: string | null;
+  months: MonthInfo[];
+  research: ResearchRange | null;
   update: (next: Filters) => void;
   reset: () => void;
 };
 
 /** มือถือ: ตัวกรองทั้งหมดใน bottom sheet เดียว */
-export function FilterSheet({ open, onClose, filters, anchor, update, reset }: FilterSheetProps) {
+export function FilterSheet({ open, onClose, filters, anchor, months, research, update, reset }: FilterSheetProps) {
   const active = countActive(filters);
   return (
     <BottomSheet
@@ -38,7 +40,7 @@ export function FilterSheet({ open, onClose, filters, anchor, update, reset }: F
         <section className="py-2">
           <h3 className="px-4 pt-1 type-section">ช่วงวันที่</h3>
           <div className="px-2">
-            <DateRangeFilter from={filters.from} to={filters.to} anchor={anchor} onChange={(r) => update({ ...filters, ...r })} />
+            <DateRangeFilter from={filters.from} to={filters.to} anchor={anchor} months={months} research={research} onChange={(r) => update({ ...filters, ...r })} />
           </div>
         </section>
         {FILTER_GROUPS.map((g) => (

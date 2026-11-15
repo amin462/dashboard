@@ -11,11 +11,13 @@ type FilterChipProps = {
   onClear: () => void;
   /** แสดง (n) ต่อท้ายชื่อเมื่อ active (ปิดสำหรับชิปวันที่) */
   showCount?: boolean;
+  /** ป๊อปโอเวอร์กว้างขึ้น (ตัวกรองวันที่) */
+  wide?: boolean;
   children: ReactNode;
 };
 
 /** ชิปตัวกรอง: กดแล้วเปิดป๊อปโอเวอร์ (Esc / คลิกนอกกรอบเพื่อปิด) */
-export function FilterChip({ label, count, onClear, showCount = true, children }: FilterChipProps) {
+export function FilterChip({ label, count, onClear, showCount = true, wide = false, children }: FilterChipProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const active = count > 0;
@@ -58,7 +60,7 @@ export function FilterChip({ label, count, onClear, showCount = true, children }
         <div
           role="group"
           aria-label={label}
-          className="absolute top-full left-0 z-40 mt-1 w-64 rounded-xl bg-surface p-1 shadow-[0_8px_24px_rgb(20_40_80/.16)]"
+          className={`absolute top-full left-0 z-40 mt-1 ${wide ? "w-80" : "w-64"} max-w-[90vw] rounded-xl bg-surface p-1 shadow-[0_8px_24px_rgb(20_40_80/.16)]`}
         >
           {active && (
             <div className="flex justify-end px-2 pt-1">

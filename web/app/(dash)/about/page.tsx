@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Bot, ClipboardCheck, Database, Info, Scale, ShieldCheck, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
-import { collectionProgress } from "@/lib/survey/aggregate";
 import { DISCLAIMER, SMALL_N, TARGET_FULL, TARGET_MIN } from "@/lib/survey/schema";
 import { CollectionProgressCard } from "@/components/overview/CollectionProgressCard";
 import { DashRoute } from "../_route";
@@ -45,7 +44,7 @@ export default function AboutPage() {
         {CREDIT ? ` · ${CREDIT}` : ""}
       </p>
 
-      <DashRoute render={({ rows, totalAll }) => <CollectionProgressCard progress={collectionProgress(rows)} totalSubmitted={totalAll} />} />
+      <DashRoute render={({ rows, totalAll }) => <CollectionProgressCard rows={rows} totalSubmitted={totalAll} />} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Block icon={<Info className="h-5 w-5" aria-hidden="true" />} title="ที่มาและวัตถุประสงค์">
