@@ -257,6 +257,52 @@ body {
   }
 }
 
+/* แชตผู้ช่วย: แผงเด้งขึ้น / ฟองข้อความและปุ่มค่อย ๆ ลอยเข้า / วงแหวนเรียกความสนใจที่ปุ่มลอย (หยุดเมื่อผู้ใช้ตั้งลดการเคลื่อนไหว — ดูกฎด้านล่าง) */
+@keyframes chat-panel-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes chat-panel-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes chat-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes chat-ring {
+  0% { opacity: 0.55; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+@keyframes chat-fab-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+.chat-panel {
+  animation: chat-panel-up 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+@media (min-width: 1024px) {
+  .chat-panel {
+    transform-origin: bottom right;
+    animation-name: chat-panel-pop;
+  }
+}
+.chat-rise {
+  animation: chat-rise 0.3s ease-out backwards;
+}
+.chat-fab {
+  animation: chat-fab-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.chat-fab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--amber);
+  pointer-events: none;
+  animation: chat-ring 1.8s ease-out 1.2s 3 both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

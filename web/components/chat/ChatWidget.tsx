@@ -45,6 +45,43 @@ function Rich({ text }: { text: string }) {
   return <div className="space-y-1.5">{blocks}</div>;
 }
 
+/**
+ * คำตอบ AI ที่ "พิมพ์ทีละนิด" (เฉพาะข้อความที่เพิ่งมาถึง ; ใช้เวลา 0.9–3 วินาที ตามความยาว)
+ * ไม่ทำเมื่อผู้ใช้ตั้งลดการเคลื่อนไหว · กดที่ฟองเพื่อข้ามไปแสดงทั้งหมด · ตัด ** ที่ยังไม่ปิดออกระหว่างพิมพ์ กันดอกจันโผล่
+ */
+function TypedReply({ text, animate, onProgress }: { text: string; animate: boolean; onProgress: () => void }) {
+  const [n, setN] = useState(animate ? 0 : text.length);
+  const progress = useRef(onProgress);
+  useEffect(() => {
+    progress.current = onProgress;
+  });
+  useEffect(() => {
+    if (!animate) return;
+    let raf = 0;
+    let start = 0;
+    const total = Math.min(3000, Math.max(900, text.length * 12));
+    const step = (t: number) => {
+      if (!start) start = t;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const p = reduce ? 1 : Math.min(1, (t - start) / total);
+      setN(Math.ceil(text.length * p));
+      progress.current();
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [animate, text]);
+
+  const done = n >= text.length;
+  const shown = done ? text : text.slice(0, n).replace(/\*\*[^*]*$/, "");
+  return (
+    <div onClick={() => setN(text.length)} aria-busy={!done}>
+      <Rich text={shown} />
+      {!done && <span aria-hidden="true" className="ml-0.5 inline-block h-4 w-0.5 translate-y-0.5 animate-pulse bg-ink-3" />}
+    </div>
+  );
+}
+
 type ApiResult = { ok: true; reply: string } | { ok: false; code?: string; message?: string };
 
 /**
@@ -60,6 +97,8 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** index ของข้อความผู้ช่วยที่เพิ่งมาถึง (พิมพ์ทีละนิด) ; null = ไม่มี */
+  const [typing, setTyping] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -113,7 +152,10 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
           }),
         });
         const data = (await res.json().catch(() => null)) as ApiResult | null;
-        if (data && data.ok) setMessages([...history, { role: "assistant", content: data.reply }]);
+        if (data && data.ok) {
+          setTyping(history.length);
+          setMessages([...history, { role: "assistant", content: data.reply }]);
+        }
         else setError((data && !data.ok && data.message) || "ผู้ช่วยขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง");
       } catch {
         setError("เชื่อมต่อไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง");
@@ -140,6 +182,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
 
   const reset = () => {
     setMessages([]);
+    setTyping(null);
     setBusiness(null);
     setPicked(false);
     setError(null);
@@ -159,7 +202,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-haspopup="dialog"
-          className="no-print fixed right-4 bottom-[4.75rem] z-40 inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(20_40_80/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy lg:right-6 lg:bottom-6"
+          className="chat-fab no-print fixed right-4 bottom-[4.75rem] z-40 inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(20_40_80/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy lg:right-6 lg:bottom-6"
         >
           <MessageCircle className="h-5 w-5" aria-hidden="true" />
           ถามผู้ช่วย
@@ -170,7 +213,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
         <section
           role="dialog"
           aria-label="ผู้ช่วยอ่านข้อมูล"
-          className="no-print fixed inset-0 z-50 flex flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:right-6 lg:bottom-6 lg:h-[620px] lg:max-h-[calc(100dvh-3rem)] lg:w-[400px] lg:rounded-2xl lg:pb-0 lg:shadow-[0_14px_48px_rgb(20_40_80/.3)]"
+          className="chat-panel no-print fixed inset-0 z-50 flex flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:right-6 lg:bottom-6 lg:h-[620px] lg:max-h-[calc(100dvh-3rem)] lg:w-[400px] lg:rounded-2xl lg:pb-0 lg:shadow-[0_14px_48px_rgb(20_40_80/.3)]"
         >
           <header className="flex items-center gap-3 bg-frame px-4 py-3 text-white">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber text-amber-fg">
@@ -196,8 +239,9 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
 
             {!picked && (
               <div className="flex flex-wrap gap-2 pl-1">
-                {BUSINESS_CHOICES.map((b) => (
+                {BUSINESS_CHOICES.map((b, i) => (
                   <Chip
+                    i={i}
                     key={b.key ?? "none"}
                     onClick={() => {
                       setBusiness(b.key);
@@ -222,8 +266,9 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
                   </p>
                 </Bubble>
                 <div className="flex flex-wrap gap-2 pl-1">
-                  {TOPIC_STARTERS.map((t) => (
+                  {TOPIC_STARTERS.map((t, i) => (
                     <Chip
+                      i={i}
                       key={t.label}
                       onClick={() => {
                         setInput(t.template);
@@ -236,8 +281,8 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
                 </div>
                 <p className="pl-1 type-meta text-ink-3">หรือถามจากข้อมูลสำรวจโดยตรง:</p>
                 <div className="flex flex-wrap gap-2 pl-1">
-                  {quickQuestions(pathname).map((q) => (
-                    <Chip key={q} onClick={() => ask(q)}>
+                  {quickQuestions(pathname).map((q, i) => (
+                    <Chip key={q} i={i + TOPIC_STARTERS.length} onClick={() => ask(q)}>
                       {q}
                     </Chip>
                   ))}
@@ -247,7 +292,15 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
 
             {messages.map((m, i) => (
               <Bubble key={i} role={m.role}>
-                {m.role === "assistant" ? <Rich text={m.content} /> : m.content}
+                {m.role === "assistant" ? (
+                  <TypedReply
+                    text={m.content}
+                    animate={typing === i}
+                    onProgress={() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight })}
+                  />
+                ) : (
+                  m.content
+                )}
               </Bubble>
             ))}
 
@@ -274,8 +327,8 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
 
             {showFollowUps && (
               <div className="flex flex-wrap gap-2 pl-1">
-                {FOLLOW_UPS.map((q) => (
-                  <Chip key={q} onClick={() => ask(q)}>
+                {FOLLOW_UPS.map((q, i) => (
+                  <Chip key={q} i={i} onClick={() => ask(q)}>
                     {q}
                   </Chip>
                 ))}
@@ -329,7 +382,7 @@ function Bubble({ role, children }: { role: "user" | "assistant"; children: Reac
   return (
     <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[15px] leading-6 break-words whitespace-pre-wrap ${
+        className={`chat-rise max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[15px] leading-6 break-words whitespace-pre-wrap ${
           mine ? "rounded-br-md bg-navy-solid text-navy-fg" : "rounded-bl-md bg-surface text-ink shadow-[var(--shadow-card)]"
         }`}
       >
@@ -339,12 +392,13 @@ function Bubble({ role, children }: { role: "user" | "assistant"; children: Reac
   );
 }
 
-function Chip({ children, onClick }: { children: ReactNode; onClick: () => void }) {
+function Chip({ children, onClick, i = 0 }: { children: ReactNode; onClick: () => void; i?: number }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full border border-amber/60 bg-amber-soft px-3 py-1.5 text-left text-[14px] leading-5 font-medium text-amber-ink transition-colors duration-150 hover:bg-amber hover:text-amber-fg"
+      style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
+      className="chat-rise rounded-full border border-amber/60 bg-amber-soft px-3 py-1.5 text-left text-[14px] leading-5 font-medium text-amber-ink transition-colors duration-150 hover:bg-amber hover:text-amber-fg"
     >
       {children}
     </button>
