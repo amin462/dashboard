@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normalize } from '@/lib/survey/normalize'
+import { cleanValue, normalize } from '@/lib/survey/normalize'
 import { applyFilters, filtersFromSearchParams, filtersToQuery } from '@/lib/survey/filters'
 import { businessInsights } from '@/lib/survey/insights'
 import { makeMock } from '@/lib/survey/mock'
@@ -138,5 +138,13 @@ describe('mock', () => {
     const days = new Set(all.map((r) => r.date))
     expect(days.size).toBeGreaterThanOrEqual(12)
     expect(Array.from(days).every((d) => d >= '2026-11-01' && d <= '2026-11-14')).toBe(true)
+  })
+})
+
+describe('cleanValue', () => {
+  it('ตัดอักขระความกว้างศูนย์ และข้อความที่เหลือแต่ตัวล่องหน = ว่าง', () => {
+    expect(cleanValue('ไม่\u200Bมี')).toBe('ไม่มี')
+    expect(cleanValue('\uFEFF 25–34 ปี')).toBe('25–34 ปี')
+    expect(cleanValue('\u200B\u200C')).toBeNull()
   })
 })

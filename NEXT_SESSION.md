@@ -9,7 +9,7 @@
 
 ## งานถัดไป (AI ทำ — ดูรายละเอียดใน PLAN.md ตาราง T11–T16 และหัวข้อ "แผนอัปเกรด D1–D4")
 1. **T11 (เหลือ)** ลองแชตบน production + มือถือจริงหลัง deploy (จูน prompt/ตัวกรองในแชตเสร็จแล้ว)
-2. **T14 (เริ่มได้แล้ว — ข้อมูล ≥ 30)**: T6 เทียบตัวเลขกับ Google Sheets, ถ่ายภาพ real (`node web/scripts/screenshots.mjs docs/screenshots/real <base-url>`), ร่างบทผล `docs/REPORT_RESULTS_DRAFT.md`, อัปเดตภาพใน USER_MANUAL
+2. **T14 (เหลือ)** T6 เทียบตัวเลขกับ Google Sheets (ต้องให้ผู้ใช้ส่งออก CSV) · รันร่างบท 4 ใหม่ตามวันตัดข้อมูล (`scripts/report-draft.ts --from --to`) แล้วตรวจอ่านทั้งบท · ถ่ายภาพ real ซ้ำเมื่อข้อมูลครบ (ภาพชุดแรกถ่ายแล้วที่ docs/screenshots/real)
 3. smoke บน production: `pnpm -C web smoke -- https://dashboard-liart-six-41.vercel.app --expect-real` (ผู้ใช้สั่งเลื่อนไว้ก่อน — รันเมื่อผู้ใช้สั่ง)
 
 ## ค้าง — ผู้ใช้ทำ

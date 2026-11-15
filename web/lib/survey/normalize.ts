@@ -17,10 +17,10 @@ export function slotOfHour(hour: number): Slot {
   return 'อื่น'
 }
 
-/** trim, ว่าง -> null, hyphen/em dash ระหว่างตัวเลข -> en dash (U+2013) */
+/** trim, ว่าง -> null, ตัดอักขระความกว้างศูนย์ (U+200B–200D, U+FEFF ที่มักติดมากับข้อความวางจากมือถือ), hyphen/em dash ระหว่างตัวเลข -> en dash (U+2013) */
 export function cleanValue(v: unknown): string | null {
   if (v === null || v === undefined) return null
-  const s = String(v).trim()
+  const s = String(v).replace(/[\u200B-\u200D\uFEFF]/g, '').trim()
   if (s === '') return null
   return s.replace(/(\d)\s*[-‐‑‒—]\s*(\d)/g, '$1–$2')
 }

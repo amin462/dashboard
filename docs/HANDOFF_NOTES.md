@@ -159,3 +159,10 @@
 - ยังไม่ได้ทำ (ข้อเสนอถ้าจะเข้มขึ้น): ต่ออายุเซสชันตามการใช้งาน/idle timeout · ตารางเซสชันในฐานข้อมูลเพื่อ revoke รายเครื่อง · 2FA · rate limit กลาง (Redis/Upstash) · CSP
 - Word export (sonnet): ปุ่ม "ส่งออก Word (.doc)" ใน /reports — `report-word.ts` สร้าง HTML ที่ Word เปิดได้ ตาราง "ตารางที่ N…" + ช่วงเชื่อมั่น 95% + ส่วนสถิติ ยะลา vs นอกจังหวัด · escape HTML ข้อความผู้ตอบ · ทดสอบด้วย unit test เท่านั้น **ยังไม่ได้เปิดไฟล์ใน Word จริง**
 - พิมพ์รายงานธุรกิจ A4 (sonnet): ปุ่ม "พิมพ์รายงานธุรกิจนี้" ใน /business + หัวรายงาน print-only + CSS print ท้าย globals.css · **ยังไม่ได้ลองพิมพ์จริง** (ไม่แน่ใจว่าพอดี 1 หน้า A4 ; ถ้าล้นให้ลดขนาด/ใช้ zoom ใน `.biz-print`)
+
+## T14 (ส่วนที่ทำได้ตอนนี้) + แก้ปุ่มล้นจอมือถือ — Claude + survey-core(sonnet) (15 พ.ย. 2569)
+- แก้ `DashPage`: กล่องปุ่ม actions เดิม `shrink-0` ทำให้ /reports (CSV/Word/PDF) ล้นจอมือถือ → `max-w-full min-w-0 flex-wrap` ; ตรวจ 375px ทุกหน้าไม่มี scroll แนวนอน
+- ภาพ real ชุดเต็ม 39 ภาพ: `docs/screenshots/real/` (ถ่ายด้วย `screenshots.mjs` ตอนผู้ตอบสมบูรณ์ ~52 ชุด) ; USER_MANUAL อ้างภาพชุดนี้แล้ว ; ถ่ายซ้ำก่อนส่งงานเมื่อข้อมูลครบ (`node web/scripts/screenshots.mjs docs/screenshots/real http://localhost:3101`)
+- `web/scripts/report-draft.ts`: สร้าง `docs/REPORT_RESULTS_DRAFT.md` (บทที่ 4 หัวข้อ 4.1–4.9, ตาราง "ตารางที่ N…" + ช่วงเชื่อมั่น 95% + ประโยคตีความตามกฎตายตัว) จากฐานข้อมูลจริงด้วยฟังก์ชัน lib เดียวกับแดชบอร์ด ; รัน `pnpm -C web exec tsx scripts/report-draft.ts --from=YYYY-MM-DD --to=YYYY-MM-DD` ตามวันตัดข้อมูลเพื่อให้ตรงกับเล่ม (ตอนนี้ร่างจากข้อมูลทั้งหมด n=54)
+- `web/scripts/verify-counts.ts`: นับอิสระจากข้อความดิบเทียบ `freq/multiFreq` ของแอป → ตรงทั้ง 67 ตัวเลือกข้อ 1–10 (exit 1 ถ้าไม่ตรง) ; **ไม่ใช่การเทียบกับ Google Sheets** (T6 ยังต้องใช้ CSV จากผู้ใช้)
+- พบข้อมูลสกปรก: ข้อเสนอแนะ "ไม่มี" ที่มีอักขระความกว้างศูนย์ → `cleanValue` ตัด U+200B–200D/FEFF แล้ว (+test) ; ข้อเสนอแนะ 19 คนกรอก แต่มีเนื้อหาจริงราว 9 (ที่เหลือ "-"/"ไม่มี") ; ร่างไม่แก้คำผิดของผู้ตอบ
