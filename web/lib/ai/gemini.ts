@@ -3,7 +3,7 @@ import type { ChatMessage } from './request'
 
 export type GeminiResult = { ok: true; text: string } | { ok: false; code: 'quota' | 'blocked' | 'error' }
 
-export const DEFAULT_MODEL = 'gemini-2.5-flash'
+export const DEFAULT_MODEL = 'gemini-flash-lite-latest'
 
 /** เรียก Gemini (Google AI Studio) ฝั่งเซิร์ฟเวอร์ ; ไม่คืนรายละเอียด error ที่อาจมีข้อมูลภายในให้ผู้ใช้ */
 export async function askGemini(opts: {
@@ -20,7 +20,7 @@ export async function askGemini(opts: {
     parts: [{ text: m.content }],
   }))
   try {
-    const res = await fetch(url, {
+    const call = () => fetch(url, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-goog-api-key': opts.apiKey },
       body: JSON.stringify({
@@ -28,11 +28,17 @@ export async function askGemini(opts: {
           parts: [{ text: `${opts.system}\n\n# บริบทข้อมูล (คำนวณโดยระบบ ใช้ตอบเท่านั้น)\n${opts.context}` }],
         },
         contents,
-        generationConfig: { temperature: 0.3, maxOutputTokens: 800 },
+        generationConfig: { temperature: 0.3, maxOutputTokens: 2048 },
       }),
       signal: AbortSignal.timeout(25_000),
     })
-    if (res.status === 429) return { ok: false, code: 'quota' }
+    let res = await call()
+    // 503 = โมเดลคนใช้เยอะชั่วคราว: ลองซ้ำ 1 ครั้ง แล้วตอบว่าไม่ว่าง
+    if (res.status === 503) {
+      await new Promise((r) => setTimeout(r, 1200))
+      res = await call()
+    }
+    if (res.status === 429 || res.status === 503) return { ok: false, code: 'quota' }
     if (!res.ok) {
       // log เฉพาะสถานะ (ไม่ log คีย์/เนื้อหา) ไว้ดีบักใน Vercel logs เช่น 403 = โปรเจกต์คีย์ใช้ฟรีไม่ได้, 404 = ชื่อรุ่นผิด
       console.error('[chat] Gemini HTTP', res.status, model)
