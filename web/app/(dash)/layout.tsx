@@ -46,8 +46,8 @@ async function FilterBarSlot() {
 }
 
 async function BannerSlot() {
-  const { source, error, seedCount } = await getSurveyBundle();
-  return <DataBanner source={source} error={error} seedCount={seedCount} />;
+  const { source, error, seedCount, stale } = await getSurveyBundle();
+  return <DataBanner source={source} error={error} seedCount={seedCount} stale={stale} />;
 }
 
 export default function DashLayout({ children }: Readonly<{ children: ReactNode }>) {

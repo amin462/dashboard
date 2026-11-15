@@ -5,10 +5,12 @@ type DataBannerProps = {
   error?: string;
   /** จำนวนแถวทดสอบ (source='seed') ที่ปนอยู่ในฐานข้อมูลจริง */
   seedCount?: number;
+  /** อ่านฐานข้อมูลรอบนี้ไม่สำเร็จ จึงแสดงชุดล่าสุดที่เคยโหลดได้ */
+  stale?: boolean;
 };
 
 /** แบนเนอร์บรรทัดเดียว 36px (warn-soft) + "รายละเอียด" แบบ disclosure ; ไม่มีเหตุให้เตือน = ไม่แสดง */
-export function DataBanner({ source, error, seedCount = 0 }: DataBannerProps) {
+export function DataBanner({ source, error, seedCount = 0, stale = false }: DataBannerProps) {
   let summary: string;
   let detail: string;
   let role: "alert" | "status" = "status";
@@ -17,6 +19,9 @@ export function DataBanner({ source, error, seedCount = 0 }: DataBannerProps) {
     role = "alert";
     summary = "เชื่อมต่อฐานข้อมูลไม่สำเร็จ — ยังไม่แสดงตัวเลข (ไม่ใช้ข้อมูลตัวอย่างแทนเพื่อกันความเข้าใจผิด)";
     detail = `ระบบจะลองดึงข้อมูลใหม่อัตโนมัติ หากยังไม่หายให้แจ้งผู้ดูแล สาเหตุ: ${error ?? "ไม่ทราบ"}`;
+  } else if (source === "supabase" && stale) {
+    summary = "เชื่อมต่อฐานข้อมูลไม่ได้ชั่วคราว — กำลังแสดงข้อมูลชุดล่าสุดที่โหลดได้ (อาจไม่ใช่ล่าสุด)";
+    detail = `ระบบจะลองดึงข้อมูลใหม่อัตโนมัติทุกครั้งที่เปิดหน้า สาเหตุ: ${error ?? "ไม่ทราบ"}`;
   } else if (source === "supabase" && seedCount > 0) {
     role = "alert";
     summary = `มีข้อมูลทดสอบปนอยู่ ${seedCount.toLocaleString("th-TH")} แถว — ผลบนจอยังไม่ใช่ข้อมูลจริงทั้งหมด`;

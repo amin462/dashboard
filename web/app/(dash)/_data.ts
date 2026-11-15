@@ -18,6 +18,7 @@ export async function getSurveyBundle() {
   return {
     source: res.source,
     error: res.error,
+    stale: res.stale === true,
     // แถวทดสอบจาก scripts/seed.ts ที่อยู่ในฐานข้อมูลจริง -> ต้องเตือนบนจอ ห้ามปนกับข้อมูลจริงโดยไม่รู้ตัว
     seedCount: res.rows.filter((r) => r.source === "seed").length,
     rows,
