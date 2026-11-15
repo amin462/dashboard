@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { BedDouble, Bus, Gift, Utensils, type LucideIcon } from "lucide-react";
+import { BedDouble, Bus, Gift, Printer, Utensils, type LucideIcon } from "lucide-react";
 import { topItem } from "@/lib/survey/aggregate";
 import { BUSINESS_TYPES, businessInsights, type BusinessType } from "@/lib/survey/insights";
 import type { Row } from "@/lib/survey/schema";
 import { num } from "@/components/format";
-import { DashPage } from "@/components/page/DashPage";
+import { DashPage, type PageData } from "@/components/page/DashPage";
 import { InsightsSection } from "@/components/page/InsightsSection";
 import { Cell } from "@/components/ui/Cell";
 import { SmallSampleBadge } from "@/components/ui/SmallSampleBadge";
 import { StatStrip } from "@/components/ui/StatStrip";
 import { BIZ_VIEWS, bizData, type BizData } from "./biz-views";
+import { BusinessPrintHeader } from "./BusinessPrintHeader";
 
 const ICONS: Record<BusinessType, LucideIcon> = { restaurant: Utensils, hotel: BedDouble, shop: Gift, tour: Bus };
 
@@ -36,11 +37,22 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
   const TypeIcon = ICONS[type];
 
   return (
-    <DashPage rows={rows} description="เลือกประเภทธุรกิจของคุณ แล้วดูว่าลูกค้าของคุณเป็นใคร มาช่วงไหน ใช้จ่ายเท่าไร พร้อมข้อเสนอเบื้องต้น">
-      {({ rows: filtered }) => {
+    <DashPage
+      rows={rows}
+      description="เลือกประเภทธุรกิจของคุณ แล้วดูว่าลูกค้าของคุณเป็นใคร มาช่วงไหน ใช้จ่ายเท่าไร พร้อมข้อเสนอเบื้องต้น"
+      hideDescriptionOnPrint
+      actions={(data: PageData) => (
+        <button type="button" onClick={() => window.print()} disabled={data.rows.length === 0} className="btn btn-secondary">
+          <Printer className="h-4 w-4" aria-hidden="true" />
+          พิมพ์รายงานธุรกิจนี้
+        </button>
+      )}
+    >
+      {({ rows: filtered, filters }) => {
         const d = bizData(filtered);
         return (
-          <>
+          <div className="biz-print space-y-4">
+            <BusinessPrintHeader typeLabel={typeLabel} filters={filters} n={d.n} />
             <div
               role="tablist"
               aria-label="ประเภทธุรกิจ"
@@ -67,8 +79,8 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
               })}
             </div>
 
-            <div role="tabpanel" aria-label={typeLabel} className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+            <div role="tabpanel" aria-label={typeLabel} className="space-y-4 print:space-y-3">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 print:gap-3">
                 <Cell span="lg:col-span-5">
                   <section aria-label={`โปรไฟล์ลูกค้า ${typeLabel}`} className="print-card card kpi-solid flex flex-col gap-3 p-5">
                     <div className="flex items-center gap-3">
@@ -92,9 +104,12 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
                 </Cell>
               </div>
               <InsightsSection title="ข้อเสนอสำหรับธุรกิจของคุณ" insights={businessInsights(filtered, type)} n={d.n} />
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">{view.charts(d)}</div>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 print:grid-cols-2 print:gap-3">{view.charts(d)}</div>
             </div>
-          </>
+            <p className="print-only type-meta text-ink-3">
+              ฐานผู้ตอบ {num(d.n)} คน ตัวเลขทั้งหมดคำนวณจากผู้ตอบในตัวกรองที่ระบุข้างต้น <SmallSampleBadge n={d.n} className="ml-1" />
+            </p>
+          </div>
         );
       }}
     </DashPage>

@@ -8,6 +8,7 @@ import {
 } from "@/lib/import/csv";
 import { getSupabaseAdmin } from "@/lib/import/supabaseAdmin";
 import { ADMIN_COOKIE, adminConfigured, isValidAdminCookie } from "@/lib/import/auth";
+import { isSameOrigin } from "@/lib/import/originCheck";
 
 // นำเข้าข้อมูล CSV (ผู้ดูแล) — DATA_CONTRACT ข้อ 6: เขียนข้อมูลด้วย SERVICE_ROLE ฝั่ง server เท่านั้น
 // body: multipart {file, mode} | JSON {csv, mode} | JSON {rows, mode}
@@ -113,6 +114,10 @@ export async function POST(request: NextRequest) {
   // สิทธิ์: ตรวจซ้ำใน route ด้วย (proxy ตรวจก่อนแล้ว แต่กันเผื่อการตั้งค่า matcher)
   if (!adminConfigured() || !isValidAdminCookie(request.cookies.get(ADMIN_COOKIE)?.value)) {
     return jsonFail("ไม่ได้รับอนุญาต — โปรดเข้าสู่ระบบผู้ดูแลอีกครั้ง", 401);
+  }
+
+  if (!isSameOrigin(request.headers.get("origin"), request.headers.get("host"))) {
+    return jsonFail("คำขอข้ามเว็บไม่ได้รับอนุญาต", 403);
   }
 
   const parsedInput = await readInput(request);

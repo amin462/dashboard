@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { LogOut, ScanSearch } from "lucide-react";
+import { ScanSearch } from "lucide-react";
 import { adminConfigured } from "@/lib/import/auth";
 import { hasSupabaseEnv } from "@/lib/import/supabaseAdmin";
 import { AdminFrame } from "@/components/shell/AdminFrame";
 import { Card } from "@/components/ui/Card";
 import { Notice } from "@/components/ui/Notice";
-import { logoutAction } from "../login/actions";
 import { ImportClient } from "./ImportClient";
 
 export const metadata = { title: "นำเข้าข้อมูล (ผู้ดูแล)" };
@@ -24,9 +23,6 @@ export default function AdminImportPage() {
             <ScanSearch className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="hidden sm:inline">คุณภาพข้อมูล</span>
           </Link>
-          <Suspense fallback={null}>
-            <LogoutButton />
-          </Suspense>
         </>
       }
     >
@@ -51,19 +47,6 @@ export default function AdminImportPage() {
         </p>
       </Card>
     </AdminFrame>
-  );
-}
-
-async function LogoutButton() {
-  await connection(); // อ่าน env ตอนร้องขอจริง ไม่ bake ตอน build
-  if (!adminConfigured()) return null;
-  return (
-    <form action={logoutAction}>
-      <button type="submit" className="btn btn-secondary h-8 px-2.5 text-[13px]">
-        <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-        <span className="hidden sm:inline">ออกจากระบบ</span>
-      </button>
-    </form>
   );
 }
 

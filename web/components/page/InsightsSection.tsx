@@ -31,7 +31,7 @@ export function InsightsSection({ title, insights, n, max = 3, variant = "grid",
         {cta && <CtaLink href={cta.href}>{cta.label}</CtaLink>}
       </div>
       {shown.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 print:grid-cols-3 print:gap-3">
           {shown.map((ins, i) => (
             <InsightCard key={ins.title} insight={ins} index={i} />
           ))}

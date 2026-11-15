@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { ADMIN_COOKIE, adminConfigured, isValidAdminCookie } from "@/lib/import/auth";
+import { isSameOrigin } from "@/lib/import/originCheck";
 import { parseDeleteIds } from "@/lib/import/deleteRows";
 import { getSupabaseAdmin } from "@/lib/import/supabaseAdmin";
 
@@ -13,6 +14,9 @@ const jsonFail = (error: string, status: number) => Response.json({ ok: false, e
 export async function POST(request: NextRequest) {
   if (!adminConfigured() || !isValidAdminCookie(request.cookies.get(ADMIN_COOKIE)?.value)) {
     return jsonFail("ไม่ได้รับอนุญาต — โปรดเข้าสู่ระบบผู้ดูแลอีกครั้ง", 401);
+  }
+  if (!isSameOrigin(request.headers.get("origin"), request.headers.get("host"))) {
+    return jsonFail("คำขอข้ามเว็บไม่ได้รับอนุญาต", 403);
   }
   const body = await request.json().catch(() => null);
   const parsed = parseDeleteIds(body);

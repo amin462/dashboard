@@ -9,7 +9,7 @@ import { loginAction } from "./actions";
 export const metadata = { title: "เข้าสู่ระบบผู้ดูแล" };
 
 type Props = {
-  searchParams: Promise<{ error?: string; logout?: string; next?: string }>;
+  searchParams: Promise<{ error?: string; logout?: string; locked?: string; next?: string }>;
 };
 
 /** กรอบหน้าล็อกอิน: โครงเดียวกับหน้าอื่น (ชื่อหน้าเป็น h1 + คำอธิบาย 1 บรรทัด) แต่จัดกลางจอ */
@@ -66,6 +66,11 @@ async function LoginCard({ searchParams }: Props) {
   return (
     <AuthShell title="ผู้ดูแลระบบ" description="กรอกรหัสผ่านผู้ดูแลเพื่อนำเข้าและตรวจคุณภาพข้อมูล">
       {sp.logout && <Notice tone="ok">ออกจากระบบเรียบร้อยแล้ว</Notice>}
+      {sp.locked && (
+        <Notice tone="danger">
+          ใส่รหัสผิดหลายครั้งเกินไป — ถูกล็อกชั่วคราว กรุณารอประมาณ {Math.max(1, Math.ceil(Number(sp.locked) / 60) || 1)} นาที แล้วลองใหม่
+        </Notice>
+      )}
       {sp.error && <Notice tone="danger">รหัสผ่านไม่ถูกต้อง โปรดลองอีกครั้ง</Notice>}
 
       <form action={loginAction} className="space-y-3">

@@ -407,3 +407,22 @@ body {
     page-break-inside: avoid;
   }
 }
+
+/* พิมพ์รายงานธุรกิจ (/business): บีบระยะห่างให้พอดี A4 หน้าเดียว */
+@media print {
+  .biz-print {
+    font-size: 9.5pt;
+    line-height: 1.4;
+  }
+  .biz-print .card {
+    padding: 10px 12px;
+  }
+  .biz-print article {
+    padding: 8px 10px;
+    break-inside: avoid;
+  }
+  .biz-print .type-kpi {
+    font-size: 18pt;
+    line-height: 1.2;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Printer } from "lucide-react";
+import { Download, FileText, Printer } from "lucide-react";
 import { freq, multiFreq, overview, satisfaction, type FreqResult } from "@/lib/survey/aggregate";
 import { filtersToQuery, type Filters } from "@/lib/survey/filters";
 import { wilsonCI } from "@/lib/survey/stats";
@@ -13,6 +13,7 @@ import { DashPage, type PageData } from "@/components/page/DashPage";
 import { ReliabilityCard } from "@/components/stats/ReliabilityCard";
 import { StatStrip } from "@/components/ui/StatStrip";
 import { buildReportCsv, downloadCsv } from "./report-csv";
+import { buildReportWordHtml, downloadWord } from "./report-word";
 
 const REPORT_CODES: Code[] = CODES.filter((c) => c.startsWith("sur") && c !== "sur11");
 
@@ -40,11 +41,19 @@ function ReportActions({ data }: { data: PageData }) {
     const { results, sat, comments } = calc(data.rows);
     downloadCsv(buildReportCsv(results, sat, comments, data.rows.length, summarize(data.filters), data.rows), `yala-insight-report-${filtersToQuery(data.filters) ? "filtered" : "all"}.csv`);
   };
+  const exportWord = () => {
+    const { results, sat, comments } = calc(data.rows);
+    downloadWord(buildReportWordHtml(results, sat, comments, data.rows.length, summarize(data.filters), data.rows), `yala-insight-report-${filtersToQuery(data.filters) ? "filtered" : "all"}.doc`);
+  };
   return (
     <>
       <button type="button" onClick={exportCsv} disabled={disabled} className="btn btn-primary">
         <Download className="h-4 w-4" aria-hidden="true" />
         ส่งออก CSV
+      </button>
+      <button type="button" onClick={exportWord} disabled={disabled} className="btn btn-secondary">
+        <FileText className="h-4 w-4" aria-hidden="true" />
+        ส่งออก Word (.doc)
       </button>
       <button type="button" onClick={() => window.print()} disabled={disabled} className="btn btn-secondary">
         <Printer className="h-4 w-4" aria-hidden="true" />

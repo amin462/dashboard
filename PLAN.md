@@ -55,7 +55,7 @@ export type Row = RawRow & { sur08list: string[]; sat: number|null; slot: 'เ�
 | T19 | ข้อความการ์ดเปรียบเทียบยะลา/ต่างถิ่นบอกว่าขาดอีกกี่คน (ขั้นต่ำ 5 ต่อกลุ่ม) + แนวทางเก็บข้อมูลกลุ่มคนยะลา | Claude | `web/components/overview/OriginCompareCard.tsx` | D3 | – | ✅ |
 | T20 | สถิติสำหรับบทผลวิจัย: ช่วงความเชื่อมั่น/ความคลาดเคลื่อน (Wilson) ของร้อยละหลัก + ไคสแควร์ยะลา vs ต่างถิ่น + ค่าเฉลี่ย/SD เทียบกลุ่ม (ใน lib + test + หน้า/การ์ด "ความน่าเชื่อถือของตัวเลข") | Claude sonnet (`survey-core`) | `web/lib/survey/**`, `web/tests/**`, `web/components/**` | D3 | – | ✅ |
 | T21 | ข้อมูลทดสอบจากอาจารย์: ทำเครื่องหมายแถวทดสอบ (เช่น คำนำหน้า/โหมดผู้ดูแล) ให้ตัดออกหรือลบได้ใน /admin ; ปุ่ม "ลองตอบแบบสำรวจ" ที่ top bar ; ห้าม fallback เป็น mock บน production เมื่อ DB ขัดข้อง (แสดงแบนเนอร์ผิดพลาดแทน) | Claude | `web/app/admin/**`, `web/lib/survey/data.ts`, `web/components/shell/**` | D3 | – | ✅ |
-| T22 | ส่งออกตารางบทที่ 4 จากหน้า /reports (CSV มีช่วงเชื่อมั่น 95% + ส่วนสถิติท้ายไฟล์ ; ยังไม่ทำ Word) + ทดสอบมือถือจริง/พิมพ์ A4 รอบสุดท้าย + ตรวจ a11y | Claude + haiku | `web/app/(dash)/reports/**`, `docs/**` | D4 | T14 | ✅ |
+| T22 | ส่งออกตารางบทที่ 4 จากหน้า /reports (CSV มีช่วงเชื่อมั่น 95% + ส่วนสถิติท้ายไฟล์ ; Word .doc เสร็จแล้ว) + ทดสอบมือถือจริง/พิมพ์ A4 รอบสุดท้าย + ตรวจ a11y | Claude + haiku | `web/app/(dash)/reports/**`, `docs/**` | D4 | T14 | ✅ |
 
 ## ลำดับสั่งงาน
 1. **วันนี้/D1 เช้า:** สั่ง Claude `survey-core` ทำ T1 ⟶ พร้อมกันสั่ง Gemini ทำ T2 ขั้น 1 (design system + layout เท่านั้น)

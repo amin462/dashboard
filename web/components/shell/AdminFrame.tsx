@@ -1,7 +1,8 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "../ThemeProvider";
+import { AdminSession } from "./AdminSession";
 
 type AdminFrameProps = {
   title: string;
@@ -28,6 +29,9 @@ export function AdminFrame({ title, description, actions, maxWidth = "max-w-[100
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {actions}
+          <Suspense fallback={null}>
+            <AdminSession />
+          </Suspense>
           <ThemeToggle />
         </div>
       </header>
