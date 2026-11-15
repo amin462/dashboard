@@ -144,3 +144,9 @@
 - T20 (survey-core): `lib/survey/stats.ts` (Wilson CI, ไคสแควร์/Fisher 2×2, Welch t + Cohen d, marginOfError, reliabilitySummary) + `tests/stats.test.ts` + `docs/STATS_METHODS.md` ; UI: `components/stats/ReliabilityCard` ใน /reports, คอลัมน์ "ช่วงเชื่อมั่น 95%" ในตารางรายข้อ, p-value + สรุปในการ์ด SUR-08 หน้าภาพรวม
 - T22: CSV ส่งออกมีช่วงเชื่อมั่น 95% + ส่วนสถิติท้ายไฟล์ (`tests/report-csv.test.ts`) ; Word ยังไม่ทำ
 - qa-docs(haiku): เพิ่ม NEW-01..13 ใน docs/QA_CHECKLIST.md + ตาราง env/ฟีเจอร์ใน README.md (ยังไม่ติ๊กผ่าน — ต้องทดสอบด้วยมือ)
+
+## ปุ่มลบแถวทดสอบ (หน้า /admin/quality) — Claude (15 พ.ย. 2569)
+- แผง "แถวผู้ตอบล่าสุด — ลบแถวที่ทดสอบกรอก" (`app/admin/quality/RecentRowsPanel.tsx`): แสดง 40 แถวล่าสุด (รวมที่ไม่นับ) เลือกด้วยช็อกบ็อกซ์ (ปุ่มลัดเลือก source=seed) → "ลบถาวร" → ยืนยัน 2 ขั้น → `POST /api/admin/delete`
+- API (`app/api/admin/delete/route.ts` + `lib/import/deleteRows.ts`): ตรวจ cookie ผู้ดูแลซ้ำ · รับเฉพาะ `{ids: uuid[]}` 1–50 รายการ (ผิดรูปแบบ = ปฏิเสธทั้งคำขอ ไม่มีโหมดลบทั้งหมด) · อ่านแถวเดิมส่งกลับเป็นไฟล์สำรอง `.json` ที่เบราว์เซอร์ดาวน์โหลดให้อัตโนมัติ · บันทึก `import_logs` (source=admin_delete) เป็นหลักฐาน
+- **ลบจริง (hard delete) ไม่ได้ย้อนกลับในระบบ** และคำตอบยังอยู่ใน Google Form/Sheets → ถ้ารัน `backfillAll()` ใน Apps Script ซ้ำ แถวที่ลบจะกลับมา (ไม่ควรรันซ้ำ) ; ไม่เปลี่ยนโครงสร้างฐานข้อมูล
+- ทดสอบ e2e กับฐานข้อมูลจริงด้วยแถวทดสอบที่สร้างเอง 1 แถว (ไม่ผ่านคัดกรอง) → ลบสำเร็จ + ไฟล์สำรองถูกต้อง + 401/400 ตามคาด ; ทดสอบ 4 เคสใน `tests/delete-rows.test.ts` ; **ยังไม่ได้ดูหน้าตาแผงด้วยตา** (ต้องล็อกอินผู้ดูแล)

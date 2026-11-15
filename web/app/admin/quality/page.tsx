@@ -12,6 +12,7 @@ import { Notice } from "@/components/ui/Notice";
 import { StatStrip, type Stat } from "@/components/ui/StatStrip";
 import { StatStripSkeleton, ChartCardSkeleton } from "@/components/ui/Skeletons";
 import { ImportLogs, MissingTable, OthersCard, type LogRow } from "./QualitySections";
+import { RecentRowsPanel, type RecentRow } from "./RecentRowsPanel";
 import { googleFormStatus, sourceStats } from "./sync-status";
 
 export const metadata = { title: "คุณภาพข้อมูล (ผู้ดูแล)" };
@@ -76,6 +77,17 @@ async function QualityBody() {
     else logs = (data ?? []) as LogRow[];
   }
 
+  // แถวล่าสุด (รวมที่ไม่นับ) ให้ผู้ดูแลเลือกลบแถวทดสอบ — อ่านด้วย service role เท่านั้น
+  let recent: RecentRow[] = [];
+  if (admin) {
+    const { data } = await admin
+      .from("survey_responses")
+      .select("id,source,submitted_at,is_complete,sur01,sur02,sur11")
+      .order("submitted_at", { ascending: false })
+      .limit(40);
+    recent = (data ?? []) as RecentRow[];
+  }
+
   // สถานะซิงก์ Google Form นับเฉพาะแถว source='google_form' ; แยกจำนวนตามแหล่งข้อมูล
   // eslint-disable-next-line react-hooks/purity -- server component: ตั้งใจอ่านเวลาจริง ณ ตอนตอบคำขอ เพื่อวัดอายุของข้อมูลล่าสุด
   const sync = googleFormStatus(all, Date.now());
@@ -127,6 +139,7 @@ async function QualityBody() {
 
       <MissingTable items={q.missingByQuestion} />
       <OthersCard others={others} sur11={sur11} />
+      {admin && <RecentRowsPanel rows={recent} />}
       <ImportLogs logs={logs} error={logsError} connected={Boolean(admin)} />
     </div>
   );
