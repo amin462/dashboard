@@ -198,6 +198,36 @@ try {
     current = null;
     await viewport(DESKTOP);
   }
+  if (want("business-print-desktop")) {
+    await open("/business");
+    await send("Emulation.setEmulatedMedia", { media: "print", features: [{ name: "prefers-color-scheme", value: "light" }] });
+    current = null;
+    await viewport({ width: 794, height: 1123, mobile: false });
+    await sleep(800);
+    await shot("business-print-desktop");
+    const pdf = await send("Page.printToPDF", { paperWidth: 8.27, paperHeight: 11.69, printBackground: true, preferCSSPageSize: true });
+    const previewDir = join(root, ".tmp", "print-preview"); // PDF + ภาพตรวจหน้า A4 ไม่ปนกับภาพในเอกสาร
+    mkdirSync(previewDir, { recursive: true });
+    writeFileSync(join(previewDir, "business-print.pdf"), Buffer.from(pdf.data, "base64"));
+    console.log("✓ .tmp/print-preview/business-print.pdf");
+    if (args.includes("--pdf-preview")) {
+      // เปิด PDF ใน viewer ของ browser แล้วเลื่อนถ่ายทีละหน้า (ใช้ตรวจการแบ่งหน้า A4)
+      current = null;
+      await viewport({ width: 900, height: 1272, mobile: false });
+      const loaded = waitEvent("Page.loadEventFired");
+      await send("Page.navigate", { url: "file:///" + join(previewDir, "business-print.pdf").replace(/\\/g, "/") + "#toolbar=0&navpanes=0&view=FitH" });
+      await loaded;
+      await sleep(2500);
+      for (let p = 1; p <= 4; p++) {
+        await shot(`business-print-p${p}`, previewDir);
+        await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: 450, y: 600, deltaX: 0, deltaY: 1272 });
+        await sleep(900);
+      }
+    }
+    await send("Emulation.setEmulatedMedia", { media: "", features: [{ name: "prefers-color-scheme", value: "light" }] });
+    current = null;
+    await viewport(DESKTOP);
+  }
   // หน้าล็อกอินต้องถ่ายก่อนล็อกอิน (หลังล็อกอินจะถูกส่งต่อไป /admin/import)
   if (want("admin-login-desktop")) {
     await open("/admin/login");

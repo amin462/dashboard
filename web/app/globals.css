@@ -425,4 +425,27 @@ body {
     font-size: 18pt;
     line-height: 1.2;
   }
+  /* ย่อทั้งรายงานให้พอดี 1 หน้า A4 (รวมหมายเหตุท้ายหน้า) ; ข้อความในการ์ดต้องตัดบรรทัดได้ ไม่ล้นขอบการ์ด */
+  .biz-print {
+    zoom: 0.9;
+  }
+  .biz-print article,
+  .biz-print .card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .biz-print article li,
+  .biz-print article h3,
+  .biz-print article p {
+    max-width: 100%;
+    white-space: normal;
+    min-width: 0;
+  }
+  .biz-print article ul {
+    min-width: 0;
+  }
+  /* หัวพิมพ์ของเชลล์ซ้ำกับหัวรายงานธุรกิจ → ซ่อนเฉพาะหน้านี้ */
+  main:has(.biz-print) > p.print-only {
+    display: none;
+  }
 }
