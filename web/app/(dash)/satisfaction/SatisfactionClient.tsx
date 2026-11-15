@@ -1,6 +1,7 @@
 "use client";
 
 import { crosstab, freq, overview, satisfaction } from "@/lib/survey/aggregate";
+import { summarizeComments } from "@/lib/survey/comments";
 import type { Row } from "@/lib/survey/schema";
 import { SatisfactionChart } from "@/components/charts/SatisfactionChart";
 import { num } from "@/components/format";
@@ -8,6 +9,7 @@ import { RevisitDonutCard } from "@/components/overview/RevisitDonutCard";
 import { CommentList } from "@/components/page/CommentList";
 import { DashPage } from "@/components/page/DashPage";
 import { shareStat } from "@/components/page/stat-helpers";
+import { CommentThemesCard } from "@/components/satisfaction/CommentThemesCard";
 import { SatByGroupCard } from "@/components/satisfaction/SatByGroupCard";
 import { SatRevisitHeat } from "@/components/satisfaction/SatRevisitHeat";
 import { satByCompanion, satByOrigin } from "@/components/satisfaction/sat-groups";
@@ -65,6 +67,9 @@ export function SatisfactionClient({ rows }: { rows: Row[] }) {
                 <SatRevisitHeat result={crosstab(filtered, "sur09", "sur10")} />
               </Cell>
               <Cell span="lg:col-span-7">
+                <CommentThemesCard summary={summarizeComments(filtered)} />
+              </Cell>
+              <Cell span="lg:col-span-12">
                 <CommentList comments={comments} />
               </Cell>
             </div>
