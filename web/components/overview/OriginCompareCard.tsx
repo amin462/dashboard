@@ -106,7 +106,7 @@ export function OriginCompareCard({ rows }: { rows: Row[] }) {
           {!isClient ? (
             <ChartLoadingBox height={height} />
           ) : (
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 640, height }} className="absolute inset-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 640, height }} className="chart-reveal absolute inset-0">
               <BarChart data={data} margin={{ ...CHART_MARGIN, left: 0, top: 20 }} barGap={4} barCategoryGap="22%">
                 <CartesianGrid {...GRID} />
                 <XAxis dataKey="tick" tick={<WrapTick />} axisLine={AXIS_LINE} tickLine={false} interval={0} height={44} />

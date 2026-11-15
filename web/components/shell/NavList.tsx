@@ -43,7 +43,7 @@ export function NavList({ tone, onNavigate }: NavListProps) {
                     className={`relative flex items-center ${frame ? "h-9 [@media(max-height:760px)]:h-8" : "h-10"} gap-3 rounded-lg px-3 transition-colors duration-150 ${tone2}`}
                   >
                     {active && frame && <span className="absolute inset-y-1.5 left-0 w-[3px] rounded-full bg-amber" aria-hidden="true" />}
-                    <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <Icon className="nav-icon h-4 w-4 shrink-0" aria-hidden="true" />
                     <span className="min-w-0 flex-1">{item.navLabel ?? item.label}</span>
                   </Link>
                 </li>

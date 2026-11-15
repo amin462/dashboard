@@ -73,7 +73,7 @@ export function SatByGroupCard({ title, code, groups, overall }: Props) {
                 >
                   {mean !== null && (
                     <span
-                      className={`block h-full rounded ${small ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
+                      className={`bar-grow block h-full rounded ${small ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
                       style={{ width: `${Math.max(1.5, pos(mean))}%` }}
                     />
                   )}

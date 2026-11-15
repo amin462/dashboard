@@ -59,7 +59,7 @@ function ThemeRow({ r, max, top, muted }: { r: CommentThemeResult; max: number; 
           <p className={`leading-snug ${top ? "font-semibold text-ink" : "text-ink"}`}>{r.label}</p>
           <span aria-hidden="true" className="mt-1.5 block h-2 overflow-hidden rounded bg-surface">
             <span
-              className={`block h-full rounded ${muted ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
+              className={`bar-grow block h-full rounded ${muted ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
               style={{ width: `${width}%` }}
             />
           </span>

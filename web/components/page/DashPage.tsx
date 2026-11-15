@@ -48,7 +48,7 @@ export function DashPage({ rows, description, hideDescriptionOnPrint = false, ac
   }, [count, total]);
 
   return (
-    <div className="space-y-4">
+    <div className="dash-stagger space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <p className={`max-w-3xl text-ink-2 ${hideDescriptionOnPrint ? "print:hidden" : ""}`}>{description}</p>
         {actions && <div className="no-print flex max-w-full min-w-0 flex-wrap gap-2">{actions(data)}</div>}

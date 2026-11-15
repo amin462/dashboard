@@ -23,7 +23,7 @@ export function BarRows({ rows, highlight, label }: { rows: BarRow[]; highlight:
             <span title={r.label} className={`line-clamp-2 leading-5 ${r.tail ? "text-ink-3" : "text-ink"} ${top ? "font-medium" : ""}`}>{r.label}</span>
             <span className="h-3 rounded bg-surface-2" aria-hidden="true">
               <span
-                className={`block h-full rounded ${r.tail ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
+                className={`bar-grow block h-full rounded ${r.tail ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
                 style={{ width: `${width}%` }}
               />
             </span>

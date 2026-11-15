@@ -69,7 +69,7 @@ export function RevisitDonutCard({ result, intent, hideCta = false }: Props) {
             {!isClient ? (
               <ChartLoadingBox height={size} />
             ) : (
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: size, height: size }}>
+              <ResponsiveContainer className="chart-pop" width="100%" height="100%" minWidth={0} initialDimension={{ width: size, height: size }}>
                 <PieChart>
                   <Pie data={ring} dataKey="value" innerRadius="72%" outerRadius="100%" startAngle={90} endAngle={-270} stroke="none" cornerRadius={6} paddingAngle={0} isAnimationActive={false}>
                     {ring.map((r) => (

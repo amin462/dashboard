@@ -348,6 +348,128 @@ body {
   animation: chat-wiggle 5s ease-in-out 3s infinite;
 }
 
+/* ===== Motion: โหลดหน้า / hover (ปิดอัตโนมัติเมื่อผู้ใช้ตั้งลดการเคลื่อนไหว — ดูกฎ prefers-reduced-motion ด้านล่าง) ===== */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-card-hover: 0 10px 28px rgb(80 50 20 / 0.13);
+}
+.dark {
+  --shadow-card-hover: 0 10px 28px rgb(0 0 0 / 0.5);
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes chart-wipe {
+  from { clip-path: inset(0 100% 0 0); opacity: 0.4; }
+  to { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+@keyframes chart-pop {
+  from { opacity: 0; transform: scale(0.88) rotate(-24deg); }
+  to { opacity: 1; transform: none; }
+}
+/* เนื้อหาหน้า: แต่ละบล็อกลอยขึ้นทีละใบ */
+.dash-stagger > *,
+.anim-rise {
+  animation: rise-in 0.55s var(--ease-out) backwards;
+}
+.dash-stagger > :nth-child(2) { animation-delay: 60ms; }
+.dash-stagger > :nth-child(3) { animation-delay: 120ms; }
+.dash-stagger > :nth-child(4) { animation-delay: 180ms; }
+.dash-stagger > :nth-child(n + 5) { animation-delay: 240ms; }
+/* ช่องใน grid: ลอยตามลำดับ (เริ่มช้ากว่าแถว KPI เล็กน้อย) ; ตัว grid เองไม่ต้องเล่นซ้ำ */
+.dash-stagger > .grid { animation: none; }
+.anim-rise { animation-delay: 140ms; }
+.anim-rise:nth-child(2) { animation-delay: 200ms; }
+.anim-rise:nth-child(3) { animation-delay: 260ms; }
+.anim-rise:nth-child(4) { animation-delay: 320ms; }
+.anim-rise:nth-child(n + 5) { animation-delay: 380ms; }
+/* แท่ง: โตจากซ้ายหลังการ์ดโผล่ ; ค่าเปลี่ยนตอนอัปเดตอัตโนมัติ = ค่อย ๆ ยืดหด */
+.bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 0.8s var(--ease-out) 0.25s backwards;
+  transition: width 0.5s var(--ease-out);
+}
+.chart-reveal {
+  animation: chart-wipe 1s var(--ease-out) 0.3s backwards;
+}
+.chart-pop {
+  animation: chart-pop 0.9s var(--ease-out) 0.3s backwards;
+}
+/* hover: เงาการ์ดลึกขึ้นเล็กน้อย ; .card-lift ยกขึ้น 2px (เฉพาะอุปกรณ์ที่มีเมาส์) */
+.card {
+  transition: box-shadow 0.25s ease, transform 0.25s var(--ease-out);
+}
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--amber) 40%, transparent);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: var(--bar);
+  }
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.btn {
+  transition:
+    background-color 150ms ease-out,
+    border-color 150ms ease-out,
+    opacity 150ms ease-out,
+    transform 180ms var(--ease-out),
+    box-shadow 220ms ease-out;
+}
+/* รายการเมนู/แถวพับ: เลื่อนไอคอนเล็กน้อยเมื่อ hover */
+.nav-icon {
+  transition: transform 0.2s var(--ease-out);
+}
+a:hover > .nav-icon {
+  transform: translateX(2px) scale(1.08);
+}
+/* หัวข้อพับ (<details>): กางออกแบบค่อย ๆ ขยาย (เบราว์เซอร์ที่ไม่รองรับจะกางทันทีตามปกติ) */
+details {
+  interpolate-size: allow-keywords;
+}
+details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 0.3s var(--ease-out), content-visibility 0.3s allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+@media print {
+  .dash-stagger > *,
+  .anim-rise,
+  .bar-grow,
+  .chart-reveal,
+  .chart-pop {
+    animation: none !important;
+  }
+  .card,
+  .btn {
+    transition: none !important;
+  }
+}
+
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

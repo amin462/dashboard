@@ -74,7 +74,7 @@ export function CollectionProgressCard({ rows, totalSubmitted }: { rows: Row[]; 
               aria-valuetext={`${num(p.n)} จาก ${num(p.full)} ชุด`}
               className="relative h-3 overflow-hidden rounded-full bg-muted-bar/60"
             >
-              <div className="h-full rounded-full bg-navy-solid" style={{ width: `${fillPct}%`, minWidth: p.n > 0 ? "6px" : 0 }} />
+              <div className="bar-grow h-full rounded-full bg-navy-solid" style={{ width: `${fillPct}%`, minWidth: p.n > 0 ? "6px" : 0 }} />
             </div>
             <span aria-hidden="true" className="absolute -top-1 bottom-0 w-0.5 rounded bg-ink-2" style={{ left: `${minPct}%` }} />
             <div className="mt-1.5 flex justify-between type-meta text-ink-3">

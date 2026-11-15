@@ -3,7 +3,7 @@ import { QUESTIONS } from "@/lib/survey/schema";
 import { ChartCard } from "./ChartCard";
 
 /** ความเข้มสูงสุดของ heatmap (คงให้ตัวอักษรอ่านได้ ≥ 4.5:1 ทั้งโหมดสว่าง/มืด) */
-const MAX_ALPHA = 45;
+const MAX_ALPHA = 38;
 
 /** ตารางไขว้ heatmap: สี navy ตามสัดส่วนในแถว, ตัวเลขอยู่ในช่อง, คอลัมน์แรก sticky */
 export function CrosstabTable({ result, title, code }: { result: CrosstabResult; title: string; code: string }) {
@@ -62,7 +62,7 @@ export function CrosstabTable({ result, title, code }: { result: CrosstabResult;
                         >
                           {val.toLocaleString("th-TH")}
                           {val > 0 && !isMultiCol && (
-                            <span className="ml-1 type-meta text-ink-2">({round1(share * 100).toFixed(0)}%)</span>
+                            <span className="ml-1 type-meta text-ink">({round1(share * 100).toFixed(0)}%)</span>
                           )}
                         </td>
                       );

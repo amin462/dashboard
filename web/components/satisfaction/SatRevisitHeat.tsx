@@ -5,7 +5,7 @@ import { ChartCard } from "../charts/ChartCard";
 import { num } from "../format";
 
 /** ความเข้มสูงสุดของ heatmap (ตัวอักษรอ่านได้ ≥ 4.5:1 ทั้งสว่าง/มืด) */
-const MAX_ALPHA = 45;
+const MAX_ALPHA = 38;
 
 const COL_SHORT: Record<string, string> = {
   "ตั้งใจจะกลับมาอีก": "ตั้งใจ",
@@ -70,7 +70,7 @@ export function SatRevisitHeat({ result }: { result: CrosstabResult }) {
                           }
                         >
                           {num(val)}
-                          {val > 0 && <span className="ml-1 type-meta text-ink-2">({round1(share * 100).toFixed(0)}%)</span>}
+                          {val > 0 && <span className="ml-1 type-meta text-ink">({round1(share * 100).toFixed(0)}%)</span>}
                         </td>
                       );
                     })}

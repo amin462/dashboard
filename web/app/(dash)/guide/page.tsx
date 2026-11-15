@@ -86,7 +86,7 @@ export default function GuidePage() {
         </ul>
       </nav>
 
-      <div className="min-w-0 space-y-10">
+      <div className="dash-stagger min-w-0 space-y-10">
         {/* เปิดเรื่อง */}
         <header className="space-y-3">
           <p className="max-w-2xl text-[15px] leading-7 text-ink-2">
@@ -106,7 +106,7 @@ export default function GuidePage() {
             {STEPS.map((s, i) => {
               const Icon = s.icon;
               return (
-                <li key={s.title} className="print-card card flex flex-col gap-2 p-5">
+                <li key={s.title} className="print-card card card-lift flex flex-col gap-2 p-5">
                   <div className="flex items-center gap-3">
                     <span
                       aria-hidden="true"
@@ -143,7 +143,7 @@ export default function GuidePage() {
                   <div key={r.l} className="flex items-center gap-2">
                     <span className={`w-16 shrink-0 ${r.top ? "font-semibold text-ink" : "text-ink-2"}`}>{r.l}</span>
                     <span className="h-2 flex-1 overflow-hidden rounded bg-surface">
-                      <span className={`block h-full rounded ${r.top ? "bg-amber" : "bg-bar"}`} style={{ width: r.w }} />
+                      <span className={`bar-grow block h-full rounded ${r.top ? "bg-amber" : "bg-bar"}`} style={{ width: r.w }} />
                     </span>
                     <span className={`w-24 shrink-0 text-right tabular-nums ${r.top ? "font-semibold text-ink" : "text-ink-2"}`}>{r.v}</span>
                   </div>
@@ -184,7 +184,7 @@ export default function GuidePage() {
             {DECISION_EXAMPLES.map((ex) => {
               const Icon = ex.icon;
               return (
-                <article key={ex.key} className="print-card card flex flex-col gap-3 p-5">
+                <article key={ex.key} className="print-card card card-lift flex flex-col gap-3 p-5">
                   <div className="flex items-center gap-2.5">
                     <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${ex.tone}`}>
                       <Icon className="h-5 w-5" aria-hidden="true" />

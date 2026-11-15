@@ -279,7 +279,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
             type="button"
             onClick={() => setOpen(true)}
             aria-haspopup="dialog"
-            className="chat-fab relative inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(80_50_20/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            className="chat-fab relative inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(80_50_20/.28)] transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
           >
             <MessageCircle className="chat-wiggle h-5 w-5" aria-hidden="true" />
             ถามผู้ช่วย

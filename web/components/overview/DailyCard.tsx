@@ -80,7 +80,7 @@ export function DailyCard({ data, total, outsideTotal }: Props) {
             {!isClient ? (
               <ChartLoadingBox height={height} />
             ) : (
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 480, height }} className="absolute inset-0">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 480, height }} className="chart-reveal absolute inset-0">
                 <AreaChart data={chartData} margin={CHART_MARGIN}>
                   <defs>
                     <Fade id="fade-all" color={SERIES.primary} top={0.35} />

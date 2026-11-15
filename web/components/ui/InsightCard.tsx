@@ -12,7 +12,7 @@ export function InsightCard({ insight, index }: { insight: Insight; index?: numb
   const isAction = insight.detail.startsWith(prefix);
   const body = isAction ? insight.detail.slice(prefix.length).trim() : insight.detail;
   return (
-    <article className="print-card flex h-full flex-col rounded-xl border border-line bg-surface-2 p-4">
+    <article className="print-card card-lift flex h-full flex-col rounded-xl border border-line bg-surface-2 p-4">
       <div className="flex items-start gap-2.5">
         {typeof index === "number" && (
           <span

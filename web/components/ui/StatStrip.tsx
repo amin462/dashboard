@@ -45,7 +45,7 @@ export function StatStrip({
         return (
           <div
             key={s.label}
-            className={`print-card card flex min-w-0 flex-col p-4 ${first ? "kpi-solid" : ""} ${oddLast ? "col-span-2 lg:col-span-1 print:col-span-1" : ""}`}
+            className={`print-card card card-lift flex min-w-0 flex-col p-4 ${first ? "kpi-solid" : ""} ${oddLast ? "col-span-2 lg:col-span-1 print:col-span-1" : ""}`}
           >
             <p className={`type-meta ${first ? "opacity-85" : "text-ink-3"}`}>{s.label}</p>
             <p className={`mt-1 ${first ? "" : "text-ink"} ${isLong(s.value) ? "text-xl leading-7 font-semibold" : "type-kpi"}`}>{s.value}</p>
@@ -58,7 +58,7 @@ export function StatStrip({
                 aria-label={s.label}
                 className={`mt-2 h-1 w-full overflow-hidden rounded-full ${first ? "bg-navy/15" : "bg-muted-bar"}`}
               >
-                <div className="h-full rounded-full bg-amber" style={{ width: `${pct}%` }} />
+                <div className="bar-grow h-full rounded-full bg-amber" style={{ width: `${pct}%` }} />
               </div>
             )}
             {s.context && <p className={`mt-1.5 type-meta ${first ? "opacity-85" : "text-ink-3"}`}>{s.context}</p>}
