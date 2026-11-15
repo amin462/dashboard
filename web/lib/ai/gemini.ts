@@ -48,10 +48,16 @@ export async function askGemini(opts: {
       candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[]
       promptFeedback?: { blockReason?: string }
     }
-    if (data.promptFeedback?.blockReason) return { ok: false, code: 'blocked' }
+    if (data.promptFeedback?.blockReason) {
+      console.error('[chat] Gemini blocked prompt:', data.promptFeedback.blockReason)
+      return { ok: false, code: 'blocked' }
+    }
     const cand = data.candidates?.[0]
     const text = cand?.content?.parts?.map((p) => p.text ?? '').join('').trim()
-    if (!text) return { ok: false, code: cand?.finishReason === 'SAFETY' ? 'blocked' : 'error' }
+    if (!text) {
+      console.error('[chat] Gemini empty reply, finishReason:', cand?.finishReason)
+      return { ok: false, code: cand?.finishReason === 'SAFETY' ? 'blocked' : 'error' }
+    }
     return { ok: true, text }
   } catch {
     return { ok: false, code: 'error' }
