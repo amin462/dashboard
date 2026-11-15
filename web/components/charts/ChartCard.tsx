@@ -12,8 +12,9 @@ export type { ChartTableData };
 
 type ChartCardProps = {
   title: string;
-  /** รหัสข้อ เช่น SUR-07 */
+  /** รหัสข้อ เช่น SUR-07 : ใช้ตั้งชื่อไฟล์ดาวน์โหลดเสมอ ; แสดงเป็นป้ายบนการ์ดเฉพาะเมื่อ showCode (หน้ารายงาน) */
   code?: string;
+  showCode?: boolean;
   /** ประโยคสรุปใต้ชื่อ เช่น "พบมากที่สุด: 301–600 บาท (37.5%)" */
   takeaway?: string;
   /** ฐาน n (ตัวหาร) */
@@ -37,6 +38,7 @@ type ChartCardProps = {
 export function ChartCard({
   title,
   code,
+  showCode = false,
   takeaway,
   base,
   skipped,
@@ -88,7 +90,7 @@ export function ChartCard({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="type-section text-ink">{title}</h2>
-            {code && (
+            {showCode && code && (
               <span className="rounded border border-line px-1.5 text-[11px] leading-[18px] text-ink-3">{code}</span>
             )}
           </div>

@@ -111,6 +111,7 @@ export function ReportsClient({ rows, source, updatedAt, seedCount = 0 }: Report
                   key={res.code}
                   title={stripNumber(QUESTIONS[res.code].title)}
                   code={codeLabel(res.code)}
+                  showCode
                   takeaway={freqTakeaway(res)}
                   base={res.base}
                   skipped={res.skipped}

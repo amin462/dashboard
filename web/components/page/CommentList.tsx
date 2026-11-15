@@ -41,7 +41,6 @@ export function CommentList({ comments }: { comments: Row[] }) {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <h2 className="type-section">ข้อเสนอแนะจากผู้ตอบ</h2>
-            <span className="rounded border border-line px-1.5 text-[11px] leading-[18px] text-ink-3">SUR-11</span>
           </div>
           <p className="mt-0.5 text-ink-2">
             {matched.length.toLocaleString("th-TH")} จาก {comments.length.toLocaleString("th-TH")} ความเห็น (ใหม่ → เก่า)

@@ -1,4 +1,3 @@
-import { Percent, Trophy, Users } from "lucide-react";
 import type { FreqItem, FreqResult } from "@/lib/survey/aggregate";
 import { num } from "../format";
 import type { Stat } from "../ui/StatStrip";
@@ -12,7 +11,6 @@ export function topStat(label: string, top: FreqItem | null, f: FreqResult, qNo:
       ? `${num(top.count)} คน (${top.pct.toFixed(1)}%) จากผู้ตอบข้อ ${qNo} จำนวน ${num(f.base)} คน`
       : `ไม่มีผู้ตอบข้อ ${qNo} ในกลุ่มนี้`,
     sampleN: f.base,
-    icon: Trophy,
   };
 }
 
@@ -23,7 +21,6 @@ export function shareStat(label: string, item: FreqItem | undefined, f: FreqResu
     value: `${(item?.pct ?? 0).toFixed(1)}%`,
     context: `${num(item?.count ?? 0)} จาก ${num(f.base)} คนที่ตอบข้อ ${qNo}`,
     sampleN: f.base,
-    icon: Percent,
   };
 }
 
@@ -34,6 +31,5 @@ export function countStat(filtered: number, total: number): Stat {
     value: `${num(filtered)} คน`,
     context: `จากผู้ตอบสมบูรณ์ทั้งหมด ${num(total)} คน`,
     sampleN: filtered,
-    icon: Users,
   };
 }

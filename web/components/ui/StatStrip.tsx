@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react";
-import { Activity } from "lucide-react";
 import { SmallSampleBadge } from "./SmallSampleBadge";
 
 export type Stat = {
@@ -11,7 +10,7 @@ export type Stat = {
   progress?: number;
   /** ฐาน n ของตัวเลขนี้ (แสดงป้ายเตือนเมื่อน้อยกว่า 5) */
   sampleN?: number;
-  /** ไอคอนเล็กสีอำพันมุมขวาบน */
+  /** เลิกแสดงแล้ว (ไอคอนตกแต่งไม่ช่วยอ่านตัวเลข) ; คงฟิลด์ไว้ให้ผู้เรียกเดิมไม่ต้องแก้ */
   icon?: LucideIcon;
 };
 
@@ -43,16 +42,12 @@ export function StatStrip({
         const first = solidFirst && i === 0;
         const pct = typeof s.progress === "number" ? Math.max(0, Math.min(100, s.progress)) : null;
         const oddLast = items.length % 2 === 1 && i === items.length - 1;
-        const Icon = s.icon ?? Activity;
         return (
           <div
             key={s.label}
             className={`print-card card flex min-w-0 flex-col p-4 ${first ? "kpi-solid" : ""} ${oddLast ? "col-span-2 lg:col-span-1 print:col-span-1" : ""}`}
           >
-            <div className="flex items-start justify-between gap-2">
-              <p className={`type-meta ${first ? "opacity-85" : "text-ink-3"}`}>{s.label}</p>
-              <Icon className="h-4 w-4 shrink-0 text-amber" aria-hidden="true" />
-            </div>
+            <p className={`type-meta ${first ? "opacity-85" : "text-ink-3"}`}>{s.label}</p>
             <p className={`mt-1 ${first ? "" : "text-ink"} ${isLong(s.value) ? "text-xl leading-7 font-semibold" : "type-kpi"}`}>{s.value}</p>
             {pct !== null && (
               <div
