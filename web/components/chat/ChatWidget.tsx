@@ -10,6 +10,10 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const MAX_LEN = 800;
 
+/** ฟองทักทายข้างปุ่มแชต: หมุนทีละข้อความ (แสดงไม่เกิน 3 ข้อความต่อการเปิดเว็บ ปิดได้ แล้วจะไม่โผล่อีกในแท็บนี้) */
+const TEASERS = ["สวัสดีครับ 👋 ไม่เข้าใจกราฟตรงไหน ถามผมได้เลย", "อยากรู้ว่าลูกค้าเป็นใคร ใช้จ่ายเท่าไร? ถามได้ครับ", "ช่วยวางแผนการตลาดให้ร้านคุณได้นะ ✨"];
+const TEASER_KEY = "yala-chat-teaser-off";
+
 /** ตัวหนา **...** → <strong> (ไม่ใช้ dangerouslySetInnerHTML) */
 function inline(text: string): ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
@@ -99,9 +103,59 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
   const [error, setError] = useState<string | null>(null);
   /** index ของข้อความผู้ช่วยที่เพิ่งมาถึง (พิมพ์ทีละนิด) ; null = ไม่มี */
   const [typing, setTyping] = useState<number | null>(null);
+  /** ฟองทักทาย: index ข้อความที่แสดงอยู่ (null = ไม่แสดง) และสถานะกำลังหดออก */
+  const [teaser, setTeaser] = useState<number | null>(null);
+  const [teaserLeaving, setTeaserLeaving] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // ฟองทักทาย: รอ 4 วินาที → แสดง 7 วินาที → พัก 5 วินาที → ข้อความถัดไป (ครบ 3 ข้อความหรือผู้ใช้ปิด/เปิดแชต = หยุด)
+  useEffect(() => {
+    if (open) {
+      // เปิดแชตแล้ว = ผู้ใช้รู้จักผู้ช่วยแล้ว ไม่ต้องทักอีกในแท็บนี้
+      try {
+        sessionStorage.setItem(TEASER_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      return;
+    }
+    let off = false;
+    try {
+      off = sessionStorage.getItem(TEASER_KEY) === "1";
+    } catch {
+      /* ไม่มี sessionStorage (โหมดส่วนตัว) = แสดงตามปกติ */
+    }
+    if (off) return;
+    const timers: number[] = [];
+    const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    let t = 4000;
+    TEASERS.forEach((_, i) => {
+      at(t, () => {
+        setTeaserLeaving(false);
+        setTeaser(i);
+      });
+      at(t + 7000, () => setTeaserLeaving(true));
+      at(t + 7250, () => setTeaser(null));
+      t += 12_000;
+    });
+    return () => {
+      timers.forEach(window.clearTimeout);
+      setTeaser(null);
+      setTeaserLeaving(false);
+    };
+  }, [open]);
+
+  const dismissTeaser = () => {
+    try {
+      sessionStorage.setItem(TEASER_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+    setTeaserLeaving(true);
+    window.setTimeout(() => setTeaser(null), 250);
+  };
 
   const close = useCallback(() => {
     setOpen(false);
@@ -197,16 +251,40 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
   return (
     <>
       {!open && (
-        <button
-          ref={triggerRef}
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-haspopup="dialog"
-          className="chat-fab no-print fixed right-4 bottom-[4.75rem] z-40 inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(20_40_80/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy lg:right-6 lg:bottom-6"
-        >
-          <MessageCircle className="h-5 w-5" aria-hidden="true" />
-          ถามผู้ช่วย
-        </button>
+        <div className="no-print fixed right-4 bottom-[4.75rem] z-40 flex flex-col items-end gap-2.5 lg:right-6 lg:bottom-6">
+          {teaser !== null && (
+            <div key={teaser} data-leaving={teaserLeaving} className="chat-teaser relative max-w-[17rem] rounded-2xl rounded-br-md bg-surface py-2.5 pr-9 pl-3.5 text-[14px] leading-5 text-ink shadow-[0_8px_24px_rgb(20_40_80/.22)]">
+              <button
+                type="button"
+                onClick={() => {
+                  dismissTeaser();
+                  setOpen(true);
+                }}
+                className="text-left"
+              >
+                {TEASERS[teaser]}
+              </button>
+              <button
+                type="button"
+                onClick={dismissTeaser}
+                aria-label="ปิดข้อความทักทาย"
+                className="absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full text-ink-3 hover:bg-surface-2"
+              >
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            </div>
+          )}
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-haspopup="dialog"
+            className="chat-fab relative inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(20_40_80/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+          >
+            <MessageCircle className="chat-wiggle h-5 w-5" aria-hidden="true" />
+            ถามผู้ช่วย
+          </button>
+        </div>
       )}
 
       {open && (
