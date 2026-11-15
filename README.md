@@ -36,6 +36,7 @@ NEXT_PUBLIC_SUPABASE_URL=<ค่า Project URL จาก Supabase>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
 SUPABASE_SERVICE_ROLE_KEY=<service role key — ใช้ฝั่ง server เท่านั้น>
 ADMIN_PASSCODE=<รหัสผู้ดูแลที่ตั้งเอง>
+ADMIN_SESSION_SECRET=<สุ่มข้อความยาว ๆ ไม่บังคับ ใช้ลงลายเซ็นคุกกี้ผู้ดูแล ไม่ตั้ง = ใช้ค่าจาก ADMIN_PASSCODE>
 NEXT_PUBLIC_MAIN_SITE_URL=https://travel-zeta-lac.vercel.app
 NEXT_PUBLIC_SURVEY_URL=<ลิงก์ Google Form ที่ผู้วิจัยใช้>
 GEMINI_API_KEY=<คีย์ Google AI Studio — ไม่ตั้ง = ปิดแชต AI>

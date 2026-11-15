@@ -64,6 +64,20 @@
 | NEW-12 | อัปเดตอัตโนมัติ: ถาม `/api/pulse` ทุก 15 วินาที + ไฟเขียว "อัปเดตอัตโนมัติ" บน top bar | `components/shell/AutoRefresh.tsx`, `app/api/pulse`, `app/(dash)/_data.ts` (T17) | ส่งแบบสำรวจ 1 ชุด ไม่กดรีเฟรช → ตัวเลข KPI ขึ้นเองภายใน ~40 วินาที (บน production ที่ deploy แล้ว) | [ ] |
 | NEW-13 | Favicon / app icon ใหม่ | `web/app/icon.svg`, `web/app/favicon.ico` | แท็บเบราว์เซอร์เห็นไอคอนใหม่ ; เปิด `/icon.svg` ได้ | [ ] |
 
+## ผู้ดูแลระบบ (ADM) — เซสชันและการลบแถวทดสอบ
+
+| ข้อ | ฟีเจอร์ | หน้า/โค้ดที่ตอบ | วิธีทดสอบ (สั้น) | ผ่าน |
+|---|---|---|---|---|
+| ADM-01 | ล็อกอินสำเร็จ + คุกกี้ `admin_session` | `/admin/login`, `lib/import/auth.ts`, `app/admin/login/actions.ts` | รหัสถูก → เข้า `/admin/import` ได้ ; DevTools: cookie ชื่อ `admin_session` เป็น HttpOnly, SameSite=Strict | [ ] |
+| ADM-02 | รหัสผิดไม่ออกคุกกี้ | `app/admin/login/actions.ts` | กรอกรหัสผิด 1 ครั้ง → มีข้อความผิดพลาด ; ไม่มีคุกกี้ `admin_session` | [ ] |
+| ADM-03 | ล็อกชั่วคราวหลังผิด 5 ครั้งใน 10 นาที | `lib/import/loginLimit.ts` | กรอกผิด 5 ครั้ง → ครั้งต่อไปแม้รหัสถูกต้องเข้าไม่ได้ ; รอ 15 นาทีแล้วเข้าได้ | [ ] |
+| ADM-04 | ปุ่มออกจากระบบ | `components/shell/AdminSession.tsx` (ทุกหน้า admin) | กด "ออกจากระบบ" → กลับหน้า login ; กด Back ไม่เห็น `/admin/quality` และ cookie ถูกลบ | [ ] |
+| ADM-05 | หมดอายุ 8 ชม. + ข้อความเวลาหมดอายุ | `lib/import/auth.ts`, `AdminSession.tsx` | มุมบนขวาแสดง "เซสชันหมดอายุ HH:mm น." (≈ เวลาเข้า + 8 ชม.) ; หลังหมดเวลาเปิด `/admin/quality` → ไป login | [ ] |
+| ADM-06 | API ที่เขียนข้อมูลต้องมีคุกกี้และ Origin เดียวกัน | `app/api/admin/import`, `app/api/admin/delete`, `lib/import/originCheck.ts` | POST `/api/admin/import` โดยไม่มีคุกกี้ → 401 ; มีคุกกี้แต่ Origin ต่างเว็บ → 403 | [ ] |
+| ADM-07 | ลบแถวทดสอบ: ไฟล์สำรอง → ยืนยัน 2 ขั้น → ลบ | `app/admin/quality/RecentRowsPanel.tsx`, `app/api/admin/delete` | ทดสอบเฉพาะแถวทดสอบ : เลือก 1 แถว → ลบถาวร → ได้ไฟล์ .json ก่อน → ยืนยันครั้งที่ 2 → แถวหาย ; ประวัตินำเข้ามี `admin_delete` | [ ] |
+| ADM-08 | จำกัดการลบครั้งละไม่เกิน 50 แถว | `app/api/admin/delete/route.ts` | เลือกมากกว่า 50 แถว (หรือยิง API เกิน 50) → ถูกปฏิเสธ | [ ] |
+| ADM-09 | ไม่ให้ค้นหาและไม่ cache หน้าผู้ดูแล | `next.config.ts`, `app/robots.ts`, `proxy.ts` | DevTools Network ที่ `/admin/*` และ `/api/admin/*`: `Cache-Control: no-store`, `X-Robots-Tag: noindex` ; `/robots.txt` มี Disallow `/admin` และ `/api/` | [ ] |
+
 ## บันทึกผลรอบทดสอบ
 
 | วันที่ | ผู้ทดสอบ | ข้อที่ไม่ผ่าน | หมายเหตุ |
