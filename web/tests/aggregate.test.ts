@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { normalize } from '@/lib/survey/normalize'
-import { bySlot, crosstab, daily, freq, multiFreq, overview, quality, satisfaction } from '@/lib/survey/aggregate'
+import { bySlot, collectionProgress, crosstab, daily, freq, multiFreq, overview, quality, satisfaction } from '@/lib/survey/aggregate'
 import { QUESTIONS } from '@/lib/survey/schema'
 import { many, mk } from './helpers'
 
@@ -189,5 +189,41 @@ describe('overview & quality', () => {
     const q = quality(all)
     expect(q).toMatchObject({ total: 5, complete: 2, failedScreening: 1, noConsent: 1, missingRequired: 1 })
     expect(q.missingByQuestion.find((m) => m.code === 'sur09')).toMatchObject({ missing: 2, pct: 100 })
+  })
+})
+
+describe('collectionProgress', () => {
+  it('ยังไม่มีข้อมูล', () => {
+    const p = collectionProgress([])
+    expect(p.n).toBe(0)
+    expect(p.status).toBe('none')
+    expect(p.remainingToMin).toBe(267)
+    expect(p.lastSubmittedAt).toBeNull()
+    expect(p.perActiveDay).toBe(0)
+  })
+
+  it('เทียบเป้า 267/300, ผู้ตอบ 7 วันล่าสุดนับย้อนจากวันที่ตอบล่าสุด', () => {
+    const raws = [
+      ...many(2, () => ({ submitted_at: '2026-11-01T03:00:00Z' })),
+      ...many(3, () => ({ submitted_at: '2026-11-10T03:00:00Z' })),
+      ...many(1, () => ({ submitted_at: '2026-11-14T03:00:00Z' })),
+    ]
+    const p = collectionProgress(normalize(raws).rows)
+    expect(p.n).toBe(6)
+    expect(p.status).toBe('collecting')
+    expect(p.pctOfMin).toBe(2.2)
+    expect(p.remainingToMin).toBe(261)
+    expect(p.remainingToFull).toBe(294)
+    expect(p.firstDate).toBe('2026-11-01')
+    expect(p.lastDate).toBe('2026-11-14')
+    expect(p.activeDays).toBe(3)
+    expect(p.perActiveDay).toBe(2)
+    expect(p.last7).toBe(4) // ช่วง 8–14 พ.ย.: วันที่ 10 (3 คน) + วันที่ 14 (1 คน) ; วันที่ 1 อยู่นอกช่วง
+  })
+
+  it('สถานะตามเกณฑ์', () => {
+    expect(collectionProgress(normalize(many(267, () => ({}))).rows).status).toBe('reached_min')
+    expect(collectionProgress(normalize(many(300, () => ({}))).rows).status).toBe('reached_full')
+    expect(collectionProgress(normalize(many(266, () => ({}))).rows).status).toBe('collecting')
   })
 })

@@ -4,15 +4,14 @@ import { num } from "../format";
 import type { Stat } from "../ui/StatStrip";
 
 /** KPI 4 ใบหน้าภาพรวม ; ค่าทั้งหมดมาจาก overview() ของ lib */
-export function overviewStats(ov: Overview): Stat[] {
-  const { satisfaction: sat, returnIntent: ret, topSpend, target } = ov;
+export function overviewStats(ov: Overview, totalAll = ov.n): Stat[] {
+  const { satisfaction: sat, returnIntent: ret, topSpend } = ov;
   return [
     {
       label: "ผู้ตอบสมบูรณ์",
       value: `${num(ov.n)} คน`,
-      context: `เป้าหมาย ${num(target.full)} คน · ${target.pctOfMin.toFixed(1)}% ของเป้าขั้นต่ำ ${num(target.min)}`,
-      // ความยาวแถบเทียบเป้า 300 (เรขาคณิตของแถบ ไม่ใช่ตัวเลขที่รายงาน)
-      progress: (ov.n / target.full) * 100,
+      // ความคืบหน้าเทียบเป้าอยู่ในการ์ด "ความคืบหน้าการเก็บข้อมูล" แล้ว (นับทั้งหมด ไม่ขึ้นกับตัวกรอง)
+      context: ov.n === totalAll ? "ผู้ตอบที่สมบูรณ์ทั้งหมด" : `ตามตัวกรอง จากทั้งหมด ${num(totalAll)} คน`,
       sampleN: ov.n,
       icon: Users,
     },

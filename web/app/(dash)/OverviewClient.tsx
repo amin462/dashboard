@@ -1,10 +1,11 @@
 "use client";
 
-import { freq, overview } from "@/lib/survey/aggregate";
+import { collectionProgress, freq, overview } from "@/lib/survey/aggregate";
 import { overviewInsights } from "@/lib/survey/insights";
 import type { Row } from "@/lib/survey/schema";
 import { FreqBar } from "@/components/charts/FreqBar";
 import { SlotBar } from "@/components/charts/SlotBar";
+import { CollectionProgressCard } from "@/components/overview/CollectionProgressCard";
 import { DailyCard } from "@/components/overview/DailyCard";
 import { OriginCompareCard } from "@/components/overview/OriginCompareCard";
 import { RevisitDonutCard } from "@/components/overview/RevisitDonutCard";
@@ -25,7 +26,8 @@ export function OverviewClient({ rows }: { rows: Row[] }) {
         const channel = freq(filtered, "sur06");
         return (
           <div className="space-y-4">
-            <StatStrip items={overviewStats(ov)} />
+            <CollectionProgressCard progress={collectionProgress(rows)} />
+            <StatStrip items={overviewStats(ov, rows.length)} />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cell span="lg:col-span-8">
                 <OriginCompareCard rows={filtered} />

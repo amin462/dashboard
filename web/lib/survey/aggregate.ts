@@ -265,6 +265,61 @@ export function overview(rows: Row[]): Overview {
   }
 }
 
+export type CollectionStatus = 'none' | 'collecting' | 'reached_min' | 'reached_full'
+
+export type CollectionProgress = {
+  n: number
+  min: number
+  full: number
+  pctOfMin: number
+  pctOfFull: number
+  remainingToMin: number
+  remainingToFull: number
+  status: CollectionStatus
+  /** ISO เวลาที่ตอบล่าสุด ; null ถ้ายังไม่มีข้อมูล */
+  lastSubmittedAt: string | null
+  /** วันแรก/วันสุดท้ายที่มีผู้ตอบ (YYYY-MM-DD เวลาไทย) */
+  firstDate: string | null
+  lastDate: string | null
+  /** จำนวนวันที่มีผู้ตอบจริง และค่าเฉลี่ยต่อวันที่มีผู้ตอบ */
+  activeDays: number
+  perActiveDay: number
+  /** ผู้ตอบใน 7 วันล่าสุด (นับย้อนจากวันที่ตอบล่าสุด รวมวันนั้น) */
+  last7: number
+}
+
+/** ความคืบหน้าการเก็บข้อมูลเทียบเป้า (ใช้กับข้อมูลทั้งหมด ไม่ใช่ข้อมูลหลังกรอง) */
+export function collectionProgress(rows: Row[]): CollectionProgress {
+  const n = rows.length
+  const days = new Map<string, number>()
+  let last: string | null = null
+  for (const r of rows) {
+    if (r.date) days.set(r.date, (days.get(r.date) ?? 0) + 1)
+    if (r.submitted_at && (!last || r.submitted_at > last)) last = r.submitted_at
+  }
+  const dates = Array.from(days.keys()).sort()
+  const lastDate = dates.length ? dates[dates.length - 1] : null
+  const cutoff = lastDate ? new Date(Date.parse(lastDate + 'T00:00:00Z') - 6 * 86400000).toISOString().slice(0, 10) : null
+  const last7 = cutoff ? rows.filter((r) => r.date && r.date >= cutoff).length : 0
+  const status: CollectionStatus = n === 0 ? 'none' : n < TARGET_MIN ? 'collecting' : n < TARGET_FULL ? 'reached_min' : 'reached_full'
+  return {
+    n,
+    min: TARGET_MIN,
+    full: TARGET_FULL,
+    pctOfMin: round1((n / TARGET_MIN) * 100),
+    pctOfFull: round1((n / TARGET_FULL) * 100),
+    remainingToMin: Math.max(0, TARGET_MIN - n),
+    remainingToFull: Math.max(0, TARGET_FULL - n),
+    status,
+    lastSubmittedAt: last,
+    firstDate: dates[0] ?? null,
+    lastDate,
+    activeDays: dates.length,
+    perActiveDay: dates.length ? round1(n / dates.length) : 0,
+    last7,
+  }
+}
+
 export type Quality = {
   total: number
   complete: number
