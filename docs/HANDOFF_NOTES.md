@@ -137,3 +137,10 @@
 - อนิเมชันแชต (CSS ใน `globals.css` + `ChatWidget.tsx`): ปุ่มลอยเด้งเข้า + วงแหวนกะพริบ 3 รอบ · แผงเด้งขึ้น (มือถือเลื่อนขึ้น) · ฟองข้อความ/ปุ่มลอยเข้าทีละใบ · คำตอบ AI "พิมพ์ทีละนิด" (`TypedReply` 0.9–3 วินาที, กดฟองเพื่อข้าม) ; ปิดทั้งหมดอัตโนมัติเมื่อผู้ใช้ตั้ง prefers-reduced-motion
 - หมายเหตุทดสอบ: ถ้า Browser pane ถูกซ่อน อนิเมชัน/rAF จะค้าง (ต้อง `tabs_select` ให้แสดงก่อนทดสอบ)
 - ฟองทักทายข้างปุ่มแชต (`TEASERS` ใน ChatWidget): รอ 4 วินาที → เด้งสปริงเข้า 7 วินาที → หดออก → ข้อความถัดไป (3 ข้อความ) ; กด ✕ / เปิดแชต = หยุดตลอดแท็บ (`sessionStorage yala-chat-teaser-off`) ; ไอคอนปุ่มส่ายเบา ๆ ทุก 5 วินาที
+
+## T19 + T20 + T21 + T22 (บางส่วน) — Claude + survey-core(sonnet) + qa-docs(haiku) (15 พ.ย. 2569)
+- T21: `lib/survey/data.ts` — ตั้ง Supabase env แล้วอ่านไม่สำเร็จ (ลองซ้ำ 1 ครั้ง) → `source='error'` ไม่มีแถว **ไม่ใช้ mock แทนอีกต่อไป** (mock เฉพาะตอนไม่ได้ตั้ง env) ; แบนเนอร์แดง + ป้าย "เชื่อมต่อฐานข้อมูลไม่ได้" + หน้า admin/quality/reports รองรับ ; ทดสอบด้วยคีย์ผิด (`SUPABASE_SERVICE_ROLE_KEY=bad next start`) ผ่าน ; ปุ่ม "ลองตอบแบบสำรวจ" ที่ top bar (จอ md ขึ้นไป ใช้ `NEXT_PUBLIC_SURVEY_URL`) ; **ยังไม่ทำ** ลบ/ซ่อนแถวทดสอบจาก admin (ต้องเขียนฐานข้อมูลจริง → ขอผู้ใช้ก่อน ; ตอนนี้ลบใน Supabase Table Editor หรือใช้ช่วงข้อมูลวิจัยตัดแถวที่หลังวันตัด)
+- T19: การ์ดคนยะลา vs ต่างถิ่น แสดงจำนวนที่ขาด (ขั้นต่ำ 5/กลุ่ม, `originCompare().need`) + วิธีเก็บ
+- T20 (survey-core): `lib/survey/stats.ts` (Wilson CI, ไคสแควร์/Fisher 2×2, Welch t + Cohen d, marginOfError, reliabilitySummary) + `tests/stats.test.ts` + `docs/STATS_METHODS.md` ; UI: `components/stats/ReliabilityCard` ใน /reports, คอลัมน์ "ช่วงเชื่อมั่น 95%" ในตารางรายข้อ, p-value + สรุปในการ์ด SUR-08 หน้าภาพรวม
+- T22: CSV ส่งออกมีช่วงเชื่อมั่น 95% + ส่วนสถิติท้ายไฟล์ (`tests/report-csv.test.ts`) ; Word ยังไม่ทำ
+- qa-docs(haiku): เพิ่ม NEW-01..13 ใน docs/QA_CHECKLIST.md + ตาราง env/ฟีเจอร์ใน README.md (ยังไม่ติ๊กผ่าน — ต้องทดสอบด้วยมือ)

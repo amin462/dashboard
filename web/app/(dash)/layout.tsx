@@ -3,6 +3,7 @@ import { bangkokDate, formatThaiDateTimeShort } from "@/components/format";
 import { monthsWithData } from "@/lib/survey/filters";
 import { FilterBar } from "@/components/filters/FilterBar";
 import { DataBanner } from "@/components/shell/Banner";
+import { EXTERNAL_LINKS } from "@/components/nav-config";
 import { AutoRefresh } from "@/components/shell/AutoRefresh";
 import { DashShell } from "@/components/shell/DashShell";
 import { SourcePill } from "@/components/shell/SourcePill";
@@ -14,6 +15,15 @@ async function TopMeta() {
   return (
     <>
       <AutoRefresh version={versionOf(bundle)} />
+      <a
+        href={EXTERNAL_LINKS.survey}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="เปิดแบบสำรวจจริงในแท็บใหม่ (ผู้ตอบที่ส่งจะนับเป็นข้อมูลจริง)"
+        className="hidden h-7 items-center gap-1 rounded-full border border-amber/60 bg-amber-soft px-3 type-meta font-medium text-amber-ink hover:bg-amber hover:text-amber-fg md:inline-flex"
+      >
+        ลองตอบแบบสำรวจ
+      </a>
       <SourcePill source={source} seedCount={seedCount} />
       <span className="hidden type-meta text-ink-3 md:inline">อัปเดต {formatThaiDateTimeShort(lastSubmittedAt)}</span>
     </>

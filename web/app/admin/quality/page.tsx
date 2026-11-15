@@ -96,6 +96,8 @@ async function QualityBody() {
           </Notice>
         ) : raw.source === "supabase" ? (
           <Notice tone="ok">ข้อมูลจริงจาก Supabase</Notice>
+        ) : raw.source === "error" ? (
+          <Notice tone="danger">เชื่อมต่อฐานข้อมูลไม่สำเร็จ — ไม่แสดงข้อมูลตัวอย่างแทน</Notice>
         ) : (
           <Notice tone="warn">ข้อมูลตัวอย่าง — ยังไม่เชื่อมต่อฐานข้อมูล ตัวเลขด้านล่างไม่ใช่ผลสำรวจจริง</Notice>
         )}

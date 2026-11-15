@@ -1,7 +1,7 @@
 import { FlaskConical } from "lucide-react";
 
 type DataBannerProps = {
-  source: "supabase" | "mock";
+  source: "supabase" | "mock" | "error";
   error?: string;
   /** จำนวนแถวทดสอบ (source='seed') ที่ปนอยู่ในฐานข้อมูลจริง */
   seedCount?: number;
@@ -13,7 +13,11 @@ export function DataBanner({ source, error, seedCount = 0 }: DataBannerProps) {
   let detail: string;
   let role: "alert" | "status" = "status";
 
-  if (source === "supabase" && seedCount > 0) {
+  if (source === "error") {
+    role = "alert";
+    summary = "เชื่อมต่อฐานข้อมูลไม่สำเร็จ — ยังไม่แสดงตัวเลข (ไม่ใช้ข้อมูลตัวอย่างแทนเพื่อกันความเข้าใจผิด)";
+    detail = `ระบบจะลองดึงข้อมูลใหม่อัตโนมัติ หากยังไม่หายให้แจ้งผู้ดูแล สาเหตุ: ${error ?? "ไม่ทราบ"}`;
+  } else if (source === "supabase" && seedCount > 0) {
     role = "alert";
     summary = `มีข้อมูลทดสอบปนอยู่ ${seedCount.toLocaleString("th-TH")} แถว — ผลบนจอยังไม่ใช่ข้อมูลจริงทั้งหมด`;
     detail = "ผู้ดูแลต้องลบแถวทดสอบด้วยคำสั่ง pnpm seed:clear ก่อนนำผลไปใช้";

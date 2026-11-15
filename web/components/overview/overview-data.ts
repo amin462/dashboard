@@ -1,6 +1,6 @@
 import { daily, multiFreq, round1, type FreqItem, type FreqResult } from "@/lib/survey/aggregate";
 import { applyFilters } from "@/lib/survey/filters";
-import { QUESTIONS, SUR08_NONE, type Row } from "@/lib/survey/schema";
+import { QUESTIONS, SMALL_N, SUR08_NONE, type Row } from "@/lib/survey/schema";
 
 export const YALA = "จังหวัดยะลา";
 /** นอกจังหวัด = ทุกตัวเลือกพื้นที่ที่ไม่ใช่ยะลา (รวมต่างประเทศ) ไม่นับ "ไม่ประสงค์ระบุ" */
@@ -17,6 +17,8 @@ export type OriginCompare = {
   cats: { label: string; yala: FreqItem; outside: FreqItem }[];
   /** หมวดที่ 2 กลุ่มต่างกันมากสุด (จุดร้อยละ) */
   gap: { label: string; points: number; outsideHigher: boolean } | null;
+  /** ผู้ตอบข้อ 8 ที่ยังขาดเพื่อให้แต่ละกลุ่มถึงเกณฑ์ขั้นต่ำ SMALL_N (0 = ถึงแล้ว) */
+  need: { yala: number; outside: number };
 };
 
 const zero = (label: string): FreqItem => ({ label, count: 0, pct: 0 });
@@ -40,7 +42,7 @@ export function originCompare(rows: Row[]): OriginCompare {
       if (!gap || Math.abs(d) > gap.points) gap = { label: c.label, points: Math.abs(d), outsideHigher: d >= 0 };
     }
   }
-  return { yala, outside, cats, gap };
+  return { yala, outside, cats, gap, need: { yala: Math.max(0, SMALL_N - yala.base), outside: Math.max(0, SMALL_N - outside.base) } };
 }
 
 export function originTakeaway(oc: OriginCompare): string | undefined {

@@ -5,20 +5,24 @@ import { CODES, type RawRow } from './schema'
 
 export type RawRowsResult = {
   rows: RawRow[]
-  source: 'supabase' | 'mock'
+  /** mock = ยังไม่ตั้งค่า Supabase (โหมดสาธิต) ; error = ตั้งค่าแล้วแต่อ่านไม่สำเร็จ → ไม่แสดงข้อมูลจำลองแทน (กันตัวเลขปลอมบน production) */
+  source: 'supabase' | 'mock' | 'error'
   error?: string
 }
 
 const PAGE = 1000
 const COLUMNS = ['id', 'source', 'submitted_at', 'is_complete', ...CODES].join(',')
 
-/** ดึงข้อมูลดิบทุกแถว: Supabase ถ้ามี env ไม่งั้น mock ; ไม่ throw (error บอกใน result, fallback เป็น mock) */
+/**
+ * ดึงข้อมูลดิบทุกแถว: Supabase ถ้ามี env ไม่งั้น mock (สาธิต) ; ไม่ throw
+ * ตั้ง env แล้วแต่อ่านไม่สำเร็จ (ลองซ้ำ 1 ครั้ง) → source='error' ไม่มีแถว (ห้ามเอาข้อมูลจำลองมาแทนข้อมูลจริง)
+ */
 export async function getRawRows(): Promise<RawRowsResult> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   if (!url || !key) return { rows: makeMock(300, 42), source: 'mock' }
 
-  try {
+  const load = async (): Promise<RawRow[]> => {
     const supabase = createClient(url, key, { auth: { persistSession: false } })
     const rows: RawRow[] = []
     for (let from = 0; ; from += PAGE) {
@@ -33,12 +37,18 @@ export async function getRawRows(): Promise<RawRowsResult> {
       rows.push(...page)
       if (page.length < PAGE) break
     }
-    return { rows, source: 'supabase' }
-  } catch (e) {
-    return {
-      rows: makeMock(300, 42),
-      source: 'mock',
-      error: e instanceof Error ? e.message : String(e),
+    return rows
+  }
+
+  try {
+    try {
+      return { rows: await load(), source: 'supabase' }
+    } catch {
+      await new Promise((r) => setTimeout(r, 800))
+      return { rows: await load(), source: 'supabase' }
     }
+  } catch (e) {
+    console.error('[data] Supabase read failed:', e instanceof Error ? e.message : e)
+    return { rows: [], source: 'error', error: e instanceof Error ? e.message : String(e) }
   }
 }

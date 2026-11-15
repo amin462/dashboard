@@ -1,5 +1,6 @@
 import type { FreqResult, satisfaction } from "@/lib/survey/aggregate";
 import { DISCLAIMER, type Row } from "@/lib/survey/schema";
+import { compareOriginInterest, compareOriginSatisfaction, reliabilitySummary, wilsonCI } from "@/lib/survey/stats";
 
 function escapeCell(value: string | number, sanitizeFormula: boolean): string {
   let str = String(value);
@@ -15,6 +16,8 @@ export function buildReportCsv(
   comments: Row[],
   totalFiltered: number,
   filterSummary: string,
+  /** แถวหลังกรอง ใช้คำนวณสถิติท้ายไฟล์ (ช่วงเชื่อมั่น/ทดสอบความต่าง) ; ไม่ส่ง = ไม่ใส่ส่วนสถิติ */
+  rows?: Row[],
 ): string {
   const lines: string[][] = [
     ["รายงานสรุปผลแบบสำรวจนักท่องเที่ยว ณ วัดคูหาภิมุข (อำเภอเมืองยะลา)"],
@@ -33,11 +36,12 @@ export function buildReportCsv(
     ["จำนวนข้อเสนอแนะที่เป็นข้อความ (ข้อ 11)", String(comments.length)],
     ["หมายเหตุ", DISCLAIMER],
     [],
-    ["รหัสข้อ", "หัวข้อคำถาม", "ตัวเลือก", "จำนวน (คน)", "ร้อยละ (%)", "ฐานผู้ตอบข้อนี้ (คน)", "ไม่ตอบ (คน)", "ไม่ประสงค์ระบุ (คน)"],
+    ["รหัสข้อ", "หัวข้อคำถาม", "ตัวเลือก", "จำนวน (คน)", "ร้อยละ (%)", "ฐานผู้ตอบข้อนี้ (คน)", "ไม่ตอบ (คน)", "ไม่ประสงค์ระบุ (คน)", "ช่วงเชื่อมั่น 95% ต่ำ (%)", "ช่วงเชื่อมั่น 95% สูง (%)"],
   ];
 
   for (const r of results) {
     for (const item of r.items) {
+      const ci = wilsonCI(item.count, r.base);
       lines.push([
         r.code.toUpperCase(),
         r.title,
@@ -47,6 +51,8 @@ export function buildReportCsv(
         String(r.base),
         String(r.skipped),
         String(r.notSpecified),
+        ci ? ci.low.toFixed(1) : "-",
+        ci ? ci.high.toFixed(1) : "-",
       ]);
     }
   }
@@ -57,7 +63,38 @@ export function buildReportCsv(
     for (const c of comments) lines.push([c.sur11 ?? "", c.date, c.slot, c.sat !== null ? String(c.sat) : "-"]);
   }
 
+  if (rows) lines.push(...statsLines(rows));
+
   return lines.map((row, ri) => row.map((cell, ci) => escapeCell(cell, ri > 7 && ci === 0)).join(",")).join("\r\n");
+}
+
+/** ส่วนสถิติท้ายไฟล์ CSV (ค่าทั้งหมดจาก lib/survey/stats.ts) */
+function statsLines(rows: Row[]): string[][] {
+  const rel = reliabilitySummary(rows);
+  const sat = compareOriginSatisfaction(rows);
+  const interest = compareOriginInterest(rows);
+  const out: string[][] = [[], ["สถิติประกอบการอ่านผล"]];
+  out.push(["ความคลาดเคลื่อนของร้อยละที่ความเชื่อมั่น 95% (± จุดร้อยละ)", rel.marginOfError === null ? "-" : rel.marginOfError.toFixed(1), "จากผู้ตอบ (คน)", String(rel.n)]);
+  if (sat.ok) {
+    out.push([
+      "ความพึงพอใจ ยะลา vs นอกจังหวัด (Welch t-test)",
+      `ยะลา mean ${sat.yala.mean.toFixed(2)} SD ${sat.yala.sd.toFixed(2)} n=${sat.yala.n}`,
+      `นอกจังหวัด mean ${sat.outside.mean.toFixed(2)} SD ${sat.outside.sd.toFixed(2)} n=${sat.outside.n}`,
+      `t=${sat.t.toFixed(2)} df=${sat.df.toFixed(1)} p=${sat.p.toFixed(4)}`,
+      sat.significant ? "ต่างอย่างมีนัยสำคัญ (p<0.05)" : "ไม่พบความต่างอย่างมีนัยสำคัญ",
+    ]);
+  } else {
+    out.push(["ความพึงพอใจ ยะลา vs นอกจังหวัด", sat.reason]);
+  }
+  if (interest.ok) {
+    out.push(["ความสนใจสินค้า/บริการ ยะลา vs นอกจังหวัด", "หมวด", "ยะลา (%)", "นอกจังหวัด (%)", "ส่วนต่าง (จุด)", "วิธีทดสอบ", "p-value", "มีนัยสำคัญ (p<0.05)"]);
+    for (const c of interest.categories) {
+      out.push(["", c.label, c.yala.pct.toFixed(1), c.outside.pct.toFixed(1), c.diffPts.toFixed(1), c.test.method === "fisher" ? "Fisher exact" : "ไคสแควร์", c.test.p.toFixed(4), c.significant ? "ใช่" : "ไม่"]);
+    }
+  } else {
+    out.push(["ความสนใจสินค้า/บริการ ยะลา vs นอกจังหวัด", interest.reason]);
+  }
+  return out;
 }
 
 const BOM = String.fromCharCode(0xfeff);
