@@ -1,52 +1,44 @@
 # NEXT_SESSION — สถานะงาน ณ 15 พ.ย. 2569 (ส่งงาน 18 พ.ย.)
 
-> 🆕 15 พ.ย.: deploy Vercel แล้ว (https://dashboard-liart-six-41.vercel.app) · sync Google Form ทำงาน (google_form = 4 แถวจริง) · seed ลบแล้ว · **แผนถัดไป = แชต AI (T9–T11) + T12–T14 ดู `PLAN.md` หัวข้อ "แผนอัปเกรด D1–D4"** · รอผู้ใช้เอา `GEMINI_API_KEY` (ห้ามส่งในแชต) · smoke บน production ยังไม่ได้รัน (ผู้ใช้สั่งเลื่อน)
+## สถานะล่าสุด
+- **Production:** https://dashboard-liart-six-41.vercel.app (Vercel root `web`, auto-deploy จาก main) · sync Google Form → Supabase ทำงาน (trigger อัตโนมัติ) · seed ลบแล้ว
+- **ข้อมูลจริง:** 6 ชุดในฐานข้อมูล (4 สมบูรณ์ + 2 ไม่ผ่านคัดกรอง = ตัดออกตามกฎ ไม่ใช่บั๊ก) เป้าขั้นต่ำ 267 / เต็ม 300
+- **แชต AI (T9–T11):** `/api/chat` + ปุ่ม "ถามผู้ช่วย" ใช้ Gemini ผ่าน `GEMINI_API_KEY` (อยู่ใน `.env.local` และ Vercel) ; รุ่นเริ่มต้น `gemini-flash-lite-latest` (รุ่น flash ปกติ 503/ช้า) ; ประโยค "…เป็นใคร" เคยถูก Gemini บล็อกผิด (เลี่ยงในปุ่มสำเร็จรูปแล้ว) ; T11 จูนเพิ่มเมื่อมีข้อมูลมากขึ้น
+- **เสร็จแล้ว:** T0–T10, T13 (ดาวน์โหลดกราฟเป็น PNG + หน้า `/about`), T12 ส่วนแถบความคืบหน้า ; ไล่ตรวจ UI v2 ทุกหน้า ; ภาพคู่มือชุด demo (`web/scripts/screenshots.mjs`)
+- ตรวจล่าสุด: tsc ✓ lint ✓ test 56/56 ✓ build ✓ (commit ล่าสุดบน main)
 
-> ✅ ไล่ตรวจหน้าย่อย v2 ทุกหน้า (1280/375 + admin) เสร็จ แก้จุดเพี้ยนแล้ว · ภาพคู่มือชุด v2 ถ่ายใหม่ครบ (`web/scripts/screenshots.mjs`) · print A4 /reports ตรวจแล้ว (รายละเอียด `docs/HANDOFF_NOTES.md` หัวข้อ "ไล่ตรวจหน้าย่อย v2")
-> ✅ T8 UI polish เสร็จ (sidebar พอดีจอไม่มี scroll, การ์ดทุกแถวสูงเท่ากัน, /satisfaction ใหม่, /business hero) ตรวจบน production build แล้ว
-> ⚠️ ถ้าเปิด dev แล้วกราฟไม่ขึ้น/ค้าง skeleton = dev server เก่าค้าง (HMR websocket fail) → ปิดแล้ว `pnpm -C web dev` ใหม่ หรือใช้ launch config `web-prod` (next start :3100 หลัง build)
-> ✅ T7 UI v2 เสร็จและตรวจแล้ว
+## งานถัดไป (AI ทำ — ดูรายละเอียดใน PLAN.md ตาราง T11–T16 และหัวข้อ "แผนอัปเกรด D1–D4")
+1. **T15** ตัวกรองเดือน/ปี (ปุ่มลัด + เลือกเดือน/ปี พ.ศ. เฉพาะเดือนที่มีข้อมูล) → ใช้ from/to เดิม
+2. **T16** ปุ่ม "ช่วงข้อมูลวิจัย" (env วันตัดข้อมูล) + ปรับการ์ดความคืบหน้า (7 วันนับจากวันนี้, เกินเป้า = ข้อมูลสะสม)
+3. **T12 ส่วนที่เหลือ** ข้อเสนอรายธุรกิจอ่านง่ายขึ้น + เตือน n น้อยทั้งหน้า
+4. **T11** ทดสอบ/จูนแชตบน production + มือถือจริง
+5. **T14** เมื่อมีข้อมูลจริง ≥ 30: T6 เทียบตัวเลขกับ Google Sheets, ถ่ายภาพ real (`node web/scripts/screenshots.mjs docs/screenshots/real <base-url>`), ร่างบทผล `docs/REPORT_RESULTS_DRAFT.md`, อัปเดตภาพใน USER_MANUAL
+6. smoke บน production: `pnpm -C web smoke -- https://dashboard-liart-six-41.vercel.app --expect-real` (ผู้ใช้สั่งเลื่อนไว้ก่อน — รันเมื่อผู้ใช้สั่ง)
 
-## เสร็จแล้ว ✅ (ตรวจโดย Claude Opus)
-- T0–T4, G1–G5, R3, R4: แกนข้อมูล `web/lib/survey` (39 tests), UI redesign ตาม `docs/DESIGN.md`, admin (passcode, fail-closed), import CSV + กันซ้ำ, หน้าคุณภาพข้อมูล, seed guard (`--yes`), smoke test, คู่มือ + สคริปต์ทดลองใช้ + QA checklist + บทระบบ (docs/)
-- Supabase: ตารางสร้างแล้ว (Tokyo) ; มี **seed 300 แถว** ; google_form = 0
-- GitHub: push ได้แล้ว (credential manager จำ amin462 ไว้) ; `.env.local` ไม่ขึ้น git
-- ตรวจล่าสุด: tsc ✓ lint ✓ test 39/39 ✓ build ✓ smoke 13/13 ✓ (`--expect-real` ✗ ถูกต้อง เพราะยังมี seed)
-
-## ค้าง — ผู้ใช้ทำ (blocking)
-1. แก้ฟอร์มจริงตาม `docs/SURVEY_REVIEW.md` ข้อ 1–3, 6
-2. ติดตั้ง `script_googleForm/syncToSupabase.gs` (ขั้นตอนใน `prompts/round4.md`) → `installTrigger` → `backfillAll`
-3. ตอบฟอร์มทดสอบ 1 ครั้ง → `pnpm -C web seed:count` เห็น google_form ≥ 1
-4. `pnpm -C web seed:clear`
-5. Deploy Vercel (root `web`, env จาก `web/.env.local`) → `pnpm -C web smoke -- https://<domain> --expect-real`
-6. ภาพหน้าจอ Apps Script (ภาพที่ 12 ในคู่มือ)
-
-## ค้าง — AI ทำ
-| งาน | ใคร | เงื่อนไข |
-|---|---|---|
-| ช่วยติดตั้ง/ดีบัก sync Google Form → Supabase | Claude | เมื่อผู้ใช้ติดตั้งสคริปต์ |
-| ลบแถวทดสอบจากฟอร์ม + `seed:clear` | Claude | หลังข้อ 3 |
-| ช่วย deploy Vercel + smoke | Claude | หลังผู้ใช้สร้างโปรเจกต์ Vercel |
-| T6: เทียบตัวเลขเว็บกับ Google Sheets (EXP-01/04) | Claude sonnet | มีข้อมูลจริง |
-| ถ่ายภาพชุด real → docs/screenshots/real/ (`node web/scripts/screenshots.mjs docs/screenshots/real http://localhost:3100` ; ภาพ demo ใน USER_MANUAL ใช้ชุดนี้แทน) | Gemini / Claude | มีข้อมูลจริง ≥ 30 |
-| R4-G2 ร่างบทผล `docs/REPORT_RESULTS_DRAFT.md` | Gemini | มีข้อมูลจริง ≥ 30 |
+## ค้าง — ผู้ใช้ทำ
+- เก็บข้อมูลให้ถึง ≥ 267 ชุดสมบูรณ์ (แชร์ QR/ลิงก์ ; โปสเตอร์ที่ `/survey-poster`)
+- **บอกวันตัดข้อมูลสำหรับรายงาน** (สำหรับ T16 ; ยังไม่กำหนดก็ได้)
+- (ไม่บังคับ) ตั้ง `NEXT_PUBLIC_RESEARCH_CREDIT` ใน Vercel เพื่อแสดงชื่อผู้จัดทำ/อาจารย์ที่ปรึกษาใน `/about`
+- **Rotate คีย์ก่อนส่งงาน:** Gemini (เคยถูกวางในแชต) และ Supabase service key (เคยโผล่ในภาพหน้าจอ) → แก้ใน `web/.env.local`, Vercel env, และ Apps Script Script properties (Supabase)
+- ภาพที่ 12 ในคู่มือ (หน้าจอ Apps Script บันทึกการดำเนินการ — ห้ามให้เห็นค่าคีย์)
 
 ## ข้อควรรู้
-- Next 16 + cacheComponents: ข้อมูลหน้า dashboard revalidate 60 วินาที (`app/(dash)/_data.ts`)
+- Next 16 + cacheComponents: ข้อมูลหน้า dashboard revalidate 60 วินาที (`app/(dash)/_data.ts`) ; ผู้ตอบที่ไม่ผ่านคัดกรอง/ไม่ยินยอม/ตอบไม่ครบ จะไม่นับ (is_complete=false) — ดู `/admin/quality`
 - ก่อน `tsc` ต้อง `pnpm -C web exec next typegen`
-- ไดรฟ์ C เหลือ ~13GB: pnpm store = D:/.pnpm-store, ห้ามลง browser/Docker
-- Git Bash บน Windows ทำภาษาไทยใน argument ของ curl เพี้ยน → ส่ง body จากไฟล์ (`--data-binary @file`)
-- DB ต่อผ่าน pooler: `aws-0-ap-northeast-1.pooler.supabase.com:5432` user `postgres.deibtxlboswdzmptsfve` (ค่าอยู่ใน `web/.env.local` DATABASE_URL) ; มี `pg` ใน `.tmp/pg/` (`node .tmp/pg/run.js <url> <file.sql>`)
+- ไดรฟ์ C เหลือน้อย: pnpm store = D:/.pnpm-store, ห้ามลง browser/Docker (screenshots.mjs ใช้ Edge ที่ติดตั้งอยู่)
+- ไฟล์ในโปรเจกต์ปน LF/CRLF: แก้ด้วยสคริปต์ให้คงสไตล์เดิม (ดู `git ls-files --eol`) อย่าให้ diff ทั้งไฟล์
+- Git Bash บน Windows: ภาษาไทยใน argument ของ curl เพี้ยน → ส่ง body จากไฟล์ (`--data-binary @file`) ; อย่าพิมพ์คีย์/passcode ลงแชตหรือไฟล์ที่ commit
+- ถ้าเปิด dev แล้วกราฟไม่ขึ้น = dev server เก่าค้าง → ใช้ `pnpm -C web build` + `next start -p 3101` แล้วดูด้วยสคริปต์ screenshots
+- DB ต่อผ่าน pooler (ค่าอยู่ใน `web/.env.local` DATABASE_URL) ; มี `pg` ใน `.tmp/pg/`
 
 ---
 
 ## Prompt สำหรับเปิด session ใหม่ (Claude Code, โฟลเดอร์ D:\project-next\dashboard)
 ```
-อ่าน NEXT_SESSION.md, AGENTS.md, PLAN.md (ไม่ต้องอ่าน new_docs/ old_docs/ ui/)
-โปรเจกต์: แดชบอร์ดช่วยผู้ประกอบการ (Next.js ใน web/, Supabase) ส่งงาน 18 พ.ย. 2569 ตอบภาษาไทยสั้น ๆ ประหยัด token
-ใช้ subagent ตามความเหมาะสม (sonnet งานโค้ด, haiku งานเอกสาร) แต่ตรวจผลเองทุกครั้งก่อนรายงาน
-ข้อ 0–2 เดิม (ไล่หน้าย่อย v2 / ภาพ admin / print A4) เสร็จแล้ว (ดู HANDOFF_NOTES) เริ่มที่:
-3) ถามผมว่าทำข้อ "ค้าง — ผู้ใช้ทำ" ถึงข้อไหนแล้ว แล้วช่วยต่อจากตรงนั้น (sync Google Form / seed:clear / Vercel + smoke)
-4) เมื่อมีข้อมูลจริง ≥ 30: ถ่ายภาพ real ด้วย screenshots.mjs, T6 เทียบตัวเลขกับ Google Sheets
-ทุกครั้งที่แก้โค้ด: typegen, tsc, test, lint, build ต้องผ่าน แล้ว commit + push
+อ่าน NEXT_SESSION.md แล้วลุยตาม "งานถัดไป" ข้อ 1→3 (T15, T16, T12 ที่เหลือ) ; อ่าน PLAN.md เฉพาะแถว T11–T16 และ AGENTS.md ตามต้องการ ห้ามอ่าน new_docs/ old_docs/ ui/
+โปรเจกต์: แดชบอร์ดผลสำรวจนักท่องเที่ยววัดคูหาภิมุข (Next.js ใน web/, Supabase, Vercel) ส่งงาน 18 พ.ย. 2569 ตอบไทยสั้น ๆ ประหยัด token
+กฎ: ตัวเลขทั้งหมดคำนวณใน web/lib/survey เท่านั้น (UI ไม่คำนวณ) · แก้ไฟล์ให้คงสไตล์ LF/CRLF เดิม · ทุกครั้งที่แก้โค้ด: typegen, tsc, lint, test, build ต้องผ่าน แล้ว commit + push (commit ต้องมีบรรทัด Co-Authored-By ตามที่ระบบกำหนด)
+ตรวจหน้าตาด้วย `pnpm -C web build` + `next start -p 3101` + `node web/scripts/screenshots.mjs .tmp/shots http://localhost:3101 --only=<ชื่อ>` แล้ว Read ภาพ (อย่าถ่ายทั้งชุดถ้าไม่จำเป็น) ; ปิดเซิร์ฟเวอร์ 3101 เมื่อเสร็จ
+ใช้ subagent เฉพาะงานที่แยกอิสระจริง ๆ (sonnet งานโค้ด, haiku งานเอกสาร) และตรวจผลเองก่อนรายงาน
+เมื่อทำครบ 3 ข้อ ให้ถามผมว่าจะรัน smoke บน production / จูนแชต (T11) / ทำ T14 (ถ้าข้อมูลจริงถึง 30 ชุดแล้ว) ต่อไหม
 ```

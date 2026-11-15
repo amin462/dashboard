@@ -48,6 +48,8 @@ export type Row = RawRow & { sur08list: string[]; sat: number|null; slot: 'เ�
 | T12 | A1–A3: แถบความคืบหน้าเก็บข้อมูล (n/267 + เวลาตอบล่าสุด) บนภาพรวม, ข้อเสนอรายธุรกิจอ่านง่ายขึ้น, เตือนกลุ่มตัวอย่างน้อยทั้งหน้า | Claude sonnet | `web/app/(dash)/**`, `web/components/**` | D2 | – | 🟡 (แถบความคืบหน้าเสร็จ · เหลือข้อเสนอรายธุรกิจอ่านง่ายขึ้น + เตือน n น้อยทั้งหน้า) |
 | T13 | B4–B5: ดาวน์โหลดกราฟเป็นภาพ + หน้า "เกี่ยวกับงานวิจัย" (วัตถุประสงค์ วิธีเก็บ ข้อจำกัด) | Claude sonnet | `web/app/(dash)/about/**`, `web/components/**` | D2–D3 | – | ✅ (ปุ่มดาวน์โหลดกราฟเป็น PNG ทุกการ์ด + หน้า /about) |
 | T14 | เมื่อมีข้อมูลจริง ≥ 30: T6 เทียบตัวเลขกับ Google Sheets, ถ่ายภาพ real (`screenshots.mjs`), ร่างบทผล, rotate คีย์ Supabase | Claude + Gemini | docs/**, `docs/screenshots/real/` | D3–D4 | ข้อมูลจริง | ⬜ |
+| T15 | ตัวกรองเดือน/ปี: ปุ่มลัด "เดือนนี้/เดือนที่แล้ว/ปีนี้" + เลือกเดือน+ปี (พ.ศ.) เฉพาะเดือนที่มีข้อมูล (ฟังก์ชัน `monthsWithData` ใน lib + test) ใช้กลไก from/to เดิม → ใช้ได้ทุกหน้า/รายงานพิมพ์/แชต AI ; mobile filter sheet ด้วย | Claude sonnet | `web/lib/survey/filters.ts` (+test), `web/components/filters/**` | D2 | – | ⬜ |
+| T16 | ข้อมูลสะสมต่อเนื่อง: ปุ่มลัด "ช่วงข้อมูลวิจัย" (env `NEXT_PUBLIC_RESEARCH_FROM/TO` — วันตัดข้อมูลให้ตัวเลขตรงกับเล่ม ; ไม่ตั้ง = ซ่อนปุ่ม) + ปรับการ์ดความคืบหน้า: "7 วันล่าสุด" นับย้อนจากวันนี้ (ส่ง now เป็นพารามิเตอร์ให้ lib ทดสอบได้) ; เกินเป้า = "ข้อมูลสะสม N ชุด (เกินเป้า +X)" | Claude sonnet | `web/lib/survey/aggregate.ts` (+test), `web/components/overview/CollectionProgressCard.tsx`, `web/components/filters/**` | D2 | T15 | ⬜ |
 
 ## ลำดับสั่งงาน
 1. **วันนี้/D1 เช้า:** สั่ง Claude `survey-core` ทำ T1 ⟶ พร้อมกันสั่ง Gemini ทำ T2 ขั้น 1 (design system + layout เท่านั้น)
@@ -91,3 +93,5 @@ NEXT_PUBLIC_SURVEY_URL=https://docs.google.com/forms/d/1uuheFOZgCXhNJBBLb62gnB3x
 - ทุกงานผ่าน typegen, tsc, test, lint, build → commit + push → smoke บน production เมื่อผู้ใช้สั่ง
 
 **ผู้ใช้ทำ:** เอา API key จาก Google AI Studio ใส่ `web/.env.local` และ Vercel (`GEMINI_API_KEY`) · แชร์ลิงก์ฟอร์มต่อให้ได้ข้อมูล ≥ 267 · ตัดสินใจขอบเขตแชต (เฉพาะข้อมูลสำรวจ = ค่าเริ่มต้น) · rotate คีย์ Supabase หลังทุกอย่างนิ่ง
+
+**เพิ่ม 15 พ.ย. (ข้อมูลไหลต่อเนื่องหลังส่งงาน):** ระบบรับข้อมูลไม่จำกัด (ดึงทีละ 1,000 แถวจนครบ) ; ตัวเลขในเล่มรายงานต้องตรึงด้วยวันตัดข้อมูล (T16) เพื่อไม่ให้ไม่ตรงกับเว็บ ; ผู้ประกอบการดูย้อนหลังได้ด้วยตัวกรองเดือน/ปี (T15) ; ผู้ใช้ต้องบอกวันตัดข้อมูล (ยังไม่กำหนด → ตั้งภายหลังผ่าน env ได้)
