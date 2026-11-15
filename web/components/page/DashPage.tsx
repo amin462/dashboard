@@ -51,7 +51,7 @@ export function DashPage({ rows, description, hideDescriptionOnPrint = false, ac
     <div className="space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <p className={`max-w-3xl text-ink-2 ${hideDescriptionOnPrint ? "print:hidden" : ""}`}>{description}</p>
-        {actions && <div className="no-print flex shrink-0 flex-wrap gap-2">{actions(data)}</div>}
+        {actions && <div className="no-print flex max-w-full min-w-0 flex-wrap gap-2">{actions(data)}</div>}
       </div>
       {count > 0 && count < SMALL_PAGE_N && <SmallPageNotice n={count} total={total} isFiltered={isFiltered} />}
       {count === 0 ? <EmptyState /> : children(data)}
