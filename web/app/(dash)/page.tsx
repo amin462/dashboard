@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function OverviewPage() {
-  return <DashRoute render={({ rows }) => <OverviewClient rows={rows} />} />;
+  return <DashRoute render={({ rows, totalAll }) => <OverviewClient rows={rows} totalAll={totalAll} />} />;
 }

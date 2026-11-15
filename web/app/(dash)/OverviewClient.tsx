@@ -17,7 +17,7 @@ import { Cell } from "@/components/ui/Cell";
 import { StatStrip } from "@/components/ui/StatStrip";
 
 /** หน้าภาพรวม: grid 12 คอลัมน์ (มือถือ = คอลัมน์เดียว, KPI 2×2) ; ตัวเลขทุกค่ามาจาก lib/survey */
-export function OverviewClient({ rows }: { rows: Row[] }) {
+export function OverviewClient({ rows, totalAll }: { rows: Row[]; totalAll?: number }) {
   return (
     <DashPage rows={rows} description="ลูกค้าคือใคร สนใจอะไร มาวันไหนช่วงไหน และรู้จักจากช่องทางใด — อ่านจบใน 30 วินาที">
       {({ rows: filtered }) => {
@@ -26,7 +26,7 @@ export function OverviewClient({ rows }: { rows: Row[] }) {
         const channel = freq(filtered, "sur06");
         return (
           <div className="space-y-4">
-            <CollectionProgressCard progress={collectionProgress(rows)} />
+            <CollectionProgressCard progress={collectionProgress(rows)} totalSubmitted={totalAll} />
             <StatStrip items={overviewStats(ov, rows.length)} />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cell span="lg:col-span-8">

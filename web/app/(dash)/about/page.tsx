@@ -45,7 +45,7 @@ export default function AboutPage() {
         {CREDIT ? ` · ${CREDIT}` : ""}
       </p>
 
-      <DashRoute render={({ rows }) => <CollectionProgressCard progress={collectionProgress(rows)} />} />
+      <DashRoute render={({ rows, totalAll }) => <CollectionProgressCard progress={collectionProgress(rows)} totalSubmitted={totalAll} />} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Block icon={<Info className="h-5 w-5" aria-hidden="true" />} title="ที่มาและวัตถุประสงค์">

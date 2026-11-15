@@ -27,7 +27,8 @@ function headline(p: CollectionProgress): string {
  * ความคืบหน้าการเก็บข้อมูล (นับผู้ตอบสมบูรณ์ทั้งหมด ไม่ขึ้นกับตัวกรอง)
  * แถบยาวแทน 0–เป้าเต็ม ; เส้นอำพัน = เป้าขั้นต่ำ ; ตัวเลขทุกค่ามาจาก collectionProgress() ของ lib
  */
-export function CollectionProgressCard({ progress: p }: { progress: CollectionProgress }) {
+export function CollectionProgressCard({ progress: p, totalSubmitted }: { progress: CollectionProgress; totalSubmitted?: number }) {
+  const excluded = typeof totalSubmitted === "number" ? Math.max(0, totalSubmitted - p.n) : 0;
   const fillPct = Math.min(100, (p.n / p.full) * 100);
   const minPct = (p.min / p.full) * 100;
   const st = STATUS[p.status];
@@ -75,6 +76,11 @@ export function CollectionProgressCard({ progress: p }: { progress: CollectionPr
           </div>
 
           <p className="mt-2 font-medium">{headline(p)}</p>
+          {excluded > 0 && (
+            <p className="mt-1 type-meta text-ink-3">
+              ส่งแบบสำรวจเข้ามาทั้งหมด {num(totalSubmitted ?? 0)} ชุด · ไม่นับ {num(excluded)} ชุด (ไม่ผ่านคัดกรอง ไม่ยินยอม หรือตอบข้อบังคับไม่ครบ)
+            </p>
+          )}
         </div>
 
         <dl className="grid grid-cols-3 gap-3 lg:col-span-5">
