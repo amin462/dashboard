@@ -35,7 +35,7 @@ export function RevisitDonutCard({ result, intent, hideCta = false }: Props) {
   );
   // ส่วนที่เหลือของวง = ฐาน − ผู้ตั้งใจกลับมา (ไม่ใช่ตัวเลขที่รายงาน ใช้วาดวงเท่านั้น)
   const ring = [
-    { name: "ตั้งใจจะกลับมาอีก", value: intent.count, fill: C.navy },
+    { name: "ตั้งใจจะกลับมาอีก", value: intent.count, fill: divColor(5) },
     { name: "อื่น ๆ", value: Math.max(0, intent.base - intent.count), fill: C.muted },
   ];
   const tableData: ChartTableData = useMemo(

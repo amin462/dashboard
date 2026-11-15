@@ -61,7 +61,7 @@ export function StatStrip({
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-label={s.label}
-                className={`mt-2 h-1 w-full overflow-hidden rounded-full ${first ? "bg-white/25" : "bg-muted-bar"}`}
+                className={`mt-2 h-1 w-full overflow-hidden rounded-full ${first ? "bg-navy/15" : "bg-muted-bar"}`}
               >
                 <div className="h-full rounded-full bg-amber" style={{ width: `${pct}%` }} />
               </div>

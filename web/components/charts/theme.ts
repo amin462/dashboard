@@ -6,6 +6,7 @@ export const C = {
   navy: "var(--navy)",
   navy2: "var(--navy-2)",
   amber: "var(--amber)",
+  series2: "var(--series-2)",
   muted: "var(--muted-bar)",
   grid: "var(--grid)",
   ink2: "var(--ink-2)",
@@ -13,8 +14,8 @@ export const C = {
   surface: "var(--surface)",
 } as const;
 
-/** ซีรีส์ 2 ชุดที่ใช้ซ้ำ: กรมท่า = ทั้งหมด / กลุ่มแรก, อำพัน = กลุ่มที่สอง (นอกจังหวัด) */
-export const SERIES = { primary: C.navy, secondary: C.amber } as const;
+/** ซีรีส์ 2 ชุดที่ใช้ซ้ำ: ดินเผา = ทั้งหมด / กลุ่มแรก, เขียวเข้ม = กลุ่มที่สอง (นอกจังหวัด) */
+export const SERIES = { primary: C.navy, secondary: C.series2 } as const;
 
 export const AXIS_TICK = { fill: C.ink3, fontSize: 12 } as const;
 export const AXIS_LINE = { stroke: C.grid } as const;

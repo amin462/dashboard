@@ -9,7 +9,7 @@ export type BarRow = {
 /**
  * แท่งแนวนอนด้วย div ล้วน (คมชัด อ่านด้วย screen reader ได้ พิมพ์ได้)
  * แถว = ป้าย 40% | ราง (ความยาว 100% = ค่าสูงสุด) | "96 · 37.5%"
- * แท่งปกติ = navy, อันดับ 1 = amber, "อื่น ๆ"/ไม่ประสงค์ระบุ = muted-bar
+ * แท่งปกติ = เทาอุ่น (bar), อันดับ 1 = สีเน้น (amber), "อื่น ๆ"/ไม่ประสงค์ระบุ = muted-bar
  */
 export function BarRows({ rows, highlight, label }: { rows: BarRow[]; highlight: string | null; label: string }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
@@ -23,7 +23,7 @@ export function BarRows({ rows, highlight, label }: { rows: BarRow[]; highlight:
             <span title={r.label} className={`line-clamp-2 leading-5 ${r.tail ? "text-ink-3" : "text-ink"} ${top ? "font-medium" : ""}`}>{r.label}</span>
             <span className="h-3 rounded bg-surface-2" aria-hidden="true">
               <span
-                className={`block h-full rounded ${r.tail ? "bg-muted-bar" : top ? "bg-amber" : "bg-navy"}`}
+                className={`block h-full rounded ${r.tail ? "bg-muted-bar" : top ? "bg-amber" : "bg-bar"}`}
                 style={{ width: `${width}%` }}
               />
             </span>

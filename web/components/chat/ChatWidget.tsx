@@ -253,7 +253,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
       {!open && (
         <div className="no-print fixed right-4 bottom-[4.75rem] z-40 flex flex-col items-end gap-2.5 lg:right-6 lg:bottom-6">
           {teaser !== null && (
-            <div key={teaser} data-leaving={teaserLeaving} className="chat-teaser relative max-w-[17rem] rounded-2xl rounded-br-md bg-surface py-2.5 pr-9 pl-3.5 text-[14px] leading-5 text-ink shadow-[0_8px_24px_rgb(20_40_80/.22)]">
+            <div key={teaser} data-leaving={teaserLeaving} className="chat-teaser relative max-w-[17rem] rounded-2xl rounded-br-md bg-surface py-2.5 pr-9 pl-3.5 text-[14px] leading-5 text-ink shadow-[0_8px_24px_rgb(80_50_20/.22)]">
               <button
                 type="button"
                 onClick={() => {
@@ -279,7 +279,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
             type="button"
             onClick={() => setOpen(true)}
             aria-haspopup="dialog"
-            className="chat-fab relative inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(20_40_80/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            className="chat-fab relative inline-flex h-12 items-center gap-2 rounded-full bg-amber px-4 text-[15px] font-semibold text-amber-fg shadow-[0_6px_20px_rgb(80_50_20/.28)] transition-transform duration-150 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
           >
             <MessageCircle className="chat-wiggle h-5 w-5" aria-hidden="true" />
             ถามผู้ช่วย
@@ -291,20 +291,20 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
         <section
           role="dialog"
           aria-label="ผู้ช่วยอ่านข้อมูล"
-          className="chat-panel no-print fixed inset-0 z-50 flex flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:right-6 lg:bottom-6 lg:h-[620px] lg:max-h-[calc(100dvh-3rem)] lg:w-[400px] lg:rounded-2xl lg:pb-0 lg:shadow-[0_14px_48px_rgb(20_40_80/.3)]"
+          className="chat-panel no-print fixed inset-0 z-50 flex flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:right-6 lg:bottom-6 lg:h-[620px] lg:max-h-[calc(100dvh-3rem)] lg:w-[400px] lg:rounded-2xl lg:pb-0 lg:shadow-[0_14px_48px_rgb(80_50_20/.3)]"
         >
-          <header className="flex items-center gap-3 bg-frame px-4 py-3 text-white">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber text-amber-fg">
+          <header className="flex items-center gap-3 bg-navy-solid px-4 py-3 text-white">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-white">
               <Sparkles className="h-5 w-5" aria-hidden="true" />
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-[15px] leading-5 font-semibold">ผู้ช่วยอ่านข้อมูล</p>
-              <p className="type-meta text-frame-ink">ตอบจากผลสำรวจวัดคูหาภิมุข</p>
+              <p className="type-meta text-white/85">ตอบจากผลสำรวจวัดคูหาภิมุข</p>
             </div>
-            <button type="button" onClick={reset} aria-label="เริ่มคุยใหม่" title="เริ่มคุยใหม่" className="flex h-9 w-9 items-center justify-center rounded-lg text-frame-ink hover:bg-white/10">
+            <button type="button" onClick={reset} aria-label="เริ่มคุยใหม่" title="เริ่มคุยใหม่" className="flex h-9 w-9 items-center justify-center rounded-lg text-white/85 hover:bg-white/15">
               <RotateCcw className="h-4 w-4" aria-hidden="true" />
             </button>
-            <button type="button" onClick={close} aria-label="ปิดผู้ช่วย" title="ปิด" className="flex h-9 w-9 items-center justify-center rounded-lg text-frame-ink hover:bg-white/10">
+            <button type="button" onClick={close} aria-label="ปิดผู้ช่วย" title="ปิด" className="flex h-9 w-9 items-center justify-center rounded-lg text-white/85 hover:bg-white/15">
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
           </header>

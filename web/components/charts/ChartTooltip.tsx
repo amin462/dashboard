@@ -15,7 +15,7 @@ export function ChartTooltip({ active, payload, title, unit = "คน" }: Props)
   if (!active || !first) return null;
   const heading = title ? title(first) : String(first.tipTitle ?? "");
   return (
-    <div className="rounded-[10px] bg-surface px-3 py-2 type-meta shadow-[0_4px_16px_rgb(20_40_80/.14)]">
+    <div className="rounded-[10px] bg-surface px-3 py-2 type-meta shadow-[0_4px_16px_rgb(80_50_20/.14)]">
       {heading && <p className="font-medium text-ink">{heading}</p>}
       <ul className="mt-0.5 space-y-0.5">
         {payload?.map((e) => (

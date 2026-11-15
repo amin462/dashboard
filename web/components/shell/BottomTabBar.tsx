@@ -21,7 +21,7 @@ export function BottomTabBar() {
 
   return (
     <>
-      <nav aria-label="เมนูด่วน" className="no-print fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 bg-frame pb-[env(safe-area-inset-bottom)] lg:hidden">
+      <nav aria-label="เมนูด่วน" className="no-print fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-frame pb-[env(safe-area-inset-bottom)] lg:hidden">
         {tabs.map((t) => {
           const active = isActivePath(pathname, t.href);
           const Icon = t.icon;
@@ -30,7 +30,7 @@ export function BottomTabBar() {
               key={t.href}
               href={query ? `${t.href}?${query}` : t.href}
               aria-current={active ? "page" : undefined}
-              className={`${cell} ${active ? "text-white shadow-[inset_0_2px_0_var(--amber)]" : "text-frame-ink"}`}
+              className={`${cell} ${active ? "font-medium text-navy shadow-[inset_0_2px_0_var(--amber)]" : "text-frame-ink"}`}
             >
               <Icon className="h-5 w-5" aria-hidden="true" />
               {t.shortLabel}
@@ -41,7 +41,7 @@ export function BottomTabBar() {
           type="button"
           onClick={() => setMoreOpen(true)}
           aria-haspopup="dialog"
-          className={`${cell} ${moreActive ? "text-white" : "text-frame-ink"}`}
+          className={`${cell} ${moreActive ? "font-medium text-navy" : "text-frame-ink"}`}
         >
           <MoreHorizontal className="h-5 w-5" aria-hidden="true" />
           เพิ่มเติม

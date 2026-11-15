@@ -72,7 +72,7 @@ export function BusinessClient({ rows }: { rows: Row[] }) {
                       selected ? "bg-navy-solid text-navy-fg" : "text-ink-2 hover:bg-surface-2"
                     }`}
                   >
-                    <Icon className={`h-5 w-5 shrink-0 ${selected ? "text-amber" : "text-ink-3"}`} aria-hidden="true" />
+                    <Icon className={`h-5 w-5 shrink-0 ${selected ? "text-navy-fg" : "text-ink-3"}`} aria-hidden="true" />
                     <span className="min-w-0 leading-5">{b.label}</span>
                   </button>
                 );

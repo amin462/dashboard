@@ -4,10 +4,10 @@ import { SMALL_N } from "@/lib/survey/schema";
 
 /** เนื้อหาคงที่ของหน้าคู่มือ (ตัวเลขเกณฑ์ดึงจาก lib/survey) */
 export const QUICK_LINKS = [
-  { href: "#about", label: "ระบบนี้คืออะไร" },
-  { href: "#read-charts", label: "วิธีอ่านกราฟ" },
-  { href: "#filters", label: "การใช้ตัวกรอง" },
-  { href: "#examples", label: "ตัวอย่าง 4 ธุรกิจ" },
+  { href: "#start", label: "เริ่มใน 3 ขั้น" },
+  { href: "#read", label: "อ่านกราฟใน 10 วินาที" },
+  { href: "#business", label: "ธุรกิจของฉัน" },
+  { href: "#more", label: "รายละเอียดเพิ่มเติม" },
   { href: "#limits", label: "ข้อจำกัดข้อมูล" },
   { href: "#faq", label: "คำถามพบบ่อย" },
 ];

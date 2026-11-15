@@ -3,78 +3,91 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design tokens v2 — กรมท่า + อำพัน (docs/DESIGN.md "v2 OVERRIDES")
- * การ์ดขาวลอยบนพื้นเทาฟ้า ; ซีรีส์ข้อมูลมีแค่ navy / navy-2 / amber / muted-bar / diverging
- * หมายเหตุ: ink-3 ปรับเข้มจากตารางเล็กน้อยในโหมดมืด เพื่อให้ meta ผ่าน contrast 4.5:1
+ * Design tokens v3 — ดินเผา + ครีม (แทนกรมท่า + อำพันของ v2 ; ชื่อตัวแปรเดิมคงไว้เพื่อไม่ให้ต้องแก้ทุกคอมโพเนนต์)
+ *  --navy / --navy-solid = สีเน้นหลักดินเผา (ตัวหนังสือลิงก์ / พื้นทึบตัวหนังสือขาว)
+ *  --amber = สีเน้นอันดับ 1 / ปุ่มหลัก (ดินเผาเดียวกัน) ; --bar = แท่งปกติสีเทาอุ่น ; --series-2 = ซีรีส์ที่ 2 (เขียวเข้ม ใช้เฉพาะกราฟเทียบ 2 กลุ่ม)
+ *  --kpi-bg / --kpi-fg = การ์ดตัวเลขใบแรก (พื้นดินเผาอ่อน ไม่ทึบเข้ม) ; --frame = แถบข้าง/แท็บล่าง (สว่าง)
+ * หมายเหตุ: ink-3 ปรับให้ meta ผ่าน contrast 4.5:1 ทั้งสองโหมด
  */
 :root {
-  --canvas: #eef1f6;
+  --canvas: #faf5ef;
   --surface: #ffffff;
-  --surface-2: #f5f7fb;
-  --line: #e3e8f0;
-  --grid: #eef1f6;
-  --ink: #1b2433;
-  --ink-2: #4b5568;
-  --ink-3: #667085;
-  --frame: #1e3a5f;
-  --frame-ink: #dce5f2;
-  /* navy = ตัวหนังสือ/ลิงก์/ซีรีส์หลัก ; navy-solid = พื้นทึบ (ตัวหนังสือขาว) */
-  --navy: #1e3a5f;
-  --navy-solid: #1e3a5f;
-  --navy-2: #3d6a9e;
+  --surface-2: #f7f1e8;
+  --line: #eadfd0;
+  --grid: #f0e8dc;
+  --ink: #2b2622;
+  --ink-2: #5a5148;
+  --ink-3: #6b6054;
+  --frame: #fffdf9;
+  --frame-ink: #5a5148;
+  --navy: #a84a26;
+  --navy-solid: #b3512d;
+  --navy-2: #d98a68;
   --navy-fg: #ffffff;
-  --amber: #f4a52b;
-  --amber-fg: #1b2433;
-  --amber-soft: #fdf1dc;
-  --amber-ink: #7a4e00;
-  --muted-bar: #d5dce8;
-  --warn: #a15c07;
-  --warn-soft: #fff5df;
+  --amber: #b3512d;
+  --amber-fg: #ffffff;
+  --amber-soft: #f8e6da;
+  --amber-ink: #7a3115;
+  --kpi-bg: #f3e0d3;
+  --kpi-fg: #4a1f0d;
+  --bar: #a99985;
+  --series-2: #2f5d50;
+  --muted-bar: #e4dccf;
+  --warn: #8a5a00;
+  --warn-soft: #fff4d6;
   --danger: #b42318;
   --danger-soft: #fef3f2;
   --ok: #157f3d;
   --ok-soft: #ecfdf3;
-  --shadow-card: 0 4px 16px rgb(20 40 80 / 0.06);
-  /* diverging 1 -> 5 (ความพึงพอใจ / ความตั้งใจกลับมา) + สีตัวอักษรบนช่วงนั้น */
-  --div-1: #e4572e;
-  --div-2: #f4a52b;
-  --div-3: #d5dce8;
-  --div-4: #6e93c4;
-  --div-5: #1e3a5f;
-  --div-fg-1: #0b1220;
-  --div-fg-2: #0b1220;
-  --div-fg-3: #0b1220;
+  --shadow-card: 0 2px 12px rgb(80 50 20 / 0.07);
+  /* diverging 1 -> 5 (ความพึงพอใจ / ความตั้งใจกลับมา): แดง -> ทอง -> เทา -> เขียว + สีตัวอักษรบนช่วงนั้น */
+  --div-1: #c4452c;
+  --div-2: #e0a94a;
+  --div-3: #ddd5c8;
+  --div-4: #6fa392;
+  --div-5: #2f5d50;
+  --div-fg-1: #ffffff;
+  --div-fg-2: #1f1408;
+  --div-fg-3: #1f1408;
   --div-fg-4: #0b1220;
   --div-fg-5: #ffffff;
 }
 
 .dark {
-  --canvas: #0b1322;
-  --surface: #142038;
-  --surface-2: #1b2a47;
-  --line: #263653;
-  --grid: #1f2e4a;
-  --ink: #e8eef8;
-  --ink-2: #aab6cb;
-  --ink-3: #8a97ae;
-  --frame: #0f2140;
-  --frame-ink: #d6e0ee;
-  --navy: #8db4e8;
-  --navy-solid: #24497d;
-  --navy-2: #5e8fc8;
-  --amber-soft: #33270f;
-  --amber-ink: #f7c06a;
-  --muted-bar: #2e405f;
+  --canvas: #1c1917;
+  --surface: #26221f;
+  --surface-2: #2e2926;
+  --line: #3d3732;
+  --grid: #332e2a;
+  --ink: #ece7df;
+  --ink-2: #b8afa3;
+  --ink-3: #9d9387;
+  --frame: #24211e;
+  --frame-ink: #c9c0b4;
+  --navy: #ec9a76;
+  --navy-solid: #b3512d;
+  --navy-2: #c97452;
+  --amber: #e48a62;
+  --amber-fg: #2a1208;
+  --amber-soft: #3a2418;
+  --amber-ink: #f3b99b;
+  --kpi-bg: #4a2c1f;
+  --kpi-fg: #f6d5c2;
+  --bar: #6a5f54;
+  --series-2: #6fb59f;
+  --muted-bar: #4a443d;
   --warn: #f0b95a;
   --warn-soft: #33280f;
   --danger: #f97066;
   --danger-soft: #3a1a18;
   --ok: #4ade80;
   --ok-soft: #12301f;
-  --shadow-card: 0 4px 16px rgb(0 0 0 / 0.35);
-  --div-3: #4a5a78;
-  --div-5: #b5d0f5;
+  --shadow-card: 0 2px 12px rgb(0 0 0 / 0.35);
+  --div-1: #e2735a;
+  --div-fg-1: #1c0a05;
+  --div-3: #5a5248;
   --div-fg-3: #ffffff;
+  --div-5: #9fd4c0;
   --div-fg-5: #0b1220;
 }
 
@@ -99,6 +112,10 @@
   --color-amber-soft: var(--amber-soft);
   --color-amber-ink: var(--amber-ink);
   --color-muted-bar: var(--muted-bar);
+  --color-bar: var(--bar);
+  --color-series-2: var(--series-2);
+  --color-kpi-bg: var(--kpi-bg);
+  --color-kpi-fg: var(--kpi-fg);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
   --color-danger: var(--danger);
@@ -171,7 +188,7 @@ body {
     cursor: not-allowed;
     opacity: 0.5;
   }
-  /* CTA อำพันมน */
+  /* CTA ดินเผามน */
   .btn-primary {
     background: var(--amber);
     color: var(--amber-fg);
@@ -184,7 +201,7 @@ body {
   .btn-secondary {
     background: var(--surface);
     border-color: var(--line);
-    box-shadow: 0 1px 2px rgb(20 40 80 / 0.05);
+    box-shadow: 0 1px 2px rgb(80 50 20 / 0.06);
     color: var(--ink);
   }
   .btn-secondary:hover:not(:disabled) {
@@ -209,24 +226,24 @@ body {
     border-radius: 14px;
     box-shadow: var(--shadow-card);
   }
-  /* KPI ใบแรก: พื้นกรมท่าทึบ */
+  /* KPI ใบแรก: พื้นดินเผาอ่อน (ไม่ทึบเข้ม) */
   .kpi-solid {
-    background: var(--navy-solid);
-    color: var(--navy-fg);
+    background: var(--kpi-bg);
+    color: var(--kpi-fg);
   }
   .print-only {
     display: none;
   }
 }
 
-/* Focus ring: 2px navy, offset 2 */
+/* Focus ring: 2px สีเน้น, offset 2 */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--navy);
   outline-offset: 2px;
 }
 
-/* Scrollbar บางกลมกลืนกับพื้นกรมท่า (แถบข้าง) และพื้นการ์ดขาว (.thin-scroll) ; Firefox ใช้ scrollbar-color, Chromium/Safari ใช้ pseudo-element */
-/* Sidebar: ซ่อน scrollbar ทุกเบราว์เซอร์ (Windows classic scrollbar สีอ่อนตัดกับพื้นกรมท่า) ยังเลื่อนด้วยล้อเมาส์/ทัชได้
+/* Scrollbar บางกลมกลืนกับแถบข้าง และพื้นการ์ดขาว (.thin-scroll) ; Firefox ใช้ scrollbar-color, Chromium/Safari ใช้ pseudo-element */
+/* Sidebar: ซ่อน scrollbar ทุกเบราว์เซอร์ (Windows classic scrollbar ตัดกับพื้นแถบข้าง) ยังเลื่อนด้วยล้อเมาส์/ทัชได้
    + เงาจาง ๆ บน/ล่างบอกว่ามีเมนูเพิ่ม (scroll-driven mask) */
 .sidebar-scroll {
   scrollbar-width: none;
@@ -359,22 +376,29 @@ body {
     --ink: #000;
     --ink-2: #222;
     --ink-3: #444;
-    --navy: #1e3a5f;
+    --navy: #8a3b1c;
     --navy-solid: #fff;
-    --navy-2: #3d6a9e;
+    --navy-2: #d98a68;
     --navy-fg: #000;
-    --amber: #f4a52b;
+    --amber: #b3512d;
+    --amber-fg: #fff;
     --amber-soft: #f4f4f4;
     --amber-ink: #000;
-    --muted-bar: #bdbdbd;
+    --kpi-bg: #fff;
+    --kpi-fg: #000;
+    --bar: #b9b9b9;
+    --series-2: #2f5d50;
+    --muted-bar: #d9d9d9;
     --warn: #5c3a05;
     --warn-soft: #f4f4f4;
     --danger: #8f1a10;
     --ok: #0f5c2b;
     --shadow-card: none;
-    --div-3: #d5dce8;
-    --div-5: #1e3a5f;
-    --div-fg-3: #0b1220;
+    --div-1: #c4452c;
+    --div-3: #ddd5c8;
+    --div-5: #2f5d50;
+    --div-fg-1: #fff;
+    --div-fg-3: #1f1408;
     --div-fg-5: #fff;
   }
 

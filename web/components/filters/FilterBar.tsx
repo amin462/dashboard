@@ -28,7 +28,7 @@ export function FilterBar({ anchor, months, research }: { anchor: string | null;
           onClick={() => setSheetOpen(true)}
           aria-haspopup="dialog"
           className={`inline-flex h-8 items-center gap-1.5 rounded-lg border px-3 text-[13px] lg:hidden ${
-            active > 0 ? "border-amber/60 bg-amber-soft font-medium text-navy" : "border-transparent bg-surface text-ink-2 shadow-[0_1px_2px_rgb(20_40_80/.08)]"
+            active > 0 ? "border-amber/60 bg-amber-soft font-medium text-navy" : "border-transparent bg-surface text-ink-2 shadow-[0_1px_2px_rgb(80_50_20/.08)]"
           }`}
         >
           <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />

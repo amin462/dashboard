@@ -5,7 +5,7 @@ import { EXTERNAL_LINKS } from "../nav-config";
 export function FooterLinks({ tone }: { tone: "frame" | "surface" }) {
   const cls =
     tone === "frame"
-      ? "text-frame-ink hover:text-white"
+      ? "text-frame-ink hover:text-navy"
       : "text-ink-2 hover:text-navy";
   return (
     <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 type-meta whitespace-nowrap">

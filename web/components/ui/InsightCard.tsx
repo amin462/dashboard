@@ -12,19 +12,19 @@ export function InsightCard({ insight, index }: { insight: Insight; index?: numb
   const isAction = insight.detail.startsWith(prefix);
   const body = isAction ? insight.detail.slice(prefix.length).trim() : insight.detail;
   return (
-    <article className="print-card flex h-full flex-col rounded-xl bg-amber-soft p-4">
+    <article className="print-card flex h-full flex-col rounded-xl border border-line bg-surface-2 p-4">
       <div className="flex items-start gap-2.5">
         {typeof index === "number" && (
           <span
             aria-hidden="true"
-            className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber text-[13px] font-semibold text-amber-fg"
+            className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-soft text-[13px] font-semibold text-amber-ink"
           >
             {index + 1}
           </span>
         )}
         <h3 className="type-section text-ink">{insight.title}</h3>
       </div>
-      <div className="mt-2.5 flex items-start gap-2 rounded-lg bg-surface/70 px-3 py-2">
+      <div className="mt-2.5 flex items-start gap-2">
         {isAction ? (
           <Target className="mt-1 h-4 w-4 shrink-0 text-amber-ink" aria-hidden="true" />
         ) : (
@@ -37,7 +37,7 @@ export function InsightCard({ insight, index }: { insight: Insight; index?: numb
       </div>
       <ul aria-label="หลักฐานจากข้อมูล" className="mt-auto flex flex-wrap gap-1.5 pt-3">
         {insight.evidence.map((ev) => (
-          <li key={ev.label} className="rounded-md bg-surface px-2 py-0.5 type-meta text-ink-2">
+          <li key={ev.label} className="rounded-md border border-line bg-surface px-2 py-0.5 type-meta text-ink-2">
             <span>{ev.label}</span> <strong className="font-semibold text-ink">{ev.value}</strong>
           </li>
         ))}
