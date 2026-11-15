@@ -592,6 +592,6 @@ details[open]::details-content {
   }
   /* หัวพิมพ์ของเชลล์ซ้ำกับหัวรายงานธุรกิจ → ซ่อนเฉพาะหน้านี้ */
   main:has(.biz-print) > p.print-only {
-    display: none;
+    display: none !important;
   }
 }

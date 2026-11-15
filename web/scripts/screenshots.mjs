@@ -210,6 +210,18 @@ try {
     mkdirSync(previewDir, { recursive: true });
     writeFileSync(join(previewDir, "business-print.pdf"), Buffer.from(pdf.data, "base64"));
     console.log("✓ .tmp/print-preview/business-print.pdf");
+    // ตรวจจำนวนหน้า A4 ของทุกประเภทธุรกิจ (ต้อง 1 หน้า)
+    for (let t = 0; t < 4; t++) {
+      await send("Emulation.setEmulatedMedia", { media: "", features: [{ name: "prefers-color-scheme", value: "light" }] });
+      await clickJs('[role="tab"]', t);
+      await send("Emulation.setEmulatedMedia", { media: "print", features: [{ name: "prefers-color-scheme", value: "light" }] });
+      await sleep(900);
+      const p = await send("Page.printToPDF", { paperWidth: 8.27, paperHeight: 11.69, printBackground: true, preferCSSPageSize: true });
+      const buf = Buffer.from(p.data, "base64");
+      writeFileSync(join(previewDir, `business-print-type${t}.pdf`), buf);
+      const pages = (buf.toString("latin1").match(/\/Type\s*\/Page[^s]/g) ?? []).length;
+      console.log(`  ประเภทที่ ${t + 1}: ${pages} หน้า${pages === 1 ? "" : "  ← เกิน 1 หน้า"}`);
+    }
     if (args.includes("--pdf-preview")) {
       // เปิด PDF ใน viewer ของ browser แล้วเลื่อนถ่ายทีละหน้า (ใช้ตรวจการแบ่งหน้า A4)
       current = null;
