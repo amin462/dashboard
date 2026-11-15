@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { buildContext, pickComments, sanitizeComment } from '@/lib/ai/context'
 import { rateLimit, resetRateLimit } from '@/lib/ai/ratelimit'
-import { parseChatRequest } from '@/lib/ai/request'
+import { MAX_MESSAGE_LEN, parseChatRequest } from '@/lib/ai/request'
 import { SYSTEM_PROMPT } from '@/lib/ai/prompt'
 import { normalize } from '@/lib/survey/normalize'
 import { many, mk } from './helpers'
@@ -103,7 +103,8 @@ describe('parseChatRequest', () => {
     expect(r).not.toBeNull()
     expect(r!.messages.length).toBeLessThanOrEqual(12)
     expect(r!.messages[0].role).toBe('user')
-    expect(r!.messages.every((m) => m.content.length <= 600)).toBe(true)
+    expect(r!.messages.filter((m) => m.role === 'user').every((m) => m.content.length <= MAX_MESSAGE_LEN)).toBe(true)
+    expect(r!.messages.filter((m) => m.role === 'assistant').every((m) => m.content.length === 900)).toBe(true) // ไม่ตัดคำตอบเก่าสั้นเกินไป
   })
 })
 

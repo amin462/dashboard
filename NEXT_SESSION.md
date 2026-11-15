@@ -4,7 +4,7 @@
 - **Production:** https://dashboard-liart-six-41.vercel.app (Vercel root `web`, auto-deploy จาก main) · sync Google Form → Supabase ทำงาน (trigger อัตโนมัติ) · seed ลบแล้ว
 - **ข้อมูลจริง:** 6 ชุดในฐานข้อมูล (4 สมบูรณ์ + 2 ไม่ผ่านคัดกรอง = ตัดออกตามกฎ ไม่ใช่บั๊ก) เป้าขั้นต่ำ 267 / เต็ม 300
 - **แชต AI (T9–T11):** `/api/chat` + ปุ่ม "ถามผู้ช่วย" ใช้ Gemini ผ่าน `GEMINI_API_KEY` (อยู่ใน `.env.local` และ Vercel) ; รุ่นเริ่มต้น `gemini-flash-lite-latest` (รุ่น flash ปกติ 503/ช้า) ; ประโยค "…เป็นใคร" เคยถูก Gemini บล็อกผิด (เลี่ยงในปุ่มสำเร็จรูปแล้ว) ; T11 จูนเพิ่มเมื่อมีข้อมูลมากขึ้น
-- **เสร็จแล้ว:** T0–T10, T12, T13, T15, T16 (ดาวน์โหลดกราฟเป็น PNG + หน้า `/about`), T12 ส่วนแถบความคืบหน้า ; ไล่ตรวจ UI v2 ทุกหน้า ; ภาพคู่มือชุด demo (`web/scripts/screenshots.mjs`)
+- **เสร็จแล้ว:** T0–T10, T12, T13, T15–T18 (ข้อเสนอต่อ T19–T22 ใน PLAN.md) (ดาวน์โหลดกราฟเป็น PNG + หน้า `/about`), T12 ส่วนแถบความคืบหน้า ; ไล่ตรวจ UI v2 ทุกหน้า ; ภาพคู่มือชุด demo (`web/scripts/screenshots.mjs`)
 - ตรวจล่าสุด: tsc ✓ lint ✓ test 56/56 ✓ build ✓ (commit ล่าสุดบน main)
 
 ## งานถัดไป (AI ทำ — ดูรายละเอียดใน PLAN.md ตาราง T11–T16 และหัวข้อ "แผนอัปเกรด D1–D4")
@@ -20,7 +20,7 @@
 - ภาพที่ 12 ในคู่มือ (หน้าจอ Apps Script บันทึกการดำเนินการ — ห้ามให้เห็นค่าคีย์)
 
 ## ข้อควรรู้
-- Next 16 + cacheComponents: ข้อมูลหน้า dashboard revalidate 60 วินาที (`app/(dash)/_data.ts`) ; ผู้ตอบที่ไม่ผ่านคัดกรอง/ไม่ยินยอม/ตอบไม่ครบ จะไม่นับ (is_complete=false) — ดู `/admin/quality`
+- Next 16 + cacheComponents: ข้อมูลหน้า dashboard revalidate 15 วินาที + `AutoRefresh` ถาม `/api/pulse` ทุก 15 วินาที (`app/(dash)/_data.ts`) ; ผู้ตอบที่ไม่ผ่านคัดกรอง/ไม่ยินยอม/ตอบไม่ครบ จะไม่นับ (is_complete=false) — ดู `/admin/quality`
 - ก่อน `tsc` ต้อง `pnpm -C web exec next typegen`
 - ไดรฟ์ C เหลือน้อย: pnpm store = D:/.pnpm-store, ห้ามลง browser/Docker (screenshots.mjs ใช้ Edge ที่ติดตั้งอยู่)
 - ไฟล์ในโปรเจกต์ปน LF/CRLF: แก้ด้วยสคริปต์ให้คงสไตล์เดิม (ดู `git ls-files --eol`) อย่าให้ diff ทั้งไฟล์

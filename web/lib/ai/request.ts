@@ -3,7 +3,9 @@ import { BUSINESS_TYPES, type BusinessType } from '@/lib/survey/insights'
 import { QUESTIONS } from '@/lib/survey/schema'
 
 export const MAX_MESSAGES = 12
-export const MAX_MESSAGE_LEN = 600
+export const MAX_MESSAGE_LEN = 800
+/** คำตอบเก่าของผู้ช่วยที่ส่งกลับมาเป็นประวัติ (ยาวกว่าข้อความผู้ใช้ได้) */
+export const MAX_ASSISTANT_LEN = 2000
 
 export type ChatMessage = { role: 'user' | 'assistant'; content: string }
 export type ChatRequest = { messages: ChatMessage[]; business: BusinessType | null; page: string | null; filters: Filters }
@@ -55,7 +57,7 @@ export function parseChatRequest(body: unknown): ChatRequest | null {
     if (!m || typeof m !== 'object') return null
     const { role, content } = m as Record<string, unknown>
     if ((role !== 'user' && role !== 'assistant') || typeof content !== 'string') return null
-    const text = content.trim().slice(0, MAX_MESSAGE_LEN)
+    const text = content.trim().slice(0, role === 'user' ? MAX_MESSAGE_LEN : MAX_ASSISTANT_LEN)
     if (text) messages.push({ role, content: text })
   }
   // Gemini ต้องเริ่มด้วย user ; ข้อสุดท้ายต้องเป็นของผู้ใช้

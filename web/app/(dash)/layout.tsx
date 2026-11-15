@@ -3,14 +3,17 @@ import { bangkokDate, formatThaiDateTimeShort } from "@/components/format";
 import { monthsWithData } from "@/lib/survey/filters";
 import { FilterBar } from "@/components/filters/FilterBar";
 import { DataBanner } from "@/components/shell/Banner";
+import { AutoRefresh } from "@/components/shell/AutoRefresh";
 import { DashShell } from "@/components/shell/DashShell";
 import { SourcePill } from "@/components/shell/SourcePill";
-import { getSurveyBundle } from "./_data";
+import { getSurveyBundle, versionOf } from "./_data";
 
 async function TopMeta() {
-  const { source, lastSubmittedAt, seedCount } = await getSurveyBundle();
+  const bundle = await getSurveyBundle();
+  const { source, lastSubmittedAt, seedCount } = bundle;
   return (
     <>
+      <AutoRefresh version={versionOf(bundle)} />
       <SourcePill source={source} seedCount={seedCount} />
       <span className="hidden type-meta text-ink-3 md:inline">อัปเดต {formatThaiDateTimeShort(lastSubmittedAt)}</span>
     </>

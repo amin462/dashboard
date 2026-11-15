@@ -4,11 +4,11 @@ import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNod
 import { usePathname } from "next/navigation";
 import { filtersFromSearchParams } from "@/lib/survey/filters";
 import { MessageCircle, RotateCcw, SendHorizontal, Sparkles, X } from "lucide-react";
-import { BUSINESS_CHOICES, FOLLOW_UPS, quickQuestions, type BusinessKey } from "./chat-config";
+import { BUSINESS_CHOICES, FOLLOW_UPS, TOPIC_STARTERS, quickQuestions, type BusinessKey } from "./chat-config";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const MAX_LEN = 600;
+const MAX_LEN = 800;
 
 /** ตัวหนา **...** → <strong> (ไม่ใช้ dangerouslySetInnerHTML) */
 function inline(text: string): ReactNode[] {
@@ -213,8 +213,28 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
             {picked && messages.length === 0 && (
               <>
                 <Bubble role="assistant">
-                  {business ? "รับทราบครับ" : "ได้เลยครับ"} ลองกดคำถามด้านล่าง หรือพิมพ์ถามได้เลย เช่น &quot;ไม่เข้าใจกราฟนี้&quot;
+                  <p>
+                    {business ? "รับทราบครับ" : "ได้เลยครับ"} ขอรู้จักธุรกิจของคุณคร่าว ๆ หน่อยนะครับ จะได้แนะนำตรงจุดขึ้น
+                  </p>
+                  <p className="mt-2">
+                    เล่าสั้น ๆ ได้เลย เช่น ขายอะไร อยู่ตรงไหน ตอนนี้ทำการตลาดอย่างไร ใช้ช่องทางไหน จัดโปรแบบไหน หรืออยากวางแผนเรื่องอะไร
+                    (กดหัวข้อด้านล่างเพื่อเติมแบบฟอร์มสั้น ๆ แล้วแก้ข้อความในวงเล็บได้)
+                  </p>
                 </Bubble>
+                <div className="flex flex-wrap gap-2 pl-1">
+                  {TOPIC_STARTERS.map((t) => (
+                    <Chip
+                      key={t.label}
+                      onClick={() => {
+                        setInput(t.template);
+                        inputRef.current?.focus();
+                      }}
+                    >
+                      {t.label}
+                    </Chip>
+                  ))}
+                </div>
+                <p className="pl-1 type-meta text-ink-3">หรือถามจากข้อมูลสำรวจโดยตรง:</p>
                 <div className="flex flex-wrap gap-2 pl-1">
                   {quickQuestions(pathname).map((q) => (
                     <Chip key={q} onClick={() => ask(q)}>
@@ -271,11 +291,11 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
               <textarea
                 id="chat-input"
                 ref={inputRef}
-                rows={1}
+                rows={input.length > 70 ? 4 : 1}
                 value={input}
                 maxLength={MAX_LEN}
                 disabled={!picked}
-                placeholder={picked ? "พิมพ์คำถามที่นี่…" : "เลือกประเภทธุรกิจก่อนนะครับ"}
+                placeholder={!picked ? "เลือกประเภทธุรกิจก่อนนะครับ" : messages.length === 0 ? "เล่าธุรกิจของคุณคร่าว ๆ หรือพิมพ์คำถาม…" : "พิมพ์คำถามที่นี่…"}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
@@ -283,7 +303,7 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
                     ask(input);
                   }
                 }}
-                className="field max-h-28 min-h-10 flex-1 resize-none py-2 text-[15px] leading-6"
+                className="field max-h-40 min-h-10 flex-1 resize-none py-2 text-[15px] leading-6"
               />
               <button
                 type="submit"
