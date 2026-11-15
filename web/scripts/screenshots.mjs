@@ -248,6 +248,22 @@ try {
     await sleep(700);
     await shot("filter-sheet-mobile");
   }
+  // แชตผู้ช่วย AI (ต้องเปิดใช้: GEMINI_API_KEY หรือ CHAT_MOCK=1 บนเซิร์ฟเวอร์) — ไม่เปิด = ข้าม
+  for (const [name, vp] of [["chat-desktop", DESKTOP], ["chat-mobile", MOBILE]]) {
+    if (!want(name) && !want(`${name}-start`)) continue;
+    await viewport(vp);
+    await open("/spending");
+    const opened = await evalJs(`[...document.querySelectorAll('button')].some(b => b.textContent.includes('ถามผู้ช่วย'))`);
+    if (!opened) continue;
+    await evalJs(`[...document.querySelectorAll('button')].find(b => b.textContent.includes('ถามผู้ช่วย'))?.click()`);
+    await sleep(500);
+    await shot(`${name}-start`);
+    await evalJs(`[...document.querySelectorAll('[role=dialog] button')].find(b => b.textContent.includes('ร้านอาหาร'))?.click()`);
+    await sleep(400);
+    await evalJs(`[...document.querySelectorAll('[role=dialog] button')].find(b => b.textContent.includes('ควรโฆษณา'))?.click()`);
+    await sleep(2500);
+    await shot(name);
+  }
 } finally {
   ws.close();
   try {
@@ -255,6 +271,10 @@ try {
   } catch {
     proc.kill();
   }
-  await sleep(500);
-  rmSync(profile, { recursive: true, force: true });
+  await sleep(800);
+  try {
+    rmSync(profile, { recursive: true, force: true });
+  } catch {
+    /* Edge ยังปล่อยไฟล์ไม่หมด — ลบรอบหน้า */
+  }
 }

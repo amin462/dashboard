@@ -16,7 +16,9 @@ const fail = (code: string, message: string, status: number, headers?: HeadersIn
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return fail("disabled", "ผู้ช่วย AI ยังไม่เปิดใช้งาน", 503);
+  // CHAT_MOCK=1 (ไม่มีคีย์) = โหมดจำลองไว้ดูหน้าตา UI เท่านั้น ห้ามใช้บน production จริง
+  const mock = !apiKey && process.env.CHAT_MOCK === "1";
+  if (!apiKey && !mock) return fail("disabled", "ผู้ช่วย AI ยังไม่เปิดใช้งาน", 503);
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const rl = rateLimit(ip, LIMIT_PER_MIN, 60_000);
@@ -38,11 +40,20 @@ export async function POST(request: NextRequest) {
   const { rows } = await getSurveyBundle();
   const context = buildContext(rows, { business: req.business, pageTitle: req.page ? PAGE_TITLES[req.page] : null });
 
+  if (mock) {
+    return Response.json({
+      ok: true,
+      reply: `(โหมดจำลอง) ผู้ตอบแบบสำรวจตอนนี้มี ${rows.length} คน
+- ตัวอย่างข้อความตอบกลับสำหรับดูหน้าตาแชต
+- เมื่อใส่คีย์จริง **ผู้ช่วยจะตอบจากข้อมูลสำรวจ** พร้อมฐาน n`,
+    });
+  }
+
   const result = await askGemini({
     system: SYSTEM_PROMPT,
     context,
     messages: req.messages,
-    apiKey,
+    apiKey: apiKey as string,
     model: process.env.GEMINI_MODEL,
   });
   if (result.ok) return Response.json({ ok: true, reply: result.text });

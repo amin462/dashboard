@@ -33,7 +33,11 @@ export async function askGemini(opts: {
       signal: AbortSignal.timeout(25_000),
     })
     if (res.status === 429) return { ok: false, code: 'quota' }
-    if (!res.ok) return { ok: false, code: 'error' }
+    if (!res.ok) {
+      // log เฉพาะสถานะ (ไม่ log คีย์/เนื้อหา) ไว้ดีบักใน Vercel logs เช่น 403 = โปรเจกต์คีย์ใช้ฟรีไม่ได้, 404 = ชื่อรุ่นผิด
+      console.error('[chat] Gemini HTTP', res.status, model)
+      return { ok: false, code: 'error' }
+    }
     const data = (await res.json()) as {
       candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[]
       promptFeedback?: { blockReason?: string }

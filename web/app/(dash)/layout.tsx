@@ -29,6 +29,7 @@ async function BannerSlot() {
 export default function DashLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <DashShell
+      chatEnabled={Boolean(process.env.GEMINI_API_KEY) || process.env.CHAT_MOCK === "1"}
       topMeta={
         <Suspense fallback={<span className="inline-block h-4 w-32 animate-pulse rounded bg-muted-bar/60" />}>
           <TopMeta />

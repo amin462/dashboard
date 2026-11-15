@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
+import { ChatWidget } from "../chat/ChatWidget";
 import { PageFooter } from "../ui/PageFooter";
 import { BottomTabBar } from "./BottomTabBar";
 import { Sidebar } from "./Sidebar";
@@ -13,10 +14,12 @@ type DashShellProps = {
   filterBar: ReactNode;
   /** แบนเนอร์ข้อมูลตัวอย่าง/ข้อมูลทดสอบ (บรรทัดเดียว) */
   banner: ReactNode;
+  /** เปิดผู้ช่วยแชต AI (มี GEMINI_API_KEY) */
+  chatEnabled?: boolean;
 };
 
 /** โครงหน้า: แถบข้างกรมท่า + top bar 56px + ตัวกรอง + แบนเนอร์ + เนื้อหา (max 1240px) + แท็บล่างมือถือ */
-export function DashShell({ children, topMeta, filterBar, banner }: DashShellProps) {
+export function DashShell({ children, topMeta, filterBar, banner, chatEnabled = false }: DashShellProps) {
   return (
     <div className="min-h-screen bg-canvas lg:flex print:block">
       <Sidebar />
@@ -35,6 +38,7 @@ export function DashShell({ children, topMeta, filterBar, banner }: DashShellPro
       <Suspense fallback={null}>
         <BottomTabBar />
       </Suspense>
+      <ChatWidget enabled={chatEnabled} />
     </div>
   );
 }
