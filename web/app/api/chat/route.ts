@@ -4,6 +4,7 @@ import { buildContext } from "@/lib/ai/context";
 import { SYSTEM_PROMPT } from "@/lib/ai/prompt";
 import { rateLimit } from "@/lib/ai/ratelimit";
 import { PAGE_TITLES, parseChatRequest } from "@/lib/ai/request";
+import { bangkokDate } from "@/components/format";
 import { getSurveyBundle } from "../../(dash)/_data";
 
 // ผู้ช่วย AI ตอบจากสถิติสรุปของ lib/survey (ไม่ส่งแถวรายคน, ไม่เก็บบทสนทนา)
@@ -38,7 +39,12 @@ export async function POST(request: NextRequest) {
   if (!req) return fail("bad_request", "รูปแบบคำขอไม่ถูกต้อง", 400);
 
   const { rows } = await getSurveyBundle();
-  const context = buildContext(rows, { business: req.business, pageTitle: req.page ? PAGE_TITLES[req.page] : null });
+  const context = buildContext(rows, {
+    business: req.business,
+    pageTitle: req.page ? PAGE_TITLES[req.page] : null,
+    filters: req.filters,
+    today: bangkokDate(new Date().toISOString()),
+  });
 
   if (mock) {
     return Response.json({

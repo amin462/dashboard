@@ -68,7 +68,7 @@ export const BIZ_VIEWS: Record<
     focus: "ความสนใจที่พัก ถิ่นพำนักของลูกค้า และงบต่อคน",
     stats: (d) => [
       shareStat("ลูกค้าของคุณสนใจที่พัก / โฮมสเตย์", interestOf(d, "โรงแรม / ที่พัก / โฮมสเตย์"), d.interest, 8),
-      topStat("ลูกค้าส่วนใหญ่พำนักที่", topItem(d.origin, ["ไม่ประสงค์ระบุ"]), d.origin, 2, "ไม่ระบุ"),
+      topStat("ถิ่นพำนักที่พบมากสุด", topItem(d.origin, ["ไม่ประสงค์ระบุ"]), d.origin, 2, "ไม่ระบุ"),
       topStat("ช่วงที่ลูกค้าใช้จ่ายมากที่สุด", spendTop(d), d.spend, 7),
     ],
     charts: (d) => (

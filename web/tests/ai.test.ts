@@ -82,7 +82,7 @@ describe('parseChatRequest', () => {
   const ok = { messages: [{ role: 'user', content: 'กราฟนี้คืออะไร' }], business: 'shop', page: '/spending' }
 
   it('รับคำขอปกติ และ whitelist ธุรกิจ/หน้า', () => {
-    expect(parseChatRequest(ok)).toEqual({ messages: [{ role: 'user', content: 'กราฟนี้คืออะไร' }], business: 'shop', page: '/spending' })
+    expect(parseChatRequest(ok)).toEqual({ messages: [{ role: 'user', content: 'กราฟนี้คืออะไร' }], business: 'shop', page: '/spending', filters: {} })
     const r = parseChatRequest({ ...ok, business: 'hack', page: '/admin/import' })
     expect(r?.business).toBeNull()
     expect(r?.page).toBeNull()
@@ -122,5 +122,44 @@ describe('rateLimit', () => {
     expect(rateLimit('a', 1, 60_000, 1).ok).toBe(true)
     expect(rateLimit('b', 1, 60_000, 1).ok).toBe(true)
     expect(rateLimit('a', 1, 60_000, 2).ok).toBe(false)
+  })
+})
+
+describe('ตัวกรองในแชต', () => {
+  const raws = [
+    ...many(4, () => ({ submitted_at: '2026-10-05T03:00:00Z', sur02: 'จังหวัดยะลา' })),
+    ...many(3, () => ({ submitted_at: '2026-11-05T03:00:00Z', sur02: 'จังหวัดปัตตานี' })),
+  ]
+  const rows = normalize(raws).rows
+
+  it('parseFilters: รับเฉพาะวันที่ถูกรูปแบบ และตัวเลือกที่มีในแบบสำรวจ', () => {
+    const r = parseChatRequest({
+      messages: [{ role: 'user', content: 'x' }],
+      filters: { from: '2026-11-01', to: 'bad', origin: ['จังหวัดยะลา', 'ไม่มีจริง', 5], age: 'x', extra: 1 },
+    })
+    expect(r?.filters).toEqual({ from: '2026-11-01', origin: ['จังหวัดยะลา'] })
+    expect(parseChatRequest({ messages: [{ role: 'user', content: 'x' }] })?.filters).toEqual({})
+  })
+
+  it('buildContext: ตอบเฉพาะกลุ่มที่กรอง + บอก AI ว่ามีตัวกรอง + วันนี้ + ช่วงวันที่ข้อมูล', () => {
+    const ctx = buildContext(rows, { filters: { from: '2026-11-01', to: '2026-11-30' }, today: '2026-11-15' })
+    expect(ctx).toContain('ผู้ตอบแบบสำรวจที่สมบูรณ์: 3 คน')
+    expect(ctx).toContain('ช่วงวันที่ 1 พ.ย. 2569 ถึง 30 พ.ย. 2569')
+    expect(ctx).toContain('จากผู้ตอบทั้งหมด 7 คน')
+    expect(ctx).toContain('วันนี้ (เวลาไทย): 15 พ.ย. 2569')
+    expect(ctx).toContain('ตอบระหว่างวันที่ 5 พ.ย. 2569 ถึง 5 พ.ย. 2569')
+    expect(ctx).toContain('จังหวัดปัตตานี 3 คน')
+    expect(ctx).not.toContain('จังหวัดยะลา 4 คน')
+  })
+
+  it('buildContext: ตัวกรองจนไม่เหลือผู้ตอบ -> บอกให้ปรับตัวกรอง ห้ามเดา', () => {
+    const ctx = buildContext(rows, { filters: { from: '2027-01-01' } })
+    expect(ctx).toContain('ผู้ตอบแบบสำรวจที่สมบูรณ์: 0 คน')
+    expect(ctx).toContain('ปรับตัวกรอง')
+    expect(ctx).toContain('ห้ามเดาตัวเลข')
+  })
+
+  it('buildContext: ไม่มีตัวกรอง -> ไม่มีข้อความเรื่องตัวกรอง', () => {
+    expect(buildContext(rows)).not.toContain('ตัวกรอง')
   })
 })

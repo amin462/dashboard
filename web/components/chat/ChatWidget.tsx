@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { filtersFromSearchParams } from "@/lib/survey/filters";
 import { MessageCircle, RotateCcw, SendHorizontal, Sparkles, X } from "lucide-react";
 import { BUSINESS_CHOICES, FOLLOW_UPS, quickQuestions, type BusinessKey } from "./chat-config";
 
@@ -103,7 +104,13 @@ export function ChatWidget({ enabled }: { enabled: boolean }) {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ messages: history, business, page: pathname }),
+          body: JSON.stringify({
+            messages: history,
+            business,
+            page: pathname,
+            // ตัวกรองที่เปิดอยู่ใน URL ตอนกดส่ง -> ผู้ช่วยตอบจากกลุ่มเดียวกับที่ผู้ใช้เห็นบนจอ
+            filters: filtersFromSearchParams(new URLSearchParams(window.location.search)),
+          }),
         });
         const data = (await res.json().catch(() => null)) as ApiResult | null;
         if (data && data.ok) setMessages([...history, { role: "assistant", content: data.reply }]);

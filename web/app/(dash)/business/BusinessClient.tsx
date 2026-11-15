@@ -26,7 +26,7 @@ function customerLine(d: BizData): string {
     origin && `พำนักที่${origin.label.replace(/^จังหวัด/, "")} (${origin.pct.toFixed(1)}%)`,
     comp && `มากับ${comp.label} (${comp.pct.toFixed(1)}%)`,
   ].filter(Boolean);
-  return parts.length > 0 ? `ลูกค้าส่วนใหญ่ ${parts.join(" · ")}` : "ยังไม่มีข้อมูลเพียงพอสรุปว่าลูกค้าส่วนใหญ่เป็นใคร";
+  return parts.length > 0 ? `กลุ่มลูกค้าที่พบมากที่สุด ${parts.join(" · ")}` : "ยังไม่มีข้อมูลเพียงพอสรุปว่าลูกค้าส่วนใหญ่เป็นใคร";
 }
 
 export function BusinessClient({ rows }: { rows: Row[] }) {

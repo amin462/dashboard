@@ -1,10 +1,12 @@
+import { type Filters } from '@/lib/survey/filters'
 import { BUSINESS_TYPES, type BusinessType } from '@/lib/survey/insights'
+import { QUESTIONS } from '@/lib/survey/schema'
 
 export const MAX_MESSAGES = 12
 export const MAX_MESSAGE_LEN = 600
 
 export type ChatMessage = { role: 'user' | 'assistant'; content: string }
-export type ChatRequest = { messages: ChatMessage[]; business: BusinessType | null; page: string | null }
+export type ChatRequest = { messages: ChatMessage[]; business: BusinessType | null; page: string | null; filters: Filters }
 
 /** ชื่อหน้าที่ผู้ใช้เปิดอยู่ (whitelist) → ใช้บอก AI ว่า "กราฟนี้" หมายถึงหน้าไหน */
 export const PAGE_TITLES: Record<string, string> = {
@@ -17,6 +19,30 @@ export const PAGE_TITLES: Record<string, string> = {
   '/business': 'มุมมองตามประเภทธุรกิจ',
   '/reports': 'รายงานและส่งออก',
   '/guide': 'คู่มือผู้ประกอบการ',
+}
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+const LIST_FILTERS = [
+  ['age', 'sur01'],
+  ['origin', 'sur02'],
+  ['companion', 'sur03'],
+  ['transport', 'sur04'],
+] as const
+
+/** ตัวกรองที่ผู้ใช้เปิดอยู่บนหน้าเว็บ (whitelist: วันที่รูปแบบถูก, ตัวเลือกต้องตรงกับแบบสำรวจ) */
+export function parseFilters(raw: unknown): Filters {
+  const f: Filters = {}
+  if (!raw || typeof raw !== 'object') return f
+  const r = raw as Record<string, unknown>
+  if (typeof r.from === 'string' && DATE_RE.test(r.from)) f.from = r.from
+  if (typeof r.to === 'string' && DATE_RE.test(r.to)) f.to = r.to
+  for (const [key, code] of LIST_FILTERS) {
+    const v = r[key]
+    if (!Array.isArray(v)) continue
+    const ok = v.filter((x): x is string => typeof x === 'string' && QUESTIONS[code].choices.includes(x)).slice(0, 12)
+    if (ok.length) f[key] = ok
+  }
+  return f
 }
 
 /** ตรวจ body ของ /api/chat ; คืน null ถ้ารูปแบบไม่ถูกต้อง */
@@ -37,5 +63,5 @@ export function parseChatRequest(body: unknown): ChatRequest | null {
   if (!messages.length || messages[messages.length - 1].role !== 'user') return null
   const business = BUSINESS_TYPES.find((t) => t.key === b.business)?.key ?? null
   const page = typeof b.page === 'string' && b.page in PAGE_TITLES ? b.page : null
-  return { messages, business, page }
+  return { messages, business, page, filters: parseFilters(b.filters) }
 }

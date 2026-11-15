@@ -1,4 +1,4 @@
-import { applyFilters } from '@/lib/survey/filters'
+import { applyFilters, hasFilters, type Filters } from '@/lib/survey/filters'
 import { bySlot, freq, multiFreq, overview, satisfaction, type FreqResult } from '@/lib/survey/aggregate'
 import { BUSINESS_TYPES, businessInsights, overviewInsights, type BusinessType } from '@/lib/survey/insights'
 import { DISCLAIMER, QUESTIONS, SMALL_N, type Code, type Row } from '@/lib/survey/schema'
@@ -14,6 +14,15 @@ const MAX_COMMENTS = 15
 const MAX_COMMENT_LEN = 100
 
 const FREQ_CODES: Code[] = ['sur01', 'sur02', 'sur03', 'sur04', 'sur05', 'sur06', 'sur07', 'sur10']
+
+const TH_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+
+/** YYYY-MM-DD -> "14 พ.ย. 2569" (ให้ AI พูดวันที่เป็น พ.ศ. แบบที่ผู้ใช้เห็นบนเว็บ) */
+export function thaiDate(ymd: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ymd)
+  if (!m) return ymd
+  return `${Number(m[3])} ${TH_MONTHS[Number(m[2]) - 1] ?? m[2]} ${Number(m[1]) + 543}`
+}
 
 const pct = (x: number) => `${x.toFixed(1)}%`
 
@@ -56,6 +65,29 @@ export type ContextOptions = {
   business?: BusinessType | null
   /** ชื่อหน้าที่ผู้ใช้กำลังเปิด (ไทย) */
   pageTitle?: string | null
+  /** ตัวกรองที่ผู้ใช้เปิดอยู่บนหน้าเว็บ : ตอบจากกลุ่มที่กรองแล้ว ให้ตรงกับตัวเลขที่ผู้ใช้เห็น */
+  filters?: Filters
+  /** วันนี้ (YYYY-MM-DD เวลาไทย) ใช้ตอบคำถามเชิงเวลา เช่น "เดือนนี้" */
+  today?: string | null
+}
+
+const FILTER_LABELS: [keyof Filters, string][] = [
+  ['age', 'อายุ'],
+  ['origin', 'พื้นที่พำนัก'],
+  ['companion', 'ผู้ร่วมเดินทาง'],
+  ['transport', 'พาหนะ'],
+]
+
+/** อธิบายตัวกรองที่ใช้อยู่เป็นภาษาไทย ; ไม่มีตัวกรอง = null */
+export function describeFilters(f: Filters): string | null {
+  if (!hasFilters(f)) return null
+  const parts: string[] = []
+  if (f.from || f.to) parts.push(`ช่วงวันที่ ${f.from ? thaiDate(f.from) : 'ต้น'} ถึง ${f.to ? thaiDate(f.to) : 'ล่าสุด'}`)
+  for (const [k, label] of FILTER_LABELS) {
+    const v = f[k]
+    if (Array.isArray(v) && v.length) parts.push(`${label}: ${v.join(' / ')}`)
+  }
+  return parts.join(' ; ')
 }
 
 function topPct(f: FreqResult, k = 4): string {
@@ -67,15 +99,27 @@ function topPct(f: FreqResult, k = 4): string {
     .join('; ')
 }
 
-export function buildContext(rows: Row[], opts: ContextOptions = {}): string {
+export function buildContext(allRows: Row[], opts: ContextOptions = {}): string {
+  const filterText = describeFilters(opts.filters ?? {})
+  const rows = filterText ? applyFilters(allRows, opts.filters ?? {}) : allRows
   const n = rows.length
   const out: string[] = []
   out.push('## ภาพรวมข้อมูล')
   out.push(`- ผู้ตอบแบบสำรวจที่สมบูรณ์: ${n} คน (เป้าขั้นต่ำ 267 คน)`)
+  if (opts.today) out.push(`- วันนี้ (เวลาไทย): ${thaiDate(opts.today)}`)
+  if (filterText) {
+    out.push(`- ⚠ ผู้ใช้เปิดตัวกรองบนหน้าเว็บอยู่ (${filterText}) ตัวเลขทั้งหมดด้านล่างคิดเฉพาะกลุ่มที่กรองนี้ ${n} คน จากผู้ตอบทั้งหมด ${allRows.length} คน ต้องบอกผู้ใช้ว่าคำตอบอิงกลุ่มที่กรอง`)
+  }
   if (n === 0) {
-    out.push('- ยังไม่มีข้อมูลผู้ตอบ: ให้ตอบว่ายังไม่มีข้อมูลให้วิเคราะห์ ห้ามเดาตัวเลข')
+    out.push(
+      filterText
+        ? '- ไม่มีผู้ตอบในกลุ่มที่กรองนี้: ให้บอกผู้ใช้ว่ากลุ่มนี้ยังไม่มีข้อมูล แนะนำให้ล้างหรือปรับตัวกรอง ห้ามเดาตัวเลข'
+        : '- ยังไม่มีข้อมูลผู้ตอบ: ให้ตอบว่ายังไม่มีข้อมูลให้วิเคราะห์ ห้ามเดาตัวเลข',
+    )
     return out.join('\n')
   }
+  const dates = rows.map((r) => r.date).filter(Boolean).sort()
+  if (dates.length) out.push(`- ผู้ตอบในกลุ่มนี้ตอบระหว่างวันที่ ${thaiDate(dates[0])} ถึง ${thaiDate(dates[dates.length - 1])}`)
   if (n < AI_SMALL_N) out.push(`- ⚠ จำนวนผู้ตอบยังน้อย (n < ${AI_SMALL_N}) ต้องเตือนทุกครั้งว่าตีความด้วยความระมัดระวัง`)
   out.push(`- ข้อจำกัด: ${DISCLAIMER}`)
   if (opts.pageTitle) out.push(`- ผู้ใช้กำลังเปิดหน้า: ${opts.pageTitle}`)
