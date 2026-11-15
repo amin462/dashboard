@@ -142,7 +142,7 @@ async function shot(name, dir = outDir, tall = false) {
 
 const clickJs = (sel, nth = 0) => evalJs(`(() => { const els = [...document.querySelectorAll(${JSON.stringify(sel)})].filter(e => e.offsetParent !== null); if (!els[${nth}]) return false; els[${nth}].click(); return true; })()`);
 
-const pages = ["home:/", "guide:/guide", "survey-poster:/survey-poster", "visitors:/visitors", "travel:/travel", "awareness:/awareness", "spending:/spending", "satisfaction:/satisfaction", "business:/business", "reports:/reports"];
+const pages = ["home:/", "guide:/guide", "about:/about", "survey-poster:/survey-poster", "visitors:/visitors", "travel:/travel", "awareness:/awareness", "spending:/spending", "satisfaction:/satisfaction", "business:/business", "reports:/reports"];
 const want = (name) => only.length === 0 || only.includes(name);
 
 try {
@@ -247,6 +247,19 @@ try {
     await clickJs('section[aria-label="ตัวกรองข้อมูล"] button[aria-haspopup="dialog"]', 0);
     await sleep(700);
     await shot("filter-sheet-mobile");
+  }
+  // ปุ่ม "ดาวน์โหลดกราฟเป็นภาพ": ดักไฟล์ที่ถูกสร้างแล้วเซฟเป็น PNG เพื่อตรวจหน้าตาภาพที่ได้
+  if (want("chart-download-sample")) {
+    await viewport(DESKTOP);
+    await open("/spending");
+    await evalJs(`window.__dl = null; HTMLAnchorElement.prototype.click = function () { window.__dl = this.href; }`);
+    await clickJs('button[aria-label="ดาวน์โหลดกราฟเป็นภาพ"]', 0);
+    for (let i = 0; i < 40 && !(await evalJs("window.__dl")); i++) await sleep(250);
+    const href = await evalJs("window.__dl");
+    if (href && href.startsWith("data:image/png")) {
+      writeFileSync(join(outDir, "chart-download-sample.png"), Buffer.from(href.split(",")[1], "base64"));
+      console.log("✓ chart-download-sample");
+    } else console.log("✗ chart-download-sample: ไม่ได้รับไฟล์ภาพ");
   }
   // แชตผู้ช่วย AI (ต้องเปิดใช้: GEMINI_API_KEY หรือ CHAT_MOCK=1 บนเซิร์ฟเวอร์) — ไม่เปิด = ข้าม
   for (const [name, vp] of [["chat-desktop", DESKTOP], ["chat-mobile", MOBILE]]) {

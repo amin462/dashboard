@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { BarChart3, Table2 } from "lucide-react";
+import { useRef, useState, type ReactNode } from "react";
+import { BarChart3, Download, Table2 } from "lucide-react";
+import { DISCLAIMER } from "@/lib/survey/schema";
 import { SmallSampleBadge } from "../ui/SmallSampleBadge";
 import { CtaLink } from "../ui/CtaLink";
 import { DataTable, type ChartTableData } from "./DataTable";
@@ -49,10 +50,40 @@ export function ChartCard({
   children,
 }: ChartCardProps) {
   const [showTable, setShowTable] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const cardRef = useRef<HTMLElement>(null);
   const fmt = (n: number) => n.toLocaleString("th-TH");
 
+  /** ดาวน์โหลดการ์ดนี้เป็นภาพ PNG (ซ่อนปุ่ม/ลิงก์ในภาพ + เติมบรรทัดที่มา) */
+  const downloadImage = async () => {
+    const node = cardRef.current;
+    if (!node || exporting) return;
+    setExporting(true);
+    try {
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const { toPng } = await import("html-to-image");
+      const bg = getComputedStyle(node).backgroundColor;
+      const url = await toPng(node, {
+        pixelRatio: 2,
+        backgroundColor: bg,
+        cacheBust: true,
+        filter: (el) => !(el instanceof HTMLElement && el.dataset.noImage !== undefined),
+      });
+      const day = new Date().toISOString().slice(0, 10);
+      const name = (code ?? "chart").toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `yala-insight-${name}-${day}.png`;
+      a.click();
+    } catch {
+      window.alert("ดาวน์โหลดภาพไม่สำเร็จ ลองใหม่อีกครั้ง หรือใช้ปุ่มพิมพ์/ส่งออกในหน้ารายงาน");
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
-    <section className="print-card card flex min-w-0 flex-col p-5">
+    <section ref={cardRef} className="print-card card flex min-w-0 flex-col p-5">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -69,6 +100,17 @@ export function ChartCard({
               <LegendDots items={legend} />
             </div>
           )}
+          <button
+            type="button"
+            onClick={() => void downloadImage()}
+            disabled={exporting}
+            data-no-image
+            aria-label="ดาวน์โหลดกราฟเป็นภาพ"
+            title="ดาวน์โหลดเป็นภาพ (PNG)"
+            className="no-print btn btn-secondary w-8 px-0"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+          </button>
           {tableData && (
             <button
               type="button"
@@ -76,6 +118,7 @@ export function ChartCard({
               aria-pressed={showTable}
               aria-label={showTable ? "ดูเป็นกราฟ" : "ดูเป็นตาราง"}
               title={showTable ? "ดูเป็นกราฟ" : "ดูเป็นตาราง"}
+              data-no-image
               className="no-print btn btn-secondary w-8 px-0"
             >
               {showTable ? <BarChart3 className="h-4 w-4" aria-hidden="true" /> : <Table2 className="h-4 w-4" aria-hidden="true" />}
@@ -102,11 +145,16 @@ export function ChartCard({
         </span>
         {base > 0 && <SmallSampleBadge n={base} />}
         {cta && (
-          <span className="ml-auto">
+          <span className="ml-auto" data-no-image>
             <CtaLink href={cta.href}>{cta.label}</CtaLink>
           </span>
         )}
       </footer>
+      {exporting && (
+        <p className="mt-2 border-t border-line pt-2 type-meta text-ink-3">
+          ที่มา: แบบสำรวจนักท่องเที่ยววัดคูหาภิมุข อ.เมืองยะลา · {DISCLAIMER}
+        </p>
+      )}
     </section>
   );
 }

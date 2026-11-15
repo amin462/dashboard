@@ -19,6 +19,7 @@ const ROUTES = [
   "/business",
   "/reports",
   "/guide",
+  "/about",
   "/survey-poster",
   "/admin/login",
 ] as const;

@@ -46,7 +46,7 @@ export type Row = RawRow & { sur08list: string[]; sat: number|null; slot: 'เ�
 | T10 | UI แชต: ปุ่มลอย/แผงแชต (มือถือเต็มจอ), ถามประเภทธุรกิจก่อน, ปุ่มคำถามสำเร็จรูป, รู้หน้าที่เปิดอยู่, แสดงฐาน n + คำเตือน, ธีม navy/amber | Claude | `web/components/chat/**`, `web/components/shell/DashShell.tsx` | D1–D2 | T9 (เริ่มด้วย mock ได้) | ✅ (UI เสร็จ ตรวจ 1280/390 ด้วย CHAT_MOCK · รอคีย์ Gemini ที่ใช้ได้) |
 | T11 | ทดสอบแชต: คำถามหลอก/นอกเรื่อง/ตัวเลขที่ไม่มี, ติดโควตา, มือถือ, production build ; ปรับ prompt | Claude | `web/lib/ai/**`, `web/tests/**` | D2 | T9,T10 | 🟡 (ทดสอบจริงแล้ว: นอกเรื่อง/prompt injection/ไม่มีข้อมูล/ธุรกิจ ผ่าน · เหลือทดสอบบน Vercel + ข้อมูลมากขึ้น) |
 | T12 | A1–A3: แถบความคืบหน้าเก็บข้อมูล (n/267 + เวลาตอบล่าสุด) บนภาพรวม, ข้อเสนอรายธุรกิจอ่านง่ายขึ้น, เตือนกลุ่มตัวอย่างน้อยทั้งหน้า | Claude sonnet | `web/app/(dash)/**`, `web/components/**` | D2 | – | 🟡 (แถบความคืบหน้าเสร็จ · เหลือข้อเสนอรายธุรกิจอ่านง่ายขึ้น + เตือน n น้อยทั้งหน้า) |
-| T13 | B4–B5: ดาวน์โหลดกราฟเป็นภาพ + หน้า "เกี่ยวกับงานวิจัย" (วัตถุประสงค์ วิธีเก็บ ข้อจำกัด) | Claude sonnet | `web/app/(dash)/about/**`, `web/components/**` | D2–D3 | – | ⬜ (ถ้ามีเวลา) |
+| T13 | B4–B5: ดาวน์โหลดกราฟเป็นภาพ + หน้า "เกี่ยวกับงานวิจัย" (วัตถุประสงค์ วิธีเก็บ ข้อจำกัด) | Claude sonnet | `web/app/(dash)/about/**`, `web/components/**` | D2–D3 | – | ✅ (ปุ่มดาวน์โหลดกราฟเป็น PNG ทุกการ์ด + หน้า /about) |
 | T14 | เมื่อมีข้อมูลจริง ≥ 30: T6 เทียบตัวเลขกับ Google Sheets, ถ่ายภาพ real (`screenshots.mjs`), ร่างบทผล, rotate คีย์ Supabase | Claude + Gemini | docs/**, `docs/screenshots/real/` | D3–D4 | ข้อมูลจริง | ⬜ |
 
 ## ลำดับสั่งงาน

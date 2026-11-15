@@ -4,6 +4,7 @@ import {
   Compass,
   FileSpreadsheet,
   HeartHandshake,
+  Info,
   LayoutDashboard,
   Megaphone,
   ScanSearch,
@@ -45,6 +46,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/business", label: "มุมมองตามประเภทธุรกิจ", navLabel: "ตามประเภทธุรกิจ", shortLabel: "ธุรกิจ", icon: Store, group: "analysis" },
   { href: "/reports", label: "รายงาน & ส่งออก", shortLabel: "รายงาน", icon: FileSpreadsheet, group: "analysis" },
   { href: "/guide", label: "คู่มือ", shortLabel: "คู่มือ", icon: BookOpen, group: "help" },
+  { href: "/about", label: "เกี่ยวกับงานวิจัย", shortLabel: "งานวิจัย", icon: Info, group: "help" },
   { href: "/admin/import", label: "นำเข้าข้อมูล", shortLabel: "นำเข้า", icon: Upload, group: "admin", preserveQuery: false },
   { href: "/admin/quality", label: "คุณภาพข้อมูล", shortLabel: "คุณภาพ", icon: ScanSearch, group: "admin", preserveQuery: false },
 ];
